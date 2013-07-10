@@ -18,29 +18,38 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
-
+/**
+ * MPBDebug Prozess
+ * Zum Testen von Verschneidungen
+ * 
+ * @author woessner
+ *
+ */
 @Algorithm(
 		version = "0.0.5",
 		title = "MPBDebug"
 		)
 public class MPBDebug extends AbstractAnnotatedAlgorithm {
 
+	SimpleFeatureCollection wattSfc;
+    SimpleFeatureCollection msrlSfc;
+    SimpleFeatureCollection resutSfc;
+	
     public MPBDebug() {
         super();
+        wattSfc = FeatureCollections.newCollection();
+        msrlSfc = FeatureCollections.newCollection();
+        resutSfc = FeatureCollections.newCollection();
     }
     
-    SimpleFeatureCollection wattSfc = FeatureCollections.newCollection();
-    SimpleFeatureCollection msrlSfc = FeatureCollections.newCollection();
-    SimpleFeatureCollection resutSfc = FeatureCollections.newCollection();
-    
     @ComplexDataInput(
-    		identifier="wattSfc", title="Wattflächen",
+    		identifier="wattSfc", title="Wattflaechen",
     		abstrakt="FeatureCollection der Eingabe-Geometrien", binding=GTVectorDataBinding.class)
     public void setWattCollection(FeatureCollection<?, ?> fc) {
     	this.wattSfc = (SimpleFeatureCollection) fc;
     }
     @ComplexDataInput(
-    		identifier="msrlSfc", title="MSRL-Flächen",
+    		identifier="msrlSfc", title="MSRL-Flaechen",
     		abstrakt="FeatureCollection der Eingabe-Geometrien", binding=GTVectorDataBinding.class)
     public void setMSRLCollection(FeatureCollection<?, ?> fc) {
     	this.msrlSfc = (SimpleFeatureCollection) fc;
@@ -59,7 +68,7 @@ public class MPBDebug extends AbstractAnnotatedAlgorithm {
     	// MultiGeometries --> SimpleGeometries
     	//this.wattSfc = Util.getSimpleGeometryCollection(this.wattSfc);
     	
-    	// Create Union of Wattflächen
+    	// Create Union of Wattflaechen
     	//this.wattSfc = Util.getUnionSfc(wattSfc);
     	
     	// Intersection

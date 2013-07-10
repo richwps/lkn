@@ -2,6 +2,13 @@ package net.disy.wps.lkn;
 
 import net.disy.wps.common.Util;
 
+/**
+ * Diese Klasse repraesentiert einen Ergebnis-Record als Teil eines
+ * Bewertungsergebnisses
+ * 
+ * @author woessner
+ * 
+ */
 public class MPBResultRecord implements Cloneable {
 
 	public Integer year;
@@ -19,7 +26,11 @@ public class MPBResultRecord implements Cloneable {
 	public Double weightEQR;
 
 	public String getYearStr() {
-		return year.toString();
+		return this.year.toString();
+	}
+
+	public Integer getYear() {
+		return this.year;
 	}
 
 	public MPBResultRecord(Integer year, Double totalWattAreaNF,
@@ -48,85 +59,84 @@ public class MPBResultRecord implements Cloneable {
 		this.OP_60areaDI = OP_60areaDI;
 	}
 
+	// Standardkonstruktor
 	public MPBResultRecord() {
-
 	}
 
 	/*
-	 * Gesamtflächen
+	 * Gesamtflaechen
 	 */
-	
-	public String getTotalWattAreaNF() { // get
+	public String getTotalWattAreaNF() {
 		return Util.tokm2Str(this.totalWattAreaNF);
 	}
 
-	public String getTotalWattAreaDI() { // get
+	public String getTotalWattAreaDI() {
 		return Util.tokm2Str(this.totalWattAreaDI);
 	}
 
-	public String getTotalWattArea() { // get, hier kein set!
+	public String getTotalWattArea() {
 		return Util.tokm2Str(this.totalWattAreaNF + this.totalWattAreaDI);
 	}
 
 	/*
 	 * Seegras
 	 */
-	public String getZStotalAreaNF() { // get
+	public String getZStotalAreaNF() {
 		return Util.tokm2Str(this.ZS_totalareaNF);
 	}
 
-	public String getZS40AreaNF() { // get
+	public String getZS40AreaNF() {
 		return Util.tokm2Str(this.ZS_40areaNF);
 	}
 
-	public String getZS60AreaNF() { // get
+	public String getZS60AreaNF() {
 		return Util.tokm2Str(this.ZS_60areaNF);
 	}
 
-	public String getZStotalAreaDI() { // get
+	public String getZStotalAreaDI() {
 		return Util.tokm2Str(this.ZS_totalareaDI);
 	}
 
-	public String getZS40AreaDI() { // get
+	public String getZS40AreaDI() {
 		return Util.tokm2Str(this.ZS_40areaDI);
 	}
 
-	public String getZS60AreaDI() { // get
+	public String getZS60AreaDI() {
 		return Util.tokm2Str(this.ZS_60areaDI);
 	}
 
-	public String getZStotalArea() { // get, hier kein set!
+	public String getZStotalArea() {
 		return Util.tokm2Str(this.ZS_totalareaNF + this.ZS_totalareaDI);
 	}
 
 	/*
 	 * Algen
 	 */
-	public String getOPtotalAreaNF() { // get
+	public String getOPtotalAreaNF() {
 		return Util.tokm2Str(this.OP_totalareaNF);
 	}
 
-	public String getOP40AreaNF() { // get
+	public String getOP40AreaNF() {
 		return Util.tokm2Str(this.OP_40areaNF);
 	}
 
-	public String getOP60AreaNF() { // get
+	public String getOP60AreaNF() {
 		return Util.tokm2Str(this.OP_60areaNF);
 	}
 
-	public String getOPtotalAreaDI() { // get
+	public String getOPtotalAreaDI() {
 		return Util.tokm2Str(this.OP_totalareaDI);
 	}
 
-	public String getOP40AreaDI() { // get
+	public String getOP40AreaDI() {
 		return Util.tokm2Str(this.OP_40areaDI);
 	}
 
-	public String getOP60AreaDI() { // get
+	public String getOP60AreaDI() {
 		return Util.tokm2Str(this.OP_60areaDI);
 	}
 
-	public String getOPtotalArea() { // get, hier kein set!
+	public String getOPtotalArea() {
 		return Util.tokm2Str(this.OP_totalareaNF + this.OP_totalareaDI);
 	}
 
@@ -164,7 +174,7 @@ public class MPBResultRecord implements Cloneable {
 
 	public void setP4Value(Double val) {
 		this.p4Value = val;
-		
+
 	}
 
 	public String getP5ValueStr() {
@@ -174,56 +184,68 @@ public class MPBResultRecord implements Cloneable {
 	public void setP5Value(Double val) {
 		this.p5Value = val;
 	}
-	
+
 	public String getP1Class() {
 		return p1Class;
 	}
+
 	public String getP2Class() {
 		return p2Class;
 	}
+
 	public String getP3Class() {
 		return p3Class;
 	}
+
 	public String getP4Class() {
 		return p4Class;
 	}
+
 	public String getP5Class() {
 		return p5Class;
 	}
-	
+
 	public String getP1EQR() {
 		return Util.toDecimalStr(p1EQR);
 	}
+
 	public String getP2EQR() {
 		return Util.toDecimalStr(p2EQR);
 	}
+
 	public String getP3EQR() {
 		return Util.toDecimalStr(p3EQR);
 	}
+
 	public String getP4EQR() {
 		return Util.toDecimalStr(p4EQR);
 	}
+
 	public String getP5EQR() {
 		return Util.toDecimalStr(p5EQR);
 	}
-	
+
 	public String getWeightEQR() {
 		return Util.toDecimalStr(weightEQR);
 	}
+
 	public String getWeightClass() {
 		return weightClass;
 	}
 
+	/**
+	 * Berechnet die fuenf zu bewertenden Parameter aus den Rohdaten
+	 * @param evalMatrix
+	 */
 	public void calculateParameters(MPBEvalMatrix evalMatrix) {
-
-		if (evalMatrix.areaOfValidity == "Nordfriesland") {
+		if (evalMatrix.areaOfValidity == MPBMain.NORDFRIESLAND) {
 			setP1Value(this.ZS_totalareaNF / this.totalWattAreaNF * 100);
 			p2Value = this.ZS_60areaNF / this.ZS_totalareaNF * 100;
 			// p3 ist konstant - basierend auf Annahmen
 			p3Value = 75.73;
 			p4Value = this.OP_totalareaNF / this.totalWattAreaNF * 100;
 			p5Value = this.OP_60areaNF / this.OP_totalareaNF * 100;
-		} else {
+		} else if (evalMatrix.areaOfValidity == MPBMain.DITHMARSCHEN) {
 			setP1Value(this.ZS_totalareaDI / this.totalWattAreaDI * 100);
 			p2Value = this.ZS_60areaDI / this.ZS_totalareaDI * 100;
 			// p3 ist konstant - basierend auf Annahmen
@@ -276,6 +298,11 @@ public class MPBResultRecord implements Cloneable {
 				+ this.getOP60AreaDI() + "," + this.getOPtotalArea();
 	}
 
+	/**
+	 * Berechnet den gewichteten EQR-Wert
+	 * 
+	 * @return
+	 */
 	public Double getWeightedEQR() {
 		if (p1EQR >= 0.0 && p2EQR >= 0.0 & p3EQR >= 0.0 && p4EQR >= 0.0
 				&& p5EQR >= 0.0) {
@@ -286,19 +313,27 @@ public class MPBResultRecord implements Cloneable {
 		}
 	}
 
+	/**
+	 * Erzeugt einen String mit Bewertungsergebnissen
+	 * 
+	 * @return
+	 */
 	public String evaluateToString() {
 		// Werte mit Komma-Trennung ausgeben
-		return this.getYearStr() + "," + Util.toDecimalStr(p1Value) + "," + p1Class
-				+ "," + Util.toDecimalStr(p1EQR) + "," + Util.toDecimalStr(p2Value) + ","
-				+ p2Class + "," + Util.toDecimalStr(p2EQR) + ","
-				+ Util.toDecimalStr(p3Value) + "," + p3Class + ","
-				+ Util.toDecimalStr(p3EQR) + "," + Util.toDecimalStr(p4Value) + ","
-				+ p4Class + "," + Util.toDecimalStr(p4EQR) + ","
-				+ Util.toDecimalStr(p5Value) + "," + p5Class + ","
-				+ Util.toDecimalStr(p5EQR) + "," + this.weightClass + ","
-				+ Util.toDecimalStr(this.weightEQR);
+		return this.getYearStr() + "," + Util.toDecimalStr(p1Value) + ","
+				+ p1Class + "," + Util.toDecimalStr(p1EQR) + ","
+				+ Util.toDecimalStr(p2Value) + "," + p2Class + ","
+				+ Util.toDecimalStr(p2EQR) + "," + Util.toDecimalStr(p3Value)
+				+ "," + p3Class + "," + Util.toDecimalStr(p3EQR) + ","
+				+ Util.toDecimalStr(p4Value) + "," + p4Class + ","
+				+ Util.toDecimalStr(p4EQR) + "," + Util.toDecimalStr(p5Value)
+				+ "," + p5Class + "," + Util.toDecimalStr(p5EQR) + ","
+				+ this.weightClass + "," + Util.toDecimalStr(this.weightEQR);
 	}
 
+	/**
+	 * Klont das MPBResultRecord-Objekt
+	 */
 	public MPBResultRecord clone() {
 		return new MPBResultRecord(this.year, this.totalWattAreaNF,
 				this.totalWattAreaDI, this.ZS_numTypesNF, this.ZS_numTypesDI,

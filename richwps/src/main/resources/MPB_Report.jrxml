@@ -365,6 +365,12 @@
 	<parameter name="DI_weightClass_4" class="java.lang.String"/>
 	<parameter name="DI_weightClass_5" class="java.lang.String"/>
 	<parameter name="DI_meanEQR" class="java.lang.String"/>
+	<parameter name="NF_TrendZS" class="java.lang.String"/>
+	<parameter name="NF_TrendEQR" class="java.lang.String"/>
+	<parameter name="DI_TrendZS" class="java.lang.String"/>
+	<parameter name="DI_TrendEQR" class="java.lang.String"/>
+	<parameter name="NF_BarChart" class="java.io.InputStream"/>
+	<parameter name="DI_BarChart" class="java.io.InputStream"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -384,13 +390,50 @@
 	<detail>
 		<band height="598">
 			<frame>
-				<reportElement uuid="4f8b234e-3ba7-4812-b91a-2d8843b24e23" x="0" y="70" width="274" height="330"/>
+				<reportElement uuid="4f8b234e-3ba7-4812-b91a-2d8843b24e23" x="0" y="70" width="274" height="346"/>
 			</frame>
 			<frame>
 				<reportElement uuid="9a7e38bd-b59d-41af-8834-f9f4c39eb9c2" x="281" y="70" width="274" height="210"/>
 			</frame>
 			<frame>
-				<reportElement uuid="29daad99-c1a9-4a34-a842-6a5d4cb829a2" x="281" y="280" width="274" height="119"/>
+				<reportElement uuid="29daad99-c1a9-4a34-a842-6a5d4cb829a2" x="281" y="280" width="274" height="136"/>
+				<image>
+					<reportElement uuid="be6df9d8-7383-45ce-b8e6-b977df5fd551" x="3" y="40" width="130" height="89">
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA[$P{NF_BarChart}]]></imageExpression>
+				</image>
+				<image>
+					<reportElement uuid="4ef3cad6-a42a-48b0-8267-5ff7621a8677" x="142" y="40" width="130" height="89">
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA[$P{DI_BarChart}]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement uuid="7e16e169-1020-4075-90bf-23c82726dafb" x="44" y="25" width="74" height="18"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Nordfriesland]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="8fbc4397-fb1e-478b-9799-011d21a069e2" x="182" y="25" width="74" height="18"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Dithmarschen]]></text>
+				</staticText>
 			</frame>
 			<staticText>
 				<reportElement uuid="ca04baca-243e-45bf-91b1-ebb4425ec42e" x="331" y="160" width="50" height="15">
@@ -404,8 +447,8 @@
 				</textElement>
 				<text><![CDATA[Mäßig]]></text>
 			</staticText>
-			<image>
-				<reportElement uuid="f1ea307b-6f86-4097-a55f-3f54abb8f654" x="5" y="75" width="264" height="300"/>
+			<image scaleImage="RetainShape">
+				<reportElement uuid="f1ea307b-6f86-4097-a55f-3f54abb8f654" x="5" y="75" width="264" height="333"/>
 				<imageExpression><![CDATA[$P{MPBResultMap}]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="false">
@@ -436,7 +479,7 @@
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Bewertungsdiagramm]]></text>
+				<text><![CDATA[Diagramme]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="0c0840ea-ddec-47bd-b922-f8815e6ea101" x="331" y="200" width="50" height="15">
@@ -451,11 +494,11 @@
 				<text><![CDATA[Schlecht]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="ae6edece-1a46-46f6-91ec-2166aef76e66" x="10" y="425" width="539" height="114"/>
+				<reportElement uuid="ae6edece-1a46-46f6-91ec-2166aef76e66" x="9" y="440" width="539" height="114"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Der Qualitätszustand der Wasserkörper im nordfriesischen Wattenmeer im Jahr " + $P{MPBResult}.getBewertungsjahr() + " konnte mit " + $P{MPBResult}.getMeanEqrOfNF() + " bestimmt werden, was der Qualitätsklasse \"" + $P{MPBResult}.getMeanEqrStringOfNF() + "\" entspricht. Für die Seegrasbestände Nordfrieslands ist innerhalb des Bewertungszeitraums ein stetiger Zuwachs zu verzeichnen. Die für die einzelnen Bewertungsjahre errechneten Norm-EQR-Werte, aus denen sich der mittlere EQR-Wert für das Gesamtgebiet bildet, nehmen leicht zu und zeigen seit 2 Jahren einen etwa stabil verlaufenden Zuwachs. Für Dithmarschen ergab sich im selben Jahr mit dem EQR in Höhe von " + $P{MPBResult}.getMeanEqrOfDI() + " die Qualitätsklasse \"" + $P{MPBResult}.getMeanEqrStringOfDI() + "\". In diesem Bewertungsgebiet ist eine stetige Abnahme der Seegrasvorkommen zu beobachten. Die entsprechenden Norm-EQR-Werte aus dem 6-jährigen Bewertungszyklus zeigen eine leichte lineare Abnahme."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Der Qualitätszustand der Wasserkörper im nordfriesischen Wattenmeer im Jahr " + $P{MPBResult}.getBewertungsjahr() + " konnte mit " + $P{MPBResult}.getMeanEqrOfNF() + " bestimmt werden, was der Qualitätsklasse \"" + $P{MPBResult}.getMeanEqrStringOfNF() + "\" entspricht. Für die Seegrasbestände Nordfrieslands ist innerhalb des Bewertungszeitraums ein" + $P{NF_TrendZS} + " zu verzeichnen. Die für die einzelnen Bewertungsjahre errechneten Norm-EQR-Werte, aus denen sich der mittlere EQR-Wert für das Gesamtgebiet bildet," + $P{NF_TrendEQR} + " Für Dithmarschen ergab sich im selben Jahr mit dem EQR in Höhe von " + $P{MPBResult}.getMeanEqrOfDI() + " die Qualitätsklasse \"" + $P{MPBResult}.getMeanEqrStringOfDI() + "\". In diesem Bewertungsgebiet ist ein" + $P{DI_TrendZS} + " der Seegrasvorkommen zu beobachten. Die entsprechenden Norm-EQR-Werte aus dem 6-jährigen Bewertungszyklus" + $P{DI_TrendEQR}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="511fc27d-3258-45c4-9359-4c44b43bd898" x="331" y="120" width="50" height="15">
@@ -546,7 +589,7 @@
 				<text><![CDATA[Unbefriedigend]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a59aad94-e927-4e57-9906-40701ea85a9b" x="10" y="405" width="110" height="16"/>
+				<reportElement uuid="a59aad94-e927-4e57-9906-40701ea85a9b" x="9" y="420" width="110" height="16"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
