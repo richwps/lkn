@@ -3,7 +3,7 @@ package net.disy.wps.lkn;
 import java.util.ArrayList;
 
 /**
- * Diese Klasse repräsentiert einen Bewertungsparameter als Teil einer
+ * Diese Klasse repraesentiert einen Bewertungsparameter als Teil einer
  * Bewertungsmatrix
  * 
  * @author woessner

@@ -16,7 +16,7 @@ import org.n52.wps.server.AbstractAnnotatedAlgorithm;
 @Algorithm(
 		version = "1.0.0",
 		title = "AreaOfFeatureCollection",
-		abstrakt = "Berechnet die Gesamtfläche der Geometrien einer FeatureCollection"
+		abstrakt = "Berechnet die Gesamtflaeche der Geometrien einer FeatureCollection"
 		)
 public class AreaOfFeatureCollection extends AbstractAnnotatedAlgorithm {
 
@@ -29,14 +29,14 @@ public class AreaOfFeatureCollection extends AbstractAnnotatedAlgorithm {
     
     @ComplexDataInput(
     		identifier="inputFeatureCollection", title="FeatureCollection",
-    		abstrakt="FeatureCollection deren Fläche bestimmt werden soll", binding=GTVectorDataBinding.class)
+    		abstrakt="FeatureCollection deren Flaeche bestimmt werden soll", binding=GTVectorDataBinding.class)
     public void setInputCollection(FeatureCollection<?, ?> fc) {
     	this.inputSfc = (SimpleFeatureCollection) fc;
     }
     
     @LiteralDataOutput(
-    		identifier = "area", title="Fläche",
-    		abstrakt="Gesamtfläche der FeatureCollection", binding = LiteralDoubleBinding.class)
+    		identifier = "area", title="Flaeche",
+    		abstrakt="Gesamtflaeche der FeatureCollection", binding = LiteralDoubleBinding.class)
     public Double getArea() {
     	return this.outputArea;
     }

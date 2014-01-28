@@ -1,7 +1,7 @@
 package net.disy.wps.lkn;
 
 /**
- * Diese Klasse Repräsentiert eine Bewertungskategorie 
+ * Diese Klasse Repraesentiert eine Bewertungskategorie 
  * @author woessner
  *
  */

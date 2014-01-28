@@ -38,7 +38,7 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.Polygon;
 
 /**
- * Diese Klasse beinhaltet allgemeine Hilfsfunktionen und Tools für die
+ * Diese Klasse beinhaltet allgemeine Hilfsfunktionen und Tools fï¿½r die
  * Implementierung von WPS-Prozessen im RichWPS-Projekt
  * 
  * @author woessner
@@ -350,7 +350,7 @@ public abstract class Util {
 	 * Erzeugt aus einer FeatureCollection von MultiGeometrien eine
 	 * FeatureCollection mit einfachen Geometrien
 	 * 
-	 * Achtung: Wird nicht mehr verwendet, funktioniert aber für Polygone
+	 * Achtung: Wird nicht mehr verwendet, funktioniert aber fï¿½r Polygone
 	 * 
 	 * @param multiGeometryCollection
 	 * @return
@@ -406,10 +406,10 @@ public abstract class Util {
 	}
 
 	/**
-	 * Schreibt einen InputStream in eine temporäre Datei
+	 * Schreibt einen InputStream in eine temporï¿½re Datei
 	 * @param in InputStream
-	 * @param prefix Praefix der temporären Datei
-	 * @param suffix Suffix der temporären Datei
+	 * @param prefix Praefix der temporï¿½ren Datei
+	 * @param suffix Suffix der temporï¿½ren Datei
 	 * @return
 	 * @throws IOException
 	 */
@@ -417,9 +417,12 @@ public abstract class Util {
 			throws IOException {
 		final File tempFile = File.createTempFile(prefix, suffix);
 		tempFile.deleteOnExit();
-		try (FileOutputStream out = new FileOutputStream(tempFile)) {
-			IOUtils.copy(in, out);
-		}
+		try  {
+                    FileOutputStream out = new FileOutputStream(tempFile);
+                    IOUtils.copy(in, out);
+		}catch(Exception e){
+                    throw new RuntimeException(e);
+                }
 		return tempFile;
 	}
 
@@ -445,7 +448,7 @@ public abstract class Util {
 
 	/**
 	 * Erzeugt einen RGB-Stil zum Rendern einer GeoTIFF-Datei
-	 * Übernommen aus Geotools-Tutorial
+	 * ï¿½bernommen aus Geotools-Tutorial
 	 * @param reader
 	 * @return
 	 */

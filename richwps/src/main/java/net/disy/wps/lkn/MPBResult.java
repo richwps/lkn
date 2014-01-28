@@ -53,7 +53,7 @@ public class MPBResult {
 	}
 
 	/**
-	 * Gibt das Ergebnis fuer Nordfriesland zurück
+	 * Gibt das Ergebnis fuer Nordfriesland zurï¿½ck
 	 * 
 	 * @return
 	 */
@@ -67,7 +67,7 @@ public class MPBResult {
 	}
 
 	/**
-	 * Gibt das Ergebnis fuer Dithmarschen zurück
+	 * Gibt das Ergebnis fuer Dithmarschen zurï¿½ck
 	 * 
 	 * @return
 	 */
@@ -130,7 +130,7 @@ public class MPBResult {
 	}
 
 	/**
-	 * Berechnet für jedes Teilergebniss die Bewertungsparameter
+	 * Berechnet fï¿½r jedes Teilergebniss die Bewertungsparameter
 	 */
 	public void calculateParameters() {
 		initEvalMatrices();
@@ -286,7 +286,7 @@ public class MPBResult {
 				&& Math.abs(zs2 - zs1) >= Math.abs(zs1 - zs0)) {
 			trendStr = "e deutliche Abnahme";
 		} else if (Math.abs(zs2 - zs1) * 1.5 > Math.abs(zs1 - zs0) || zs1 > zs0) {
-			trendStr = " auffallender Rückgang";
+			trendStr = " auffallender Rueckgang";
 		} else if (Math.abs(zs3 - zs2) <= Math.abs(zs2 - zs1)
 				&& Math.abs(zs2 - zs1) > Math.abs(zs1 - zs0)) {
 			trendStr = "e stabilisierende negative Entwicklung";
@@ -334,7 +334,7 @@ public class MPBResult {
 		if (Math.abs(eqr0 - eqr1) <= 0.005 && Math.abs(eqr1 - eqr2) <= 0.005) {
 			trendStr = " bleiben fast auf dem gleichen Niveau innerhalb der letzten Jahre.";
 		} else if ((eqr0 - eqr1) / eqr0 >= 0.25) {
-			trendStr = " nehmen gegenüber den Vorjahren und besonders im Bewertungsjahr selbst deutlich zu.";
+			trendStr = " nehmen gegenueber den Vorjahren und besonders im Bewertungsjahr selbst deutlich zu.";
 		} else if (eqr3 < eqr2
 				&& eqr2 < eqr1
 				&& eqr1 < eqr0
@@ -350,7 +350,7 @@ public class MPBResult {
 		} else if (eqr2 < eqr1 && eqr1 < eqr0) {
 			trendStr = " nehmen leicht zu und zeigen seit 2 Jahren einen etwa stabil verlaufenden Zuwachs.";
 		} else if ((eqr1 - eqr0) / eqr0 >= 0.25) {
-			trendStr = " nehmen gegenüber den Vorjahren und besonders im Bewertungsjahr selbst deutlich ab.";
+			trendStr = " nehmen gegenueber den Vorjahren und besonders im Bewertungsjahr selbst deutlich ab.";
 		} else if (eqr3 > eqr2
 				&& eqr2 > eqr1
 				&& eqr1 > eqr0
@@ -366,7 +366,7 @@ public class MPBResult {
 		} else if (eqr2 > eqr1 && eqr1 > eqr0) {
 			trendStr = " nehmen leicht ab und zeigen seit 2 Jahren eine etwa stabil verlaufende Minderung.";
 		} else {
-			trendStr = "liegen außerhalb des Trends und weisen somit keine aussagekräftigen Zusammenhänge auf.";
+			trendStr = "liegen ausserhalb des Trends und weisen somit keine aussagekraeftigen Zusammenhaenge auf.";
 		}
 
 		return trendStr;

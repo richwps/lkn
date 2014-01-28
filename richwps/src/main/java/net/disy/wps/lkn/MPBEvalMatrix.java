@@ -3,7 +3,7 @@ package net.disy.wps.lkn;
 import java.util.ArrayList;
 
 /**
- * Diese Klasse repräsentiert eine Bewertungsmatrix, bestehend aus Parametern
+ * Diese Klasse repraesentiert eine Bewertungsmatrix, bestehend aus Parametern
  * und Kategorien
  * 
  * @author woessner
@@ -354,7 +354,7 @@ public class MPBEvalMatrix {
 			evalString = "unbefr.";
 			break;
 		case 2:
-			evalString = "mäßig";
+			evalString = "mï¿½ï¿½ig";
 			break;
 		case 3:
 			evalString = "gut";

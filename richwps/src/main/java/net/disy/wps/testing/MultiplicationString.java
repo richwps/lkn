@@ -27,7 +27,7 @@ public class MultiplicationString extends AbstractAnnotatedAlgorithm {
     	this.inputNumber = inputNumber;
     }
     
-    @LiteralDataOutput(identifier = "outputString", title = "Ergebnis-Aussage", abstrakt = "Aussage über das Ergebnis der Multiplikation", binding = LiteralStringBinding.class)
+    @LiteralDataOutput(identifier = "outputString", title = "Ergebnis-Aussage", abstrakt = "Aussage ueber das Ergebnis der Multiplikation", binding = LiteralStringBinding.class)
     public String getErgebnis() {
         return outputString;
     }
