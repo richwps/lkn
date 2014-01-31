@@ -436,7 +436,7 @@
 				<Property name="Geoserver_username" active="true">admin</Property>
 				<Property name="Geoserver_password" active="true">geoserver</Property>
 				<Property name="Geoserver_host" active="true">localhost</Property>
-				<Property name="Geoserver_port" active="true">8181</Property>
+				<Property name="Geoserver_port" active="true">8080</Property>
 				<!--Property name="Geoserver_host" active="true">geoprocessing.demo.52north.org</Property> 
 					<Property name="Geoserver_port" active="true">8080</Property> <Property name="Geoserver_password" 
 					active="true">geWosePrv5er</Property -->
@@ -448,7 +448,7 @@
 				<Property name="Geoserver_username" active="true">admin</Property>
 				<Property name="Geoserver_password" active="true">geoserver</Property>
 				<Property name="Geoserver_host" active="true">localhost</Property>
-				<Property name="Geoserver_port" active="true">8181</Property>
+				<Property name="Geoserver_port" active="true">8080</Property>
 			</Generator>
 			<Generator name="WCSGenerator"
 				className="org.n52.wps.io.datahandler.generator.GeoserverWCSGenerator"
@@ -457,7 +457,7 @@
 				<Property name="Geoserver_username" active="true">admin</Property>
 				<Property name="Geoserver_password" active="true">geoserver</Property>
 				<Property name="Geoserver_host" active="true">localhost</Property>
-				<Property name="Geoserver_port" active="true">8181</Property>
+				<Property name="Geoserver_port" active="true">8080</Property>
 			</Generator>
 			<Generator name="MapserverWMSGenerator" className="org.n52.wps.io.datahandler.generator.MapserverWMSGenerator" active="false">
 				<Format mimetype="application/WMS"/>
@@ -1021,7 +1021,7 @@
   </AlgorithmRepositoryList>
 	<RemoteRepositoryList />
 	
-	<Server hostname="localhost" hostport="8080"
+	<Server hostname="192.168.56.102" hostport="8080"
 		includeDataInputsInResponse="false" computationTimeoutMilliSeconds="5"
 		cacheCapabilites="false" webappPath="wps" repoReloadInterval="0">
 		<!-- Setting to 'true' will enable filtering of responses documents.  Any server URL in
