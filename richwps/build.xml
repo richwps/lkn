@@ -1,0 +1,34 @@
+
+<project name="lkn-mpa" default="dist" basedir=".">
+   
+    <property name="user" value="root" />
+    <property name="host" value="192.168.56.102"/>
+    <property name="port" value="22" />
+    <property name="password" value="vmadmin" />
+    <property name="confdestination" value="/var/lib/tomcat7/webapps/wps/config" />
+    <property name="jardestination" value="/var/lib/tomcat7/webapps/wps/WEB-INF/lib" />
+
+    <description>
+        deployment suite.
+    </description>
+ 
+    <target name="dist">
+        <scp file="./wps_config.xml" todir="${user}@${host}:${confdestination}" port="${port}" password="${password}" trust="true"/>
+    
+        <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="chown tomcat7:tomcat7 ${confdestination}/wps_config.xml" trust="true"/>
+   
+        <scp file="./target/lkn-mpa-0.0.1-SNAPSHOT-full.jar" todir="${user}@${host}:${jardestination}" port="${port}" password="${password}" trust="true"/>
+        <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/" trust="true"/>
+        <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="/etc/init.d/tomcat7 restart" trust="true"/>
+    </target>
+ 
+    <!-- empties the remote log -->
+    <target name="flushlog">
+        <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="cat /dev/null > /var/log/tomcat7/catalina.out" trust="true"/>
+    </target>
+ 
+ <!-- copies the remote log to localhost (./catalina.out)-->
+    <target name="pulllog">
+        <scp file="${user}@${host}:/var/log/tomcat7/catalina.out" todir="catalina.out" port="${port}" password="${password}" trust="true"/>
+    </target>
+</project>
