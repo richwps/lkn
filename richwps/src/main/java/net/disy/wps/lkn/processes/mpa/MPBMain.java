@@ -1,4 +1,4 @@
-package net.disy.wps.lkn;
+package net.disy.wps.lkn.processes.mpa;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +44,10 @@ import org.opengis.filter.FilterFactory2;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
+import net.disy.wps.lkn.IntersectionCollection;
+import net.disy.wps.lkn.MPBResult;
+import net.disy.wps.lkn.MPBResultRecord;
+import net.disy.wps.lkn.ObservationCollection;
 
 @Algorithm(title = "Makrophytenbewertung", abstrakt = "Prozess zur Bewertung der Berichtsgebiete Nordfriesland und Dithmarschen anhand von MSRL-D5 Daten", version = "0.9.5")
 public class MPBMain extends AbstractAnnotatedAlgorithm {

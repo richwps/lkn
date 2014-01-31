@@ -508,6 +508,7 @@
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultipleComplexInAndOutputsDummyTestClass</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.processes.mpa.MPBMain</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
@@ -1064,19 +1065,19 @@
                 <Property name="wipe.threshold" active="true">P7D</Property>
             </Database>
 
-            Direct connection configuration:
-            <Database>
-                Alternative connection method    
-                <Property active="true" name="databaseName">postgres</Property>
-                <Property active="true" name="databasePath">//localhost:5432</Property>
-                <Property active="true" name="username">username</Property>
-                <Property active="true" name="password">password</Property>
-                <Property active="true" name="saveResultsToDb">false</Property>
-                <Property name="wipe.enabled" active="true">true</Property>
-                <Property name="wipe.period" active="true">PT1H</Property>
-                <Property name="wipe.threshold" active="true">P7D</Property>
-            </Database>
--->
+                    Direct connection configuration:
+                    <Database>
+                        Alternative connection method    
+                        <Property active="true" name="databaseName">postgres</Property>
+                        <Property active="true" name="databasePath">//localhost:5432</Property>
+                        <Property active="true" name="username">username</Property>
+                        <Property active="true" name="password">password</Property>
+                        <Property active="true" name="saveResultsToDb">false</Property>
+                        <Property name="wipe.enabled" active="true">true</Property>
+                        <Property name="wipe.period" active="true">PT1H</Property>
+                        <Property name="wipe.threshold" active="true">P7D</Property>
+                    </Database>
+        -->
 
-	</Server>
+    </Server>
 </WPSConfiguration>
