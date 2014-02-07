@@ -9,7 +9,7 @@
     <property name="jardestination" value="/var/lib/tomcat7/webapps/wps/WEB-INF/lib" />
 
     <description>
-        Deployment suite (hsos). Deploys lkn-process into virtual maschine (sandboxed environment).
+        Deployment suite (hsos). Deploys lkn-mpa into virtual maschine (sandboxed environment).
     </description>
  
     <target name="dist">
@@ -18,18 +18,20 @@
         <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="chown tomcat7:tomcat7 ${confdestination}/wps_config.xml" trust="true"/>
    
         <scp file="./target/lkn-mpa-0.0.1-SNAPSHOT-full.jar" todir="${user}@${host}:${jardestination}" port="${port}" password="${password}" trust="true"/>
-         <scp file="./target/lkn-mpa-0.0.1-SNAPSHOT.jar" todir="${user}@${host}:${jardestination}" port="${port}" password="${password}" trust="true"/>
+        <!--<scp file="./target/lkn-mpa-0.0.1-SNAPSHOT.jar" todir="${user}@${host}:${jardestination}" port="${port}" password="${password}" trust="true"/>-->
         <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="chown -R tomcat7:tomcat7 /var/lib/tomcat7/webapps/" trust="true"/>
         <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="/etc/init.d/tomcat7 restart" trust="true"/>
     </target>
  
     <!-- empties the remote log -->
-    <target name="flushlog">
+    <target name="flushlogs">
         <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="cat /dev/null > /var/log/tomcat7/catalina.out" trust="true"/>
+           <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="cat /dev/null > /var/log/tomcat7/52n-wps.log" trust="true"/>
     </target>
  
- <!-- copies the remote log to localhost (./catalina.out)-->
-    <target name="pulllog">
+    <!-- copies the remote log to localhost (./catalina.out)-->
+    <target name="pulllogs">
         <scp file="${user}@${host}:/var/log/tomcat7/catalina.out" todir="catalina.out" port="${port}" password="${password}" trust="true"/>
+        <scp file="${user}@${host}:/var/log/tomcat7/catalina.out" todir="52n-wps.log" port="${port}" password="${password}" trust="true"/>
     </target>
 </project>

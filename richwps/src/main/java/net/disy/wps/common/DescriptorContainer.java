@@ -2,8 +2,8 @@ package net.disy.wps.common;
 
 /**
  * Diese Klasse beiinhaltet eine einfache Beschreibung eines
- * Attribut-Deskriptors, die zur Erweiterung eines Geotools-FeautureTypes in
- * Util.refactorFeatureType verwendet werden kann
+ * Attribut-Deskriptors, die zur Erweiterung eines Geotools-FeautureTypes
+ * in FeatureCollectionUtil.refactorFeatureType verwendet werden kann
  * 
  * @author woessner
  */

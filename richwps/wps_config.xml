@@ -477,10 +477,15 @@
 				active="false">
 				<Format mimetype="application/octet-stream" />
 			</Generator>
-		</GeneratorList>
+                        <Generator name="MBPResultGenerator"
+                        className="net.disy.wps.n52.generator.MPBResultGenerator"
+                                   active="true">
+                            <Format mimetype="application/xml"/>
+                        </Generator>
+                </GeneratorList>
 	</Datahandlers>
 	<AlgorithmRepositoryList>
-		<Repository name="LocalRAlgorithmRepository"
+		<!--<Repository name="LocalRAlgorithmRepository"
 			className="org.n52.wps.server.r.LocalRAlgorithmRepository" active="false">
 			<Property name="Script_Dir" active="true">R/scripts</Property>
 			<Property name="R_Datatype_Config" active="true">R/R_Datatype.conf</Property>
@@ -491,10 +496,10 @@
 			<Property name="Algorithm" active="true">org.n52.wps.server.r.pegel-report</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.r.sweave-foo</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.r.eo2h_airqualitysaxony.R</Property>
-		</Repository>
+		</Repository>-->
 		<Repository name="LocalAlgorithmRepository"
 			className="org.n52.wps.server.LocalAlgorithmRepository" active="true">
-			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.SimpleBufferAlgorithm</Property>
+			<!--<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.SimpleBufferAlgorithm</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.JTSConvexHullAlgorithm</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.coordinatetransform.CoordinateTransformAlgorithm</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.simplify.DouglasPeuckerAlgorithm</Property>
@@ -507,13 +512,13 @@
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.LongRunningDummyTestClass</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultipleComplexInAndOutputsDummyTestClass</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm</Property>
-			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>
+			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>-->
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.processes.mpa.MPBMain</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
 		</Repository>
-		<Repository name="GrassRepository"
+		<!--<Repository name="GrassRepository"
 			className="org.n52.wps.server.grass.GrassProcessRepository" active="false">
 			<Property name="Grass_Home" active="true">c:\programme\GRASS 7.0.svn</Property>
 			<Property name="Python_Home" active="true">c:\python25</Property>
@@ -738,9 +743,9 @@
 			<Property name="Algorithm" active="true">v.univar</Property>
 			<Property name="Algorithm" active="true">v.vol.rst</Property>
 			<Property name="Algorithm" active="true">v.voronoi</Property>
-		</Repository>
-		<!-- <Repository name="GeotoolsProcessRepository" className="org.n52.wps.geotools.GeotoolsProcessRepository" 
-			active="false"> </Repository> -->
+		</Repository>-->
+		<Repository name="GeotoolsProcessRepository" className="org.n52.wps.geotools.GeotoolsProcessRepository" 
+			active="true"> </Repository>
 		<!-- <Repository name="OracleBPELRepository" className="org.n52.wps.transactional.service.DefaultTransactionalProcessRepository" 
 			active="true"> <Property name="GenericAlgorithm" active="true">org.n52.wps.transactional.algorithm.DefaultTransactionalAlgorithm</Property> 
 			<Property name="DeployManager" active="true">org.n52.wps.transactional.deploy.bpel.oracle.OracleBPELManager</Property> 
@@ -781,7 +786,7 @@
 			</Repository> -->
 		<Repository name="SextanteRepository"
 			className="org.n52.wps.server.sextante.SextanteProcessRepository"
-			active="false">
+			active="true">
 			<Property name="Algorithm" active="true">visibility</Property>
 			<Property name="Algorithm" active="true">recttopolar</Property>
 			<Property name="Algorithm" active="true">crossclassification</Property>
