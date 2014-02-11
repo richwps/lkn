@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.disy.wps.lkn.utils.FeatureCollectionUtil;
+import net.disy.wps.lkn.utils.MPAUtils;
 
 import org.joda.time.DateTime;
 
@@ -25,12 +26,12 @@ public class MPBResult {
 
 	public MPBResult() {
 		timestamp = DateTime.now();
-		MPBEvalMatrix nfMatrix = new MPBEvalMatrix(MPBMain.NORDFRIESLAND);
+		MPBEvalMatrix nfMatrix = new MPBEvalMatrix(MPAUtils.NORDFRIESLAND);
 		areaResults.add(new MPBAreaResult(timestamp, bewertungsjahr,
-				MPBMain.NORDFRIESLAND, nfMatrix));
-		MPBEvalMatrix diMatrix = new MPBEvalMatrix(MPBMain.DITHMARSCHEN);
+				MPAUtils.NORDFRIESLAND, nfMatrix));
+		MPBEvalMatrix diMatrix = new MPBEvalMatrix(MPAUtils.DITHMARSCHEN);
 		areaResults.add(new MPBAreaResult(timestamp, bewertungsjahr,
-				MPBMain.DITHMARSCHEN, diMatrix));
+				MPAUtils.DITHMARSCHEN, diMatrix));
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class MPBResult {
 	 */
 	public MPBAreaResult getNFResult() {
 		for (int i = 0; i < areaResults.size(); i++) {
-			if (areaResults.get(i).getGebiet() == MPBMain.NORDFRIESLAND) {
+			if (areaResults.get(i).getGebiet() == MPAUtils.NORDFRIESLAND) {
 				return areaResults.get(i);
 			}
 		}
@@ -74,7 +75,7 @@ public class MPBResult {
 	 */
 	public MPBAreaResult getDIResult() {
 		for (int i = 0; i < areaResults.size(); i++) {
-			if (areaResults.get(i).getGebiet() == MPBMain.DITHMARSCHEN) {
+			if (areaResults.get(i).getGebiet() == MPAUtils.DITHMARSCHEN) {
 				return areaResults.get(i);
 			}
 		}
@@ -93,8 +94,8 @@ public class MPBResult {
 	 */
 	public void setBewertungsjahr(Integer bewertungsjahr) {
 		this.bewertungsjahr = bewertungsjahr;
-		getAreaResult(MPBMain.NORDFRIESLAND).setBewertungsjahr(bewertungsjahr);
-		getAreaResult(MPBMain.DITHMARSCHEN).setBewertungsjahr(bewertungsjahr);
+		getAreaResult(MPAUtils.NORDFRIESLAND).setBewertungsjahr(bewertungsjahr);
+		getAreaResult(MPAUtils.DITHMARSCHEN).setBewertungsjahr(bewertungsjahr);
 	}
 
 	/**
@@ -106,9 +107,9 @@ public class MPBResult {
 	 */
 	public MPBAreaResult getAreaResult(Integer gebiet) {
 		switch (gebiet) {
-		case MPBMain.NORDFRIESLAND:
+		case MPAUtils.NORDFRIESLAND:
 			return getNFResult();
-		case MPBMain.DITHMARSCHEN:
+		case MPAUtils.DITHMARSCHEN:
 			return getDIResult();
 		}
 		return null;
@@ -146,7 +147,7 @@ public class MPBResult {
 	 * @return Mittlerer EQR-Wert
 	 */
 	public String getMeanEqrOfNF() {
-		return FeatureCollectionUtil.toDecimalStr(getAreaResult(MPBMain.NORDFRIESLAND)
+		return FeatureCollectionUtil.toDecimalStr(getAreaResult(MPAUtils.NORDFRIESLAND)
 				.getMeanEQR());
 	}
 
@@ -156,7 +157,7 @@ public class MPBResult {
 	 * @return Mittlerer EQR-Wert
 	 */
 	public String getMeanEqrOfDI() {
-		return FeatureCollectionUtil.toDecimalStr(getAreaResult(MPBMain.DITHMARSCHEN)
+		return FeatureCollectionUtil.toDecimalStr(getAreaResult(MPAUtils.DITHMARSCHEN)
 				.getMeanEQR());
 	}
 
@@ -167,7 +168,7 @@ public class MPBResult {
 	 * @return String-Repraesentation des mittleren EQR-Wertes
 	 */
 	public String getMeanEqrStringOfNF() {
-		return getAreaResult(MPBMain.NORDFRIESLAND).getMeanEQREvalString();
+		return getAreaResult(MPAUtils.NORDFRIESLAND).getMeanEQREvalString();
 	}
 
 	/**
@@ -177,7 +178,7 @@ public class MPBResult {
 	 * @return String-Repraesentation des mittleren EQR-Wertes
 	 */
 	public String getMeanEqrStringOfDI() {
-		return getAreaResult(MPBMain.DITHMARSCHEN).getMeanEQREvalString();
+		return getAreaResult(MPAUtils.DITHMARSCHEN).getMeanEQREvalString();
 	}
 
 	/**
@@ -189,7 +190,7 @@ public class MPBResult {
 	public String getRawRecordsString(boolean metadata) {
 		initEvalMatrices();
 		// Sollte fuer beide AreaResults gleich sein!
-		return getAreaResult(MPBMain.DITHMARSCHEN)
+		return getAreaResult(MPAUtils.DITHMARSCHEN)
 				.getRawRecordsString(metadata);
 	}
 
@@ -213,12 +214,12 @@ public class MPBResult {
 					+ "\n\n";
 		}
 
-		resultStr += getAreaResult(MPBMain.NORDFRIESLAND)
+		resultStr += getAreaResult(MPAUtils.NORDFRIESLAND)
 				.getEvalRecordsString();
 		resultStr = resultStr
-				+ FeatureCollectionUtil.toDecimalStr(getAreaResult(MPBMain.NORDFRIESLAND)
+				+ FeatureCollectionUtil.toDecimalStr(getAreaResult(MPAUtils.NORDFRIESLAND)
 						.getMeanEQR()) + ","
-				+ getAreaResult(MPBMain.NORDFRIESLAND).getMeanEQREvalString()
+				+ getAreaResult(MPAUtils.NORDFRIESLAND).getMeanEQREvalString()
 				+ "\n";
 
 		if (metadata) {
@@ -226,11 +227,11 @@ public class MPBResult {
 					+ "Ergebnismatrix fuer das Berichtsgebiet Dithmarschen"
 					+ "\n\n";
 		}
-		resultStr += getAreaResult(MPBMain.DITHMARSCHEN).getEvalRecordsString();
+		resultStr += getAreaResult(MPAUtils.DITHMARSCHEN).getEvalRecordsString();
 		resultStr = resultStr
-				+ FeatureCollectionUtil.toDecimalStr(getAreaResult(MPBMain.DITHMARSCHEN)
+				+ FeatureCollectionUtil.toDecimalStr(getAreaResult(MPAUtils.DITHMARSCHEN)
 						.getMeanEQR()) + ","
-				+ getAreaResult(MPBMain.DITHMARSCHEN).getMeanEQREvalString()
+				+ getAreaResult(MPAUtils.DITHMARSCHEN).getMeanEQREvalString()
 				+ "\n";
 
 		return resultStr;
@@ -252,12 +253,12 @@ public class MPBResult {
 		Double zs2 = null;
 		Double zs3 = null;
 
-		if (evalArea == MPBMain.NORDFRIESLAND) {
+		if (evalArea == MPAUtils.NORDFRIESLAND) {
 			zs0 = areaResult.getRecordByYear(bewertungsjahr).ZS_totalareaNF;
 			zs1 = areaResult.getRecordByYear(bewertungsjahr - 1).ZS_totalareaNF;
 			zs2 = areaResult.getRecordByYear(bewertungsjahr - 2).ZS_totalareaNF;
 			zs3 = areaResult.getRecordByYear(bewertungsjahr - 3).ZS_totalareaNF;
-		} else if (evalArea == MPBMain.DITHMARSCHEN) {
+		} else if (evalArea == MPAUtils.DITHMARSCHEN) {
 			zs0 = areaResult.getRecordByYear(bewertungsjahr).ZS_totalareaDI;
 			zs1 = areaResult.getRecordByYear(bewertungsjahr - 1).ZS_totalareaDI;
 			zs2 = areaResult.getRecordByYear(bewertungsjahr - 2).ZS_totalareaDI;
@@ -314,7 +315,7 @@ public class MPBResult {
 		Double eqr2 = null;
 		Double eqr3 = null;
 
-		if (evalArea == MPBMain.NORDFRIESLAND) {
+		if (evalArea == MPAUtils.NORDFRIESLAND) {
 			eqr0 = areaResult.getRecordByYear(bewertungsjahr).getWeightedEQR();
 			eqr1 = areaResult.getRecordByYear(bewertungsjahr - 1)
 					.getWeightedEQR();
@@ -322,7 +323,7 @@ public class MPBResult {
 					.getWeightedEQR();
 			eqr3 = areaResult.getRecordByYear(bewertungsjahr - 3)
 					.getWeightedEQR();
-		} else if (evalArea == MPBMain.DITHMARSCHEN) {
+		} else if (evalArea == MPAUtils.DITHMARSCHEN) {
 			eqr0 = areaResult.getRecordByYear(bewertungsjahr).getWeightedEQR();
 			eqr1 = areaResult.getRecordByYear(bewertungsjahr - 1)
 					.getWeightedEQR();

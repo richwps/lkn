@@ -19,7 +19,12 @@ public class ReportingAreaUtils {
     public static final String ATTRIB_DISTR = "DISTR";
     public static final String ATTRIB_DISTR_DI = "DI";
     public static final String ATTRIB_DISTR_NF = "NF";
-
+    private SimpleFeatureCollection reportingareas;
+    
+    public ReportingAreaUtils(SimpleFeatureCollection reportingareas){
+        this.reportingareas=reportingareas;
+    
+    }
     /**
      * Iteriert ueber bestehende Berichtsgebiete und uebernimmt die fuer die das
      * Attribut "TEMPLATE" gegeben ist.
@@ -27,7 +32,7 @@ public class ReportingAreaUtils {
      * @param ea Berichtsgebiete FeatureCollection
      * @return bereinigte Berichtsgebiete FeatureCollection
      */
-    public static SimpleFeatureCollection clearReportingAreas(final SimpleFeatureCollection ea) {
+    public SimpleFeatureCollection clearReportingAreas() {
 
         SimpleFeatureCollection clearedCollection = FeatureCollections.newCollection();
 
@@ -35,7 +40,7 @@ public class ReportingAreaUtils {
         // Welches Attribut ist hier ausschlaggebend? Provisorisch wird TEMPLATE
         // verwendet
         Filter filter = ff.notEqual(ff.property(ATTRIB_TEMPLATE), null);
-        FeatureIterator<SimpleFeature> iter = ea.features();
+        FeatureIterator<SimpleFeature> iter = this.reportingareas.features();
         while (iter.hasNext()) {
             SimpleFeature feature = iter.next();
             if (filter.evaluate(feature)) {
@@ -45,27 +50,24 @@ public class ReportingAreaUtils {
         return clearedCollection;
     }
 
-    /**
-     *
-     * @return
-     */
-    public static SimpleFeatureCollection extractNF(SimpleFeatureCollection inputCollection) {
+    public SimpleFeatureCollection extractNF() {
         String[] keys = {ATTRIB_DISTR, ATTRIB_TEMPLATE};
         String[] values = {ATTRIB_DISTR_NF, ""};
         SimpleFeatureCollection NFCollection = FeatureCollectionUtil.extract(
-                inputCollection, keys, values);
+                this.reportingareas, keys, values);
         return NFCollection;
     }
 
-    /**
-     *
-     * @return
-     */
-    public static SimpleFeatureCollection extractDI(SimpleFeatureCollection inputCollection) {
+    
+    public SimpleFeatureCollection extractDI() {
         String[] keys = {ATTRIB_DISTR, ATTRIB_TEMPLATE};
         String[] values = {ATTRIB_DISTR_DI, ""};
         SimpleFeatureCollection NFCollection = FeatureCollectionUtil.extract(
-                inputCollection, keys, values);
+                this.reportingareas, keys, values);
         return NFCollection;
+    }
+    
+    public SimpleFeatureCollection getFeatureCollection(){
+        return this.reportingareas;
     }
 }

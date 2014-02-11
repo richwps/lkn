@@ -28,7 +28,7 @@ public class ObservationCollection implements Comparable<ObservationCollection> 
 		return this.area;
 	}
 	
-	public SimpleFeatureCollection getSfc() {
+	public SimpleFeatureCollection getFeatureCollection() {
 		return this.sfc;
 	}
 	

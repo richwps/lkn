@@ -8,14 +8,10 @@ import java.util.HashSet;
 import net.disy.wps.common.DescriptorContainer;
 import net.disy.wps.lkn.processes.mpa.types.IntersectionCollection;
 import net.disy.wps.lkn.processes.mpa.types.ObservationCollection;
-import static net.disy.wps.lkn.utils.MSRLD5Utils.ATTRIB_OBSV_PHENOMENONTIME;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollections;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -25,24 +21,35 @@ import org.opengis.feature.simple.SimpleFeatureType;
  */
 public class MPAUtils {
 
+    public static final int NORDFRIESLAND = 1;
+    public static final int DITHMARSCHEN = 2;
+    public static final String NORDFRIESLAND_NAME = "Nordfriesland";
+    public static final String DITHMARSCHEN_NAME = "Dithmarschen";
+
     public static final String OBSV_PARAMETERVALUE = "OBSV_PARAMETERVALUE";
 
-            private static final DateTimeFormatter DateTimeFormatter = DateTimeFormat
-            .forPattern("yyyy-MM-dd'T'HH:mm:ss");
-    private static final DateTimeFormatter DateTimeFormatter4TimeStamp = DateTimeFormat
-            .forPattern("yyyy-MM-dd HH:mm:ss.S");
+    private TopographyUtils topgraphy;
+    private ReportingAreaUtils reportingareas;
+    private MSRLD5Utils msrld5;
+
+    public MPAUtils(TopographyUtils topgraphy, ReportingAreaUtils reportingareas, MSRLD5Utils msrld5) {
+        this.topgraphy = topgraphy;
+        this.reportingareas = reportingareas;
+        this.msrld5 = msrld5;
+    }
+
     /**
      * Verschneidet eine SimpleFeatureCollection von Berichtsgebieten mit einer
      * SimpleFeatureCollection von Topographien eines Jahres. Die
      * zurueckgegebene SimpleFeatureCollection enthaelt alle Attribute der
      * Topographien und die Angaben 'DIST' und 'Name' der Berichtsgebiete
      *
-     * @param berichtsFc - SimpleFeatureCollection von Berichtsgebieten
+     * @param reportingareas - SimpleFeatureCollection von Berichtsgebieten
      * @param topoFc - SimpleFeatureCollection von Topographien eines Jahres
      * @return SimpleFeatureCollection des Verschneidungs-Ergebnisses
      */
-    public static SimpleFeatureCollection intersectBerichtsgebieteAndTopography(
-            SimpleFeatureCollection berichtsFc, SimpleFeatureCollection wattFc) {
+    public static SimpleFeatureCollection intersectReportingsareasAndTidelands(
+            SimpleFeatureCollection reportingareas, SimpleFeatureCollection tidelands) {
 
         SimpleFeatureCollection intersecFeatureCollection = FeatureCollections
                 .newCollection();
@@ -64,14 +71,14 @@ public class MPAUtils {
          * Verschneidung relevanten Features
          */
         // Iterator ueber Features der Berichtsgebiete
-        iterA = berichtsFc.features();
+        iterA = reportingareas.features();
         try {
             while (iterA.hasNext()) {
                 berichtsFeature = iterA.next();
                 berichtsBB = ((Geometry) berichtsFeature.getDefaultGeometry())
                         .getEnvelope();
 
-                iterB = wattFc.features();
+                iterB = tidelands.features();
                 try {
                     while (iterB.hasNext()) {
                         wattFeature = iterB.next();
@@ -99,7 +106,7 @@ public class MPAUtils {
         dcList.add(new DescriptorContainer(1, 1, false, "NAME", String.class));
         SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
                 FeatureCollectionUtil.refactorFeatureType(
-                        (SimpleFeatureType) wattFc.getSchema(), dcList,
+                        (SimpleFeatureType) tidelands.getSchema(), dcList,
                         "BerichtsgebieteTopographieIntersection", null));
 
         // ArrayLists aus HashSets befuellen
@@ -120,7 +127,7 @@ public class MPAUtils {
                 if (!intersec.isEmpty()) {
                     featureBuilder = FeatureCollectionUtil.initBuilderValues(featureBuilder,
                             wattFeature);
-                    featureBuilder.set(wattFc.getSchema()
+                    featureBuilder.set(tidelands.getSchema()
                             .getGeometryDescriptor().getLocalName(), intersec);
                     featureBuilder.set("DISTR",
                             berichtsFeature.getAttribute("DISTR"));
@@ -144,7 +151,7 @@ public class MPAUtils {
      * @param msrlYears
      * @return
      */
-    public static ArrayList<Integer> getRelevantTopoYears(
+    public ArrayList<Integer> getRelevantTopoYears(
             ArrayList<Integer> topoYears, ArrayList<Integer> msrlYears) {
         ArrayList<Integer> relTopoYears = new ArrayList<Integer>();
         HashSet<Integer> hs = new HashSet<Integer>();
@@ -152,7 +159,7 @@ public class MPAUtils {
         // Schleife ueber MSRL-Years, fuer die jeweils das entsprechende
         // TopoYear bestimmt werden soll
         for (int i = 0; i < msrlYears.size(); i++) {
-            relTopoYears.add(TopographyUtils.getTopoYear(msrlYears.get(i), topoYears));
+            relTopoYears.add(this.getTopoYear(msrlYears.get(i), topoYears));
         }
         // Liste auf eindeutige Werte beschraenken
         hs.addAll(relTopoYears);
@@ -280,204 +287,42 @@ public class MPAUtils {
         }
         return intersecColl;
     }
+
     
+
     
-    /**
-     * Gibt eine Liste von ObservationCollections zurueck, die ein Element fuer
-     * jeden Eintrag in der uebergebenen Liste mit Beobachtungszeitpunkten
-     * enthaelt Returns an Array of ObservationsCollections. The list contains
-     * entries for each DateTime including the corresponding SimpleFeatures in a
-     * collection and the total area
-     *
-     * @param sfc
-     * @param obsDates
-     * @return Liste mit ObservationCollections
-     */
-    public static ArrayList<ObservationCollection> getObsCollByDateList(
-            SimpleFeatureCollection sfc, ArrayList<DateTime> obsDates) {
-        String compareStr;
-        Double area;
-        SimpleFeatureCollection groupCollection;
-        ArrayList<ObservationCollection> obsCollections = new ArrayList<ObservationCollection>();
-
-        // Schleife ueber die Beobachtungszeitpunkte
-        for (int i = 0; i < obsDates.size(); i++) {
-            groupCollection = FeatureCollections.newCollection();
-            // String zum Vergleich von Beobachtungszeitpunkten erzeugen
-            if (FeatureCollectionUtil.attributeIsTimeStamp(sfc, ATTRIB_OBSV_PHENOMENONTIME)) {
-                compareStr = obsDates.get(i).toString(
-                        DateTimeFormatter4TimeStamp);
-            } else {
-                compareStr = obsDates.get(i).toString(DateTimeFormatter);
-            }
-            // Entsprechende SimpleFeatureCollection aus der gesamten
-            // FeatureCollection extrahieren
-            groupCollection = FeatureCollectionUtil.extract(sfc,
-                    new String[]{ATTRIB_OBSV_PHENOMENONTIME},
-                    new String[]{compareStr});
-            // Gesamtflaeche der Features berechnen
-            area = FeatureCollectionUtil.getArea(groupCollection);
-            // ObservationCollection erzeugen und der Ausgabe-Liste hinzufuegen
-            obsCollections.add(new ObservationCollection(obsDates.get(i),
-                    groupCollection, area));
-        }
-
-        // Debug
-        for (ObservationCollection obsColl : obsCollections) {
-            /*LOGGER.debug("getObsCollByDateList: "
-             + obsColl.getDateTime().getYear() + "-"
-             + obsColl.getDateTime().getMonthOfYear() + "-"
-             + obsColl.getDateTime().getDayOfMonth() + ": "
-             + FeatureCollectionUtil.tokm2Str(obsColl.getArea()) + " km2");*/
-        }
-
-        return obsCollections;
-    }
 
     /**
-     * Ermittelt zu aus einer Liste von ObservationCollectiond und einer
-     * Jahres-Angabe den Index des entsprechenden Elements falls das Jahr
-     * kleiner ist als die vorhanden Jahre in der Liste wird eine
-     * RuntimeException ausgeloest Falls das Jahr groesser ist als die
-     * vorhandene Jahre in der Liste wird der Index des zeitlich
-     * naechstliegenden Jahres zurueckgegeben
+     * Liefert ein einem Topographie-Datensatz zugehoeriges Jahr aus einer Liste
+     * von moeglichen Jahren, welches die minimale zeitliche Distanz zu einem
+     * Eingabejahr aufweist. Im Fall von gleichen Zeitunterschieden zu zwei
+     * Jahren, wird das spaetere zurueck gegeben.
      *
-     * @param obsCollList - Liste mit allen ObservationCollections
-     * @param year - Jahr
-     * @return Index
+     * @param year - Eingabejahr, zu dem ein passendes Topographie-Jahr
+     * ermittelt werden soll
+     * @param topoYearList - Liste mit vorhandenen Topographie-Jahren
+     * @return Jahr
      */
-    public static Integer getIdxOfObsCollbyYear(
-            ArrayList<ObservationCollection> obsCollList, Integer year) {
+    public int getTopoYear(final int year, final ArrayList<Integer> topoYearList) {
+        ArrayList<Integer> dList = new ArrayList<Integer>();
+        Integer minDiff;
+        Integer minYearIndex = -1;
 
-        Integer i = 0;
-        // sort descending by DateTime of ObservationCollection
-        Collections.sort(obsCollList, Collections.reverseOrder());
-        Integer listYear = obsCollList.get(i).getDateTime().getYear();
-        // Schleife, bis aktuelles Jahr aus der Liste nicht mehr kleier als das
-        // Bewertungsjahr ist
-        do {
-            // RuntimException, wenn die Anzahl der Schleifendurchlaeufe die
-            // Groesse der Liste ueberschreitet
-            if (i > obsCollList.size() - 1) {
-                throw new RuntimeException(
-                        "Invalid year or non fitting data! Try to use "
-                        + listYear + " as year.");
-            }
-            listYear = obsCollList.get(i).getDateTime().getYear();
-            if (listYear.equals(year)) {
-                return i;
-            } else if (listYear < year) {
-                return i;
-            }
-            i++;
-        } while (listYear >= year);
-        return null;
-    }
+        // Wichtig: absteigend sortieren!
+        Collections.sort(topoYearList, Collections.reverseOrder());
 
-    /**
-     * Liefert eine durch ein Jahr bestimme ObservationCollection aus einer
-     * Liste von ObservationCollections
-     *
-     * @param obsCollList - Liste von ObservationCollections
-     * @param year - Jahr, zu dem die ObservationCollection zurueckgegeben
-     * werden soll
-     * @return ObservationCollection
-     */
-    public static ObservationCollection getObsCollByYear(
-            ArrayList<ObservationCollection> obsCollList, Integer year) {
-        ObservationCollection obsColl = null;
-
-        for (int j = 0; j < obsCollList.size(); j++) {
-            if (obsCollList.get(j).getDateTime().getYear() == year) {
-                obsColl = obsCollList.get(j);
+        for (int i = 0; i < topoYearList.size(); i++) {
+            dList.add(Math.abs(year - topoYearList.get(i)));
+        }
+        minDiff = dList.get(0);
+        for (int j = 1; j < dList.size() - 1; j++) {
+            if (minDiff > dList.get(j)) {
+                minDiff = dList.get(j);
             }
         }
-        return obsColl;
-    }
+        minYearIndex = dList.indexOf(minDiff);
 
-    /**
-     * Versucht aus einer Liste von ObservationCollections (MSRL-Daten) die
-     * sechs fuer das Bewertungsjahr relevanten Beobachtungssammlungen zu
-     * ermitteln und zurueck zu geben. Falls vom Bewertungsjahr ausgehend keine
-     * sechs ObservationCollections verfuegbar sind, wird eine RuntimeException
-     * ausgeloest.
-     *
-     * @param obsCollections - Liste von ObservationCollections fuer jeden
-     * Beobachtungszeitpunkt
-     * @param bewertungsjahr
-     * @return Liste mit den sechs relevanten ObservationCollections
-     */
-    public static ArrayList<ObservationCollection> getRelevantObservationCollections(
-            ArrayList<ObservationCollection> obsCollections,
-            Integer bewertungsjahr) {
-        ArrayList<ObservationCollection> preSelCollections = new ArrayList<ObservationCollection>();
-        ArrayList<ObservationCollection> finalCollections = new ArrayList<ObservationCollection>();
-        HashSet<Integer> existingYears = new HashSet<Integer>();
-
-        // Schleife ueber alle ObservationCollections
-        for (int i = 0; i < obsCollections.size(); i++) {
-            ObservationCollection obsColl = obsCollections.get(i);
-
-            // Pruefen, ob die Liste der ausgewaehlten ObservationCollections
-            // Eintraege enthaelt
-            if (preSelCollections.size() > 0) {
-                // ueber bestehende Eintraege in selCollections iterieren,
-                // um Jahr und Flaeche der neuen obsColl zu vergleichen
-                Integer initSize = preSelCollections.size();
-                for (int j = 0; j < initSize; j++) {
-                    ObservationCollection selColl = preSelCollections.get(j);
-                    // Wenn unter den schon selektierten Sammlungen eine mit
-                    // gleichem Jahr und kleinerer Flaeche ist...
-                    if (selColl.getDateTime().getYear() == obsColl
-                            .getDateTime().getYear()) {
-                        if (selColl.getArea() < obsColl.getArea()) {
-                            // ...dann wird diese geloescht...
-                            preSelCollections.remove(selColl);
-                            // ...und die neue hinzugefuegt
-                            preSelCollections.add(obsColl);
-                        }
-                    } // Wenn Jahre unterschiedlich, muss geprueft werden, ob es
-                    // schon einen Eintrag mit dem Jahr gibt. Falls nicht, kann
-                    // die Sammlung hinzugefuegt werden.
-                    else if (!existingYears.contains(obsColl.getDateTime()
-                            .getYear())) {
-                        preSelCollections.add(obsColl);
-                        existingYears.add(obsColl.getDateTime().getYear());
-                    }
-                }
-            } // Falls die Liste noch leer ist, wird die erste
-            // Beobachtungssammlung hinzugefuegt
-            else {
-                preSelCollections.add(obsColl);
-                // Das Jahr des hinzugefuegten Eintrags in die Liste der bereits
-                // uebernommenen Jahre hinzufuegen
-                existingYears.add(obsColl.getDateTime().getYear());
-            }
-        }
-        // StartIndex ermitteln
-        Integer startIndex = MPAUtils.getIdxOfObsCollbyYear(preSelCollections,
-                bewertungsjahr);
-        try {
-            for (int i = 0; i < 6; i++) {
-                finalCollections.add(preSelCollections.get(startIndex + i));
-            }
-        } catch (Exception e) {
-            // RuntimeException ausloesen, falls keine sechs
-            // ObservationCollections vorhanden
-            throw new RuntimeException(
-                    "There is not enough data for 6 years available.");
-        }
-        // Debug
-        /*for (int k = 0; k < preSelCollections.size(); k++) {
-             LOGGER.debug("getRelevantFeatureCollections: "
-             + preSelCollections.get(k).getDateTime().getYear() + "-"
-             + preSelCollections.get(k).getDateTime().getMonthOfYear()
-             + "-"
-             + preSelCollections.get(k).getDateTime().getDayOfMonth()
-             + " ausgewaehlt: "
-             + FeatureCollectionUtil.tokm2Str(preSelCollections.get(k).getArea()));
-        }*/
-        return finalCollections;
+        return topoYearList.get(minYearIndex);
     }
 
 }
