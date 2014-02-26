@@ -1,8 +1,7 @@
-package net.disy.wps.lkn.processes.mpa.types;
+package net.disy.wps.lkn;
 
 import net.disy.wps.lkn.processes.mpa.MPBMain;
 import java.util.ArrayList;
-import net.disy.wps.lkn.utils.MPAUtils;
 
 /**
  * Diese Klasse repraesentiert eine Bewertungsmatrix, bestehend aus Parametern
@@ -32,9 +31,9 @@ public class MPBEvalMatrix {
 		normEQRcategories = new ArrayList<MPBEvalCategory>();
 		params = new ArrayList<MPBEvalParameter>();
 		
-		if (area == MPAUtils.NORDFRIESLAND) {
+		if (area == MPBMain.NORDFRIESLAND) {
 			createNFMatrix();
-		} else if (area == MPAUtils.DITHMARSCHEN) {
+		} else if (area == MPBMain.DITHMARSCHEN) {
 			createDIMatrix();
 		} else {
 			throw new RuntimeException("Das Bewertungsgebiet '" + area
@@ -46,7 +45,7 @@ public class MPBEvalMatrix {
 	 * Erzeugt die statische Bewertungsmatrix fuer Nordfriesland
 	 */
 	private void createNFMatrix() {
-		this.areaOfValidity = MPAUtils.NORDFRIESLAND;
+		this.areaOfValidity = MPBMain.NORDFRIESLAND;
 		MPBEvalParameter param;
 		MPBEvalCategory cat;
 
@@ -138,7 +137,7 @@ public class MPBEvalMatrix {
 	 * Erzeugt die statische Bewertungsmatrix fuer Dithmarschen
 	 */
 	private void createDIMatrix() {
-		this.areaOfValidity = MPAUtils.DITHMARSCHEN;
+		this.areaOfValidity = MPBMain.DITHMARSCHEN;
 		MPBEvalParameter param = null;
 		MPBEvalCategory cat = null;
 
@@ -356,7 +355,7 @@ public class MPBEvalMatrix {
 			evalString = "unbefr.";
 			break;
 		case 2:
-			evalString = "maessig";
+			evalString = "m��ig";
 			break;
 		case 3:
 			evalString = "gut";

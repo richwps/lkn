@@ -38,7 +38,6 @@ import net.disy.wps.lkn.processes.mpa.types.MPBResultRecord;
 import net.disy.wps.lkn.processes.mpa.types.ObservationCollection;
 import net.disy.wps.lkn.utils.MPAUtils;
 import net.disy.wps.lkn.utils.MSRLD5Utils;
-import net.disy.wps.lkn.utils.Observations;
 import net.disy.wps.lkn.utils.ReportingAreaUtils;
 import net.disy.wps.lkn.utils.TopographyUtils;
 import org.slf4j.Logger;
@@ -55,30 +54,20 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
         super();
     }
 
+    public static final int NORDFRIESLAND = 1;
+    public static final int DITHMARSCHEN = 2;
+    public static final String NORDFRIESLAND_NAME = "Nordfriesland";
+    public static final String DITHMARSCHEN_NAME = "Dithmarschen";
+
     // MPBResult List
     private MPBResult result = new MPBResult();
 
-    private Integer inputAssesmentYear;
-    private SimpleFeatureCollection inputReportingAreas;
-    private SimpleFeatureCollection inputTopography;
-    private SimpleFeatureCollection inputMSRLD5;
-    private SimpleFeatureCollection outputCollection = FeatureCollections.newCollection();
-    /**
-     * Dealing with topography data.
-     */
-    private TopographyUtils topgraphy;
-    /**
-     * Dealing with reportingareas.
-     */
-    private ReportingAreaUtils reportingareas;
-    /**
-     * Dealing with MSRLD5 measurements.
-     */
-    private MSRLD5Utils msrld5;
-    /**
-     * Assesment specific tasks.
-     */
-    private MPAUtils mpa;
+    private Integer InputBewertungsjahr;
+    private SimpleFeatureCollection inputEvalAreaCollection;
+    private SimpleFeatureCollection inputTopoCollection;
+    private SimpleFeatureCollection inputMSRLCollection;
+    private SimpleFeatureCollection outputCollection = FeatureCollections
+            .newCollection();
 
     // Debug
 	/*
@@ -91,37 +80,37 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
     private File outputXMLFile;
 
     @ComplexDataInput(identifier = "berichtsgebiete", title = "Berichtsgebiete", abstrakt = "Berichtsgebiete die die Werte 'DI' und 'NF' im Attribut 'DISTR' enthalten.", binding = GTVectorDataBinding.class)
-    public void setReportingArea(final FeatureCollection<?, ?> evalAreaCollection) {
-        this.inputReportingAreas = (SimpleFeatureCollection) evalAreaCollection;
+    public void setEvaluationArea(FeatureCollection<?, ?> evalAreaCollection) {
+        this.inputEvalAreaCollection = (SimpleFeatureCollection) evalAreaCollection;
     }
 
     @ComplexDataInput(identifier = "topographie", title = "Topographie", abstrakt = "Topographie Layer", minOccurs = 1, maxOccurs = 1, binding = GTVectorDataBinding.class)
-    public void setTopography(final FeatureCollection<?, ?> topoCollection) {
-        this.inputTopography = (SimpleFeatureCollection) topoCollection;
+    public void setTopography(FeatureCollection<?, ?> topoCollection) {
+        this.inputTopoCollection = (SimpleFeatureCollection) topoCollection;
     }
 
-    @ComplexDataInput(identifier = "msrl-d5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class)
-    public void setMSRLD5(final FeatureCollection<?, ?> inputCollection) {
-        this.inputMSRLD5 = (SimpleFeatureCollection) inputCollection;
+    @ComplexDataInput(identifier = "msrl-d5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten", binding = GTVectorDataBinding.class)
+    public void setMSRLCollection(FeatureCollection<?, ?> inputCollection) {
+        this.inputMSRLCollection = (SimpleFeatureCollection) inputCollection;
     }
 
-    @LiteralDataInput(identifier = "bewertungsjahr", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class)
-    public void setAssesmentYear(String assesmentYear) {
-        this.inputAssesmentYear = Integer.parseInt(assesmentYear);
+    @LiteralDataInput(identifier = "bewertungsjahr", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht", binding = LiteralStringBinding.class)
+    public void setBewertungsjahr(String bewertungsjahr) {
+        this.InputBewertungsjahr = Integer.parseInt(bewertungsjahr);
     }
 
-    @LiteralDataOutput(identifier = "rawValues", title = "Rohdaten", abstrakt = "CSV-Tabelle mit Rohdaten der Verschneidungsergebnisse (Flaechen in Quadratkilometer).", binding = LiteralStringBinding.class)
+    @LiteralDataOutput(identifier = "rawValues", title = "Rohdaten", abstrakt = "CSV-Tabelle mit Rohdaten der Verschneidungsergebnisse (Flaechen in Quadratkilometer)", binding = LiteralStringBinding.class)
     public String getRawValues() {
         return this.outputRawValues;
     }
 
-    @LiteralDataOutput(identifier = "evalValues", title = "Bewertungsergebnisse", abstrakt = "CSV-Tabelle mit bewerteten Flaechenverhaeltnissen und EQR-Werten.", binding = LiteralStringBinding.class)
+    @LiteralDataOutput(identifier = "evalValues", title = "Bewertungsergebnisse", abstrakt = "CSV-Tabelle mit bewerteten Flaechenverhaeltnissen und EQR-Werten", binding = LiteralStringBinding.class)
     public String getEvalValues() {
         return this.outputEvalValues;
     }
 
-    // Achtung: Output Type muss hier FeatureCollection sein (nicht
-    // SimpleFeatureCollection)!
+    // Achtung: Output Type muss hier FeatureType sein (nicht
+    // SimpleFeatureType!)
     @ComplexDataOutput(identifier = "mpbResultGml", title = "Bewertete Berichtsgebiete", abstrakt = "FeatureCollection der bewerteten Berichtsgebiete", binding = GTVectorDataBinding.class)
     public FeatureCollection getResultGml() {
         return this.outputCollection;
@@ -144,26 +133,33 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
      */
     @Execute
     public void runMPB() {
-        this.topgraphy = new TopographyUtils(inputTopography);
-        this.reportingareas = new ReportingAreaUtils(inputReportingAreas);
-        this.msrld5 = new MSRLD5Utils(inputMSRLD5);
-        this.mpa = new MPAUtils(topgraphy, reportingareas, msrld5);
         /*
          * LOGGER Level
          */
         //LOGGER.setLevel(Level.ALL);
 
         /*
+         * Array der Parameternamen: COV_OP = Algen COV_ZS = Seegras
+         */
+        String[] obsParams = {"COV_OP", "COV_ZS"};
+
+        /*
          * Definition der notwendigen Variablen
          */
         // paramArrayList: List with two entries, one for each parameter in the
         // obsParam-Array
-        ArrayList<Observations> paramArrayList = new ArrayList<Observations>();
+        ArrayList<ArrayList<ObservationCollection>> paramArrayList = new ArrayList<ArrayList<ObservationCollection>>();
+
+        // obsCollArrayList: List of ObservationCollections
+        ArrayList<ObservationCollection> obsCollArrayList = new ArrayList<ObservationCollection>();
+
+        // relCollArrayList: List of relevant ObservationCollections
+        ArrayList<ObservationCollection> relCollArrayList = new ArrayList<ObservationCollection>();
 
         // topoArrayList: Liste mit ObservationCollection,
         // die jeweils die FeatureCollection der Topographie-Geometrien fuer ein
         // Jahr enthalten
-        Observations topoArrayList = new Observations();
+        ArrayList<ObservationCollection> topoArrayList = new ArrayList<ObservationCollection>();
 
         ArrayList<IntersectionCollection> intersecWattBerichtsgebiete = new ArrayList<IntersectionCollection>();
 
@@ -193,7 +189,7 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
         Double OP_totalareaNF, OP_40areaNF, OP_60areaNF, OP_totalareaDI, OP_40areaDI, OP_60areaDI;
 
         // Ergebnis-Objekt mit Bewertungsjahr initialisieren
-        result.setBewertungsjahr(this.inputAssesmentYear);
+        result.setBewertungsjahr(this.InputBewertungsjahr);
 
         /*
          * ::: SourceCode-Abschnitt ::: Auswahl Seegras und Algen
@@ -201,35 +197,60 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
         LOGGER.info("PHASE::Auswahl Seegras und Algen::Start");
 
         LOGGER.debug("SFC-Info:Input-Berichtsgebiete: "
-                + FeatureCollectionUtil.size(inputReportingAreas)
+                + FeatureCollectionUtil.size(inputEvalAreaCollection)
                 + " Features, "
-                + FeatureCollectionUtil.getNumVerticesFromFC(inputReportingAreas)
+                + FeatureCollectionUtil.getNumVerticesFromFC(inputEvalAreaCollection)
                 + " Stuetzpunkte, "
-                + FeatureCollectionUtil.getMeanVerticesFromFC(inputReportingAreas)
+                + FeatureCollectionUtil.getMeanVerticesFromFC(inputEvalAreaCollection)
                 + " Stuetzpunkte im Mittel");
         LOGGER.debug("SFC-Info:Input-Topographie: "
-                + FeatureCollectionUtil.size(inputTopography)
+                + FeatureCollectionUtil.size(inputTopoCollection)
                 + " Features, "
-                + FeatureCollectionUtil.getNumVerticesFromFC(inputTopography)
+                + FeatureCollectionUtil.getNumVerticesFromFC(inputTopoCollection)
                 + " Stuetzpunkte, "
-                + FeatureCollectionUtil.getMeanVerticesFromFC(inputTopography)
+                + FeatureCollectionUtil.getMeanVerticesFromFC(inputTopoCollection)
                 + " Stuetzpunkte im Mittel");
         LOGGER.debug("SFC-Info:Input-MSRL-D5: "
-                + FeatureCollectionUtil.size(inputMSRLD5)
+                + FeatureCollectionUtil.size(inputMSRLCollection)
                 + " Features, "
-                + FeatureCollectionUtil.getNumVerticesFromFC(inputMSRLD5)
+                + FeatureCollectionUtil.getNumVerticesFromFC(inputMSRLCollection)
                 + " Stuetzpunkte, "
-                + FeatureCollectionUtil.getMeanVerticesFromFC(inputMSRLD5)
+                + FeatureCollectionUtil.getMeanVerticesFromFC(inputMSRLCollection)
                 + " Stuetzpunkte im Mittel");
 
-        final Observations relevantAlgea;
-        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, inputAssesmentYear);
-        final Observations relevantSeagras;
-        relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, inputAssesmentYear);
-        final int amountSeagrasObservations = relevantSeagras.size();
-        final int amountAlgaeObservations = relevantAlgea.size();
-        paramArrayList.add(relevantSeagras);
-        paramArrayList.add(relevantAlgea);
+        for (int i = 0; i < obsParams.length; i++) {
+            SimpleFeatureCollection sfc = FeatureCollections.newCollection();
+
+            // SimpleFeatureCollection des aktuellen Parameters extrahieren
+            sfc = FeatureCollectionUtil.extract(inputMSRLCollection,
+                    new String[]{"OBSV_PARAMETERNAME"},
+                    new String[]{obsParams[i]});
+
+            // Liste von Beobachtungszeitpunkten erzeugen, fuer die mindestens
+            // eine Beobachtung vorhanden ist
+            LOGGER.debug("getObservationDates: Fuer den Parameter "
+                    + obsParams[i]
+                    + " sind folgende Beobachtungszeitpunkte vorhanden:");
+            ArrayList<DateTime> obsDates = MSRLD5Utils.getObservationDates(sfc);
+
+            // Liste von ObservationCollections anhand von
+            // Beobachtungszeitpunkten
+            obsCollArrayList = MSRLD5Utils.getObsCollByDateList(sfc, obsDates);
+
+            // Relevante ObservationCollections ausgehend von Bewertungsjahr
+            // ermitteln
+            LOGGER.debug("getRelevantFeatureCollections: Folgende Datensaetze fuer den Parameter "
+                    + obsParams[i]
+                    + " und das Bewertungsjahr "
+                    + InputBewertungsjahr + " ausgewaehlt");
+            relCollArrayList = MSRLD5Utils.getRelevantObservationCollections(
+                    obsCollArrayList, InputBewertungsjahr);
+
+            // Relevante ObservationCollections der paramArrayListe hinzufuegen
+            paramArrayList.add(relCollArrayList);
+
+        }
+        // Ende der Schleife ueber die Parameter (Seegras, Algen)
         LOGGER.info("PHASE::Auswahl Seegras und Algen::Ende");
 
         /*
@@ -242,17 +263,11 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
             throw new RuntimeException(
                     "Es sind nicht genuegend Parameter zur Bewertung vorhanden!");
         }
-
-        if (amountSeagrasObservations != amountAlgaeObservations) {
-            throw new RuntimeException(
-                    "Es sind nicht genuegend Parameter zur Bewertung vorhanden!");
-        }
         // Test: Entsprechen sich die Jahre von Seegras- und Algen-Datensaetzen
         // in der paramArrayList Sammlung?
-        // 
-        for (int i = 0; i < amountSeagrasObservations; i++) {
-            if (paramArrayList.get(0).get(i).getDateTime().getYear()
-                    != paramArrayList.get(1).get(i).getDateTime().getYear()) {
+        for (int i = 0; i < relCollArrayList.size(); i++) {
+            if (paramArrayList.get(0).get(i).getDateTime().getYear() != paramArrayList
+                    .get(1).get(i).getDateTime().getYear()) {
                 throw new RuntimeException(
                         "Die relevanten Jahre der"
                         + "beiden Parameter 'Algen' und 'Seegras' entsprechen sich nicht!");
@@ -269,41 +284,44 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
          */
         LOGGER.info("PHASE::Auswahl Berichtsgebiete und Wattflaechen::Start");
         // Inseln aus Berichtsgebieten entfernen
-        this.inputReportingAreas = this.reportingareas.clearReportingAreas();
+        this.inputEvalAreaCollection = ReportingAreaUtils.clearEvalAreas(this.inputEvalAreaCollection);
 
         // Nordfriesland (NF) und Dithmarschen (DI) aus Berichtsgebieten
         // extrahieren
-        bGebietNFCollection = this.reportingareas.extractNF();
-
+        bGebietNFCollection = FeatureCollectionUtil.extract(
+                this.inputEvalAreaCollection, new String[]{"DISTR",
+                    "TEMPLATE"}, new String[]{"NF", ""});
         LOGGER.debug("Filter-Info:Berichtsgebiet Nordfriesland - "
                 + bGebietNFCollection.size() + " Feautures");
 
-        bGebietDICollection = this.reportingareas.extractDI();
-
-        LOGGER.debug("Filter-Info:Berichtsgebiet Diethmarschen - "
+        bGebietDICollection = FeatureCollectionUtil.extract(
+                this.inputEvalAreaCollection, new String[]{"DISTR",
+                    "TEMPLATE"}, new String[]{"DI", ""});
+        LOGGER.debug("Filter-Info:Berichtsgebiet Nordfriesland - "
                 + bGebietDICollection.size() + " Feautures");
 
         // Wattflaechen aus Topographie extrahieren
-        wattCollection = this.topgraphy.extractTidelands();
-
+        wattCollection = FeatureCollectionUtil.extract(inputTopoCollection,
+                new String[]{"POSKEY", "POSKEY"}, new String[]{"Watt",
+                    "watt"});
         LOGGER.debug("Filter-Info:Wattflaechen - " + wattCollection.size()
                 + " Feautures");
 
         // Vorhandene Topographie-Jahre ermitteln
-        existingTopoYears = this.topgraphy.getTopoYears();
+        existingTopoYears = TopographyUtils.getTopoYears(wattCollection);
 
         // Relevante Topographie-Jahre ermitteln
-        relevantTopoYears = this.mpa.getRelevantTopoYears(existingTopoYears, relevantYears);
+        relevantTopoYears = MPAUtils.getRelevantTopoYears(existingTopoYears,
+                relevantYears);
 
         // Liste von ObservationCollections mit Topographien fuer jedes Jahr
         // erstellen und der topoArrayList hinzufuegen
         String relevantTopoYearsString = "";
         for (int i = 0; i < relevantTopoYears.size(); i++) {
-
-            String year = relevantTopoYears.get(i).toString();
             SimpleFeatureCollection sfc = FeatureCollections.newCollection();
-            sfc = this.topgraphy.extractByYear(year);
-
+            sfc = FeatureCollectionUtil.extract(wattCollection,
+                    new String[]{"YEAR"}, new String[]{relevantTopoYears
+                        .get(i).toString()});
             DateTime dt = new DateTime(relevantTopoYears.get(i), 1, 1, 0, 0);
             Double area = FeatureCollectionUtil.getArea(sfc);
             topoArrayList.add(new ObservationCollection(dt, sfc, area));
@@ -328,33 +346,34 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
             IntersectionCollection intersecColl;
 
             // Verschneidung mit NF
-            intersecWattBGebiet = MPAUtils.intersectReportingsareasAndTidelands(
+            intersecWattBGebiet = MPAUtils.intersectBerichtsgebieteAndTopography(
                     bGebietNFCollection,
-                    topoArrayList.getObsCollByYear(relevantTopoYears.get(i)).getFeatureCollection());
+                    MSRLD5Utils.getObsCollByYear(topoArrayList, relevantTopoYears.get(i))
+                    .getSfc());
             LOGGER.debug("Intersection-Result valid: "
                     + FeatureCollectionUtil.checkValid(intersecWattBGebiet));
 
             dt = new DateTime(relevantTopoYears.get(i), 1, 1, 0, 0);
             area = FeatureCollectionUtil.getArea(intersecWattBGebiet);
 
-            intersecColl = new IntersectionCollection(MPAUtils.NORDFRIESLAND,
+            intersecColl = new IntersectionCollection(MPBMain.NORDFRIESLAND,
                     dt, intersecWattBGebiet, area);
             intersecWattBerichtsgebiete.add(intersecColl);
             LOGGER.debug("Verschneidung NF und Wattflaechen "
                     + relevantTopoYears.get(i) + " abgeschlossen");
 
             // Verschneidung mit DI
-            intersecWattBGebiet = MPAUtils.intersectReportingsareasAndTidelands(
+            intersecWattBGebiet = MPAUtils.intersectBerichtsgebieteAndTopography(
                     bGebietDICollection,
-                    topoArrayList.getObsCollByYear(relevantTopoYears.get(i))
-                    .getFeatureCollection());
+                    MSRLD5Utils.getObsCollByYear(topoArrayList, relevantTopoYears.get(i))
+                    .getSfc());
             LOGGER.debug("Intersection-Result valid: "
                     + FeatureCollectionUtil.checkValid(intersecWattBGebiet));
 
             dt = new DateTime(relevantTopoYears.get(i), 1, 1, 0, 0);
             area = FeatureCollectionUtil.getArea(intersecWattBGebiet);
 
-            intersecColl = new IntersectionCollection(MPAUtils.DITHMARSCHEN, dt,
+            intersecColl = new IntersectionCollection(MPBMain.DITHMARSCHEN, dt,
                     intersecWattBGebiet, area);
             intersecWattBerichtsgebiete.add(intersecColl);
             LOGGER.debug("Verschneidung DI und Wattflaechen "
@@ -365,7 +384,8 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
         for (int i = 0; i < relevantYears.size(); i++) {
             IntersectionCollection intsecColl;
             ObservationCollection msrlColl;
-            Integer topoYear = this.mpa.getTopoYear(relevantYears.get(i), existingTopoYears);
+            Integer topoYear = TopographyUtils.getTopoYear(relevantYears.get(i),
+                    existingTopoYears);
 
             LOGGER.debug("Verschneidung: MSRL D5 "
                     + relevantYears.get(i).toString() + " & Topographie "
@@ -374,17 +394,19 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
             // Nordfriesland
             intsecColl = MPAUtils.getIntersecCollByYearAndGebiet(
                     intersecWattBerichtsgebiete, topoYear,
-                    MPAUtils.NORDFRIESLAND);
+                    MPBMain.NORDFRIESLAND);
             totalWattAreaNF = intsecColl.getArea();
             // ZS --> Seegras
-            msrlColl = ((Observations) paramArrayList.get(1)).getObsCollByYear(relevantYears.get(i));
+            msrlColl = MSRLD5Utils.getObsCollByYear(paramArrayList.get(1),
+                    relevantYears.get(i));
 
-            intersecBGebietWattMSRL = this.mpa.intersectIntersectionAndMSRL(intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
+            intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
+                    intsecColl.getSfc(), msrlColl.getSfc());
 
             // Debug
 			/*
              * if (relevantYears.get(i) == 2003) { this.debugA =
-             * intsecColl.getFeatureCollection(); this.debugB = intersecBGebietWattMSRL; }
+             * intsecColl.getSfc(); this.debugB = intersecBGebietWattMSRL; }
              */
             LOGGER.debug("Intersection-Result valid: "
                     + FeatureCollectionUtil.checkValid(intersecBGebietWattMSRL));
@@ -392,11 +414,11 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
             ZS_totalareaNF = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
             ZS_40areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"4"}));
             ZS_60areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"6"}));
             if (ZS_40areaNF > 0 && ZS_60areaNF > 0) {
                 ZS_numTypesNF = 2;
@@ -406,38 +428,40 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
             LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Seegras "
                     + relevantYears.get(i) + " in Nordfriesland");
             // OP --> Algen
-            msrlColl = ((Observations) paramArrayList.get(0)).getObsCollByYear(relevantYears.get(i));
+            msrlColl = MSRLD5Utils.getObsCollByYear(paramArrayList.get(0),
+                    relevantYears.get(i));
             intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
-                    intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
+                    intsecColl.getSfc(), msrlColl.getSfc());
 
             OP_totalareaNF = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
             OP_40areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"4"}));
             OP_60areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"6"}));
             LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Algen "
                     + relevantYears.get(i) + " in Nordfriesland");
 
             // Dithmarschen
             intsecColl = MPAUtils.getIntersecCollByYearAndGebiet(
-                    intersecWattBerichtsgebiete, topoYear, MPAUtils.DITHMARSCHEN);
+                    intersecWattBerichtsgebiete, topoYear, MPBMain.DITHMARSCHEN);
             totalWattAreaDI = intsecColl.getArea();
             // ZS --> Seegras
-            msrlColl = ((Observations) paramArrayList.get(1)).getObsCollByYear(relevantYears.get(i));
+            msrlColl = MSRLD5Utils.getObsCollByYear(paramArrayList.get(1),
+                    relevantYears.get(i));
             intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
-                    intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
+                    intsecColl.getSfc(), msrlColl.getSfc());
             ZS_totalareaDI = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
             ZS_40areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"4"}));
             ZS_60areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"6"}));
             if (ZS_40areaDI > 0 && ZS_60areaDI > 0) {
                 ZS_numTypesDI = 2;
@@ -447,17 +471,18 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
             LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Seegras "
                     + relevantYears.get(i) + " in Dithmarschen");
             // OP --> Algen
-            msrlColl = ((Observations) paramArrayList.get(0)).getObsCollByYear(relevantYears.get(i));
+            msrlColl = MSRLD5Utils.getObsCollByYear(paramArrayList.get(0),
+                    relevantYears.get(i));
             intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
-                    intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
+                    intsecColl.getSfc(), msrlColl.getSfc());
             OP_totalareaDI = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
             OP_40areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"4"}));
             OP_60areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extract(
                     intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
+                    new String[]{"OBSV_PARAMETERVALUE"},
                     new String[]{"6"}));
             LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Algen "
                     + relevantYears.get(i) + " in Dithmarschen");
@@ -504,18 +529,14 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
     }
 
     /**
-     * Erzeugt relevantSeagrasus den
-     * EingrelevantSeagrasrelevantAlgeae-FerelevantSeagrastureCollections fuer
-     * die AusgrelevantSeagrasngsgeometrien der relevantAlgeaeiden
-     * BerichtsgerelevantAlgeaiete NF und DI zwei verschmolzene Polygone mit
-     * BewertungsprelevantSeagrasrrelevantSeagrasmetern
+     * Erzeugt aus den Eingabe-FeatureCollections fuer die Ausgangsgeometrien
+     * der beiden Berichtsgebiete NF und DI zwei verschmolzene Polygone mit
+     * Bewertungsparametern
      *
-     * @param nfCollection - SimpleFerelevantSeagrastureCollection
-     * BerichtsgerelevantAlgeaiet NordfrieslrelevantSeagrasnd
-     * @param diCollection - SimpleFerelevantSeagrastureCollection
-     * BerichtsgerelevantAlgeaiet DithmrelevantSeagrasrschen
-     * @return SimpleFerelevantSeagrastureCollection der relevantAlgeaewerteten
-     * BerichtsgerelevantAlgeaiete
+     * @param nfCollection - SimpleFeatureCollection Berichtsgebiet
+     * Nordfriesland
+     * @param diCollection - SimpleFeatureCollection Berichtsgebiet Dithmarschen
+     * @return SimpleFeatureCollection der bewerteten Berichtsgebiete
      */
     private SimpleFeatureCollection getEvaluatedAreas(
             SimpleFeatureCollection nfCollection,
@@ -533,7 +554,7 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
         ftBuilder.setNamespaceURI("http://www.disy.net/MPBBerichtsgebiet");
         ftBuilder.add("MPBGeom", Polygon.class);
         ftBuilder.setDefaultGeometry("MPBGeom");
-        ftBuilder.add(ReportingAreaUtils.ATTRIB_DISTR, String.class);
+        ftBuilder.add("DISTR", String.class);
         ftBuilder.add("MPBMeanEQR", String.class);
         ftBuilder.add("MPBEvalStringEQR", String.class);
         SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
@@ -549,12 +570,12 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
         }
         geom = FeatureCollectionUtil.union(geomCollection);
         featureBuilder.set("MPBGeom", geom);
-        featureBuilder.set(ReportingAreaUtils.ATTRIB_DISTR, ReportingAreaUtils.ATTRIB_DISTR_NF);
+        featureBuilder.set("DISTR", "NF");
         featureBuilder.set("MPBMeanEQR",
-                result.getAreaResult(MPAUtils.NORDFRIESLAND).getMeanEQR()
+                result.getAreaResult(MPBMain.NORDFRIESLAND).getMeanEQR()
                 .toString());
         featureBuilder.set("MPBEvalStringEQR",
-                result.getAreaResult(MPAUtils.NORDFRIESLAND)
+                result.getAreaResult(MPBMain.NORDFRIESLAND)
                 .getMeanEQREvalString());
         resultCollection.add(featureBuilder.buildFeature(null));
         geomCollection.clear();
@@ -568,12 +589,12 @@ public class MPBMain extends AbstractAnnotatedAlgorithm {
         }
         geom = FeatureCollectionUtil.union(geomCollection);
         featureBuilder.set("MPBGeom", geom);
-        featureBuilder.set(ReportingAreaUtils.ATTRIB_DISTR, ReportingAreaUtils.ATTRIB_DISTR_DI);
+        featureBuilder.set("DISTR", "DI");
         featureBuilder.set("MPBMeanEQR",
-                result.getAreaResult(MPAUtils.DITHMARSCHEN).getMeanEQR()
+                result.getAreaResult(MPBMain.DITHMARSCHEN).getMeanEQR()
                 .toString());
         featureBuilder.set("MPBEvalStringEQR",
-                result.getAreaResult(MPAUtils.DITHMARSCHEN)
+                result.getAreaResult(MPBMain.DITHMARSCHEN)
                 .getMeanEQREvalString());
         resultCollection.add(featureBuilder.buildFeature(null));
         geomCollection.clear();

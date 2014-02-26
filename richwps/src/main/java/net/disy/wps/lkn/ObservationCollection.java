@@ -1,13 +1,8 @@
-package net.disy.wps.lkn.processes.mpa.types;
+package net.disy.wps.lkn;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.joda.time.DateTime;
 
-
-/**
- * 
- * @author woessner
- */
 public class ObservationCollection implements Comparable<ObservationCollection> {
 
 	private DateTime obsTime;
@@ -28,7 +23,7 @@ public class ObservationCollection implements Comparable<ObservationCollection> 
 		return this.area;
 	}
 	
-	public SimpleFeatureCollection getFeatureCollection() {
+	public SimpleFeatureCollection getSfc() {
 		return this.sfc;
 	}
 	

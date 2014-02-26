@@ -1,13 +1,16 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package net.disy.wps.lkn.utils;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import net.disy.wps.common.DescriptorContainer;
 import net.disy.wps.lkn.processes.mpa.types.IntersectionCollection;
-import net.disy.wps.lkn.processes.mpa.types.ObservationCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollections;
 import org.geotools.feature.FeatureIterator;
@@ -21,35 +24,18 @@ import org.opengis.feature.simple.SimpleFeatureType;
  */
 public class MPAUtils {
 
-    public static final int NORDFRIESLAND = 1;
-    public static final int DITHMARSCHEN = 2;
-    public static final String NORDFRIESLAND_NAME = "Nordfriesland";
-    public static final String DITHMARSCHEN_NAME = "Dithmarschen";
-
-    public static final String OBSV_PARAMETERVALUE = "OBSV_PARAMETERVALUE";
-
-    private TopographyUtils topgraphy;
-    private ReportingAreaUtils reportingareas;
-    private MSRLD5Utils msrld5;
-
-    public MPAUtils(TopographyUtils topgraphy, ReportingAreaUtils reportingareas, MSRLD5Utils msrld5) {
-        this.topgraphy = topgraphy;
-        this.reportingareas = reportingareas;
-        this.msrld5 = msrld5;
-    }
-
     /**
      * Verschneidet eine SimpleFeatureCollection von Berichtsgebieten mit einer
      * SimpleFeatureCollection von Topographien eines Jahres. Die
      * zurueckgegebene SimpleFeatureCollection enthaelt alle Attribute der
      * Topographien und die Angaben 'DIST' und 'Name' der Berichtsgebiete
      *
-     * @param reportingareas - SimpleFeatureCollection von Berichtsgebieten
+     * @param berichtsFc - SimpleFeatureCollection von Berichtsgebieten
      * @param topoFc - SimpleFeatureCollection von Topographien eines Jahres
      * @return SimpleFeatureCollection des Verschneidungs-Ergebnisses
      */
-    public static SimpleFeatureCollection intersectReportingsareasAndTidelands(
-            SimpleFeatureCollection reportingareas, SimpleFeatureCollection tidelands) {
+    public static SimpleFeatureCollection intersectBerichtsgebieteAndTopography(
+            SimpleFeatureCollection berichtsFc, SimpleFeatureCollection wattFc) {
 
         SimpleFeatureCollection intersecFeatureCollection = FeatureCollections
                 .newCollection();
@@ -71,14 +57,14 @@ public class MPAUtils {
          * Verschneidung relevanten Features
          */
         // Iterator ueber Features der Berichtsgebiete
-        iterA = reportingareas.features();
+        iterA = berichtsFc.features();
         try {
             while (iterA.hasNext()) {
                 berichtsFeature = iterA.next();
                 berichtsBB = ((Geometry) berichtsFeature.getDefaultGeometry())
                         .getEnvelope();
 
-                iterB = tidelands.features();
+                iterB = wattFc.features();
                 try {
                     while (iterB.hasNext()) {
                         wattFeature = iterB.next();
@@ -106,7 +92,7 @@ public class MPAUtils {
         dcList.add(new DescriptorContainer(1, 1, false, "NAME", String.class));
         SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
                 FeatureCollectionUtil.refactorFeatureType(
-                        (SimpleFeatureType) tidelands.getSchema(), dcList,
+                        (SimpleFeatureType) wattFc.getSchema(), dcList,
                         "BerichtsgebieteTopographieIntersection", null));
 
         // ArrayLists aus HashSets befuellen
@@ -127,7 +113,7 @@ public class MPAUtils {
                 if (!intersec.isEmpty()) {
                     featureBuilder = FeatureCollectionUtil.initBuilderValues(featureBuilder,
                             wattFeature);
-                    featureBuilder.set(tidelands.getSchema()
+                    featureBuilder.set(wattFc.getSchema()
                             .getGeometryDescriptor().getLocalName(), intersec);
                     featureBuilder.set("DISTR",
                             berichtsFeature.getAttribute("DISTR"));
@@ -151,7 +137,7 @@ public class MPAUtils {
      * @param msrlYears
      * @return
      */
-    public ArrayList<Integer> getRelevantTopoYears(
+    public static ArrayList<Integer> getRelevantTopoYears(
             ArrayList<Integer> topoYears, ArrayList<Integer> msrlYears) {
         ArrayList<Integer> relTopoYears = new ArrayList<Integer>();
         HashSet<Integer> hs = new HashSet<Integer>();
@@ -159,7 +145,7 @@ public class MPAUtils {
         // Schleife ueber MSRL-Years, fuer die jeweils das entsprechende
         // TopoYear bestimmt werden soll
         for (int i = 0; i < msrlYears.size(); i++) {
-            relTopoYears.add(this.getTopoYear(msrlYears.get(i), topoYears));
+            relTopoYears.add(TopographyUtils.getTopoYear(msrlYears.get(i), topoYears));
         }
         // Liste auf eindeutige Werte beschraenken
         hs.addAll(relTopoYears);
@@ -168,7 +154,7 @@ public class MPAUtils {
 
         return relTopoYears;
     }
-
+    
     /**
      * Verschneidet das Verschneidungs-Ergebnis von Berichtsgebieten &
      * Wattflaechen mit den MSRL-Daten (Seegras-, Algen-Geometrien) eines
@@ -254,8 +240,8 @@ public class MPAUtils {
                 if (!intersec.isEmpty()) {
                     featureBuilder.set(msrlColl.getSchema()
                             .getGeometryDescriptor().getLocalName(), intersec);
-                    featureBuilder.set(OBSV_PARAMETERVALUE,
-                            msrlFeature.getAttribute(OBSV_PARAMETERVALUE));
+                    featureBuilder.set("OBSV_PARAMETERVALUE",
+                            msrlFeature.getAttribute("OBSV_PARAMETERVALUE"));
                     SimpleFeature intersectFeature = featureBuilder
                             .buildFeature(null);
                     intersecFeatureCollection.add(intersectFeature);
@@ -264,8 +250,9 @@ public class MPAUtils {
         }
         return intersecFeatureCollection;
     }
-
-    /**
+    
+    
+      /**
      * Gibt eine durch ein Bewertungsgebiet und ein Jahr spezifizierte
      * Intersection-Collection aus einer Liste zurueck
      *
@@ -286,43 +273,6 @@ public class MPAUtils {
             }
         }
         return intersecColl;
-    }
-
-    
-
-    
-
-    /**
-     * Liefert ein einem Topographie-Datensatz zugehoeriges Jahr aus einer Liste
-     * von moeglichen Jahren, welches die minimale zeitliche Distanz zu einem
-     * Eingabejahr aufweist. Im Fall von gleichen Zeitunterschieden zu zwei
-     * Jahren, wird das spaetere zurueck gegeben.
-     *
-     * @param year - Eingabejahr, zu dem ein passendes Topographie-Jahr
-     * ermittelt werden soll
-     * @param topoYearList - Liste mit vorhandenen Topographie-Jahren
-     * @return Jahr
-     */
-    public int getTopoYear(final int year, final ArrayList<Integer> topoYearList) {
-        ArrayList<Integer> dList = new ArrayList<Integer>();
-        Integer minDiff;
-        Integer minYearIndex = -1;
-
-        // Wichtig: absteigend sortieren!
-        Collections.sort(topoYearList, Collections.reverseOrder());
-
-        for (int i = 0; i < topoYearList.size(); i++) {
-            dList.add(Math.abs(year - topoYearList.get(i)));
-        }
-        minDiff = dList.get(0);
-        for (int j = 1; j < dList.size() - 1; j++) {
-            if (minDiff > dList.get(j)) {
-                minDiff = dList.get(j);
-            }
-        }
-        minYearIndex = dList.indexOf(minDiff);
-
-        return topoYearList.get(minYearIndex);
     }
 
 }

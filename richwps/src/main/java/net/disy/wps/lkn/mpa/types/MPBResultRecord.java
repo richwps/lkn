@@ -2,7 +2,6 @@ package net.disy.wps.lkn.processes.mpa.types;
 
 import net.disy.wps.lkn.processes.mpa.MPBMain;
 import net.disy.wps.lkn.utils.FeatureCollectionUtil;
-import net.disy.wps.lkn.utils.MPAUtils;
 
 /**
  * Diese Klasse repraesentiert einen Ergebnis-Record als Teil eines
@@ -240,14 +239,14 @@ public class MPBResultRecord implements Cloneable {
 	 * @param evalMatrix
 	 */
 	public void calculateParameters(MPBEvalMatrix evalMatrix) {
-		if (evalMatrix.areaOfValidity == MPAUtils.NORDFRIESLAND) {
+		if (evalMatrix.areaOfValidity == MPBMain.NORDFRIESLAND) {
 			setP1Value(this.ZS_totalareaNF / this.totalWattAreaNF * 100);
 			p2Value = this.ZS_60areaNF / this.ZS_totalareaNF * 100;
 			// p3 ist konstant - basierend auf Annahmen
 			p3Value = 75.73;
 			p4Value = this.OP_totalareaNF / this.totalWattAreaNF * 100;
 			p5Value = this.OP_60areaNF / this.OP_totalareaNF * 100;
-		} else if (evalMatrix.areaOfValidity == MPAUtils.DITHMARSCHEN) {
+		} else if (evalMatrix.areaOfValidity == MPBMain.DITHMARSCHEN) {
 			setP1Value(this.ZS_totalareaDI / this.totalWattAreaDI * 100);
 			p2Value = this.ZS_60areaDI / this.ZS_totalareaDI * 100;
 			// p3 ist konstant - basierend auf Annahmen
