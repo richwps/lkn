@@ -1,8 +1,8 @@
-package net.disy.wps.lkn.mpa.types;
+package net.disy.wps.lkn.processes.mpa.types;
 
-import net.disy.wps.lkn.mpa.processes.MacrophyteAssesment;
-import net.disy.wps.lkn.FeatureCollectionUtil;
-import net.disy.wps.lkn.mpa.MPAUtils;
+import net.disy.wps.lkn.processes.mpa.MPBMain;
+import net.disy.wps.lkn.utils.FeatureCollectionUtil;
+import net.disy.wps.lkn.utils.MPAUtils;
 
 /**
  * Diese Klasse repraesentiert einen Ergebnis-Record als Teil eines

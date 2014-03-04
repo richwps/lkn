@@ -1,6 +1,5 @@
 package net.disy.wps.lkn;
 
-import net.disy.wps.lkn.utils.FeatureCollectionUtil;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;

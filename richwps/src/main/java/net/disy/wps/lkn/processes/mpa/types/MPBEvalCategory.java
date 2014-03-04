@@ -1,4 +1,4 @@
-package net.disy.wps.lkn.mpa.types;
+package net.disy.wps.lkn.processes.mpa.types;
 
 /**
  * Diese Klasse Repraesentiert eine Bewertungskategorie 

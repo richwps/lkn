@@ -1,4 +1,4 @@
-package net.disy.wps.lkn.mpa.types;
+package net.disy.wps.lkn.processes.mpa.types;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import net.disy.wps.lkn.FeatureCollectionUtil;
+import net.disy.wps.lkn.utils.FeatureCollectionUtil;
 
 import org.joda.time.DateTime;
 

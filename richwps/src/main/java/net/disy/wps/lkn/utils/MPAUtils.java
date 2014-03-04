@@ -1,23 +1,17 @@
-package net.disy.wps.lkn.mpa;
+package net.disy.wps.lkn.utils;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Polygon;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import net.disy.wps.common.DescriptorContainer;
-import net.disy.wps.lkn.FeatureCollectionUtil;
-import net.disy.wps.lkn.MSRLD5Utils;
-import net.disy.wps.lkn.ReportingAreaUtils;
-import net.disy.wps.lkn.TopographyUtils;
-import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollection;
-import net.disy.wps.lkn.mpa.types.MPBResult;
+import net.disy.wps.lkn.processes.mpa.types.IntersectionCollection;
+import net.disy.wps.lkn.processes.mpa.types.ObservationCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollections;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -280,10 +274,10 @@ public class MPAUtils {
      * @param gebiet
      * @return
      */
-    public static IntersectionFeatureCollection getIntersecCollByYearAndGebiet(
-            ArrayList<IntersectionFeatureCollection> intersecCollList, Integer year,
+    public static IntersectionCollection getIntersecCollByYearAndGebiet(
+            ArrayList<IntersectionCollection> intersecCollList, Integer year,
             Integer gebiet) {
-        IntersectionFeatureCollection intersecColl = null;
+        IntersectionCollection intersecColl = null;
 
         for (int j = 0; j < intersecCollList.size(); j++) {
             if (intersecCollList.get(j).getDateTime().getYear() == year
@@ -293,6 +287,10 @@ public class MPAUtils {
         }
         return intersecColl;
     }
+
+    
+
+    
 
     /**
      * Liefert ein einem Topographie-Datensatz zugehoeriges Jahr aus einer Liste
@@ -325,82 +323,6 @@ public class MPAUtils {
         minYearIndex = dList.indexOf(minDiff);
 
         return topoYearList.get(minYearIndex);
-    }
-
-    /**
-     * Erzeugt aus den Eingabe-FeatureCollections fuer die Ausgangsgeometrien
-     * der beiden Berichtsgebiete NF und DI zwei verschmolzene Polygone mit
-     * Bewertungsparametern
-     *
-     * @param result -
-     * @param nfCollection - SimpleFeatureCollection Berichtsgebiet
-     * Nordfriesland
-     * @param diCollection - SimpleFeatureCollection Berichtsgebiet Dithmarschen
-     * @return SimpleFeatureCollection der bewerteten Berichtsgebiete
-     */
-    public static
-            SimpleFeatureCollection getEvaluatedAreas(final MPBResult result,
-                    SimpleFeatureCollection nfCollection,
-                    SimpleFeatureCollection diCollection) {
-        Geometry geom;
-        SimpleFeatureCollection resultCollection = FeatureCollections
-                .newCollection();
-        ArrayList<DescriptorContainer> dcList = new ArrayList<DescriptorContainer>();
-        dcList.add(new DescriptorContainer(1, 1, false, "MPBMeanEQR",
-                String.class));
-
-        // FeatureType bauen
-        SimpleFeatureTypeBuilder ftBuilder = new SimpleFeatureTypeBuilder();
-        ftBuilder.setName("MPBBerichtsgebiet");
-        ftBuilder.setNamespaceURI("http://www.disy.net/MPBBerichtsgebiet");
-        ftBuilder.add("MPBGeom", Polygon.class);
-        ftBuilder.setDefaultGeometry("MPBGeom");
-        ftBuilder.add(ReportingAreaUtils.ATTRIB_DISTR, String.class);
-        ftBuilder.add("MPBMeanEQR", String.class);
-        ftBuilder.add("MPBEvalStringEQR", String.class);
-        SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
-                ftBuilder.buildFeatureType());
-
-        // Geometrien aus Nordfriesland sammeln
-        FeatureIterator<SimpleFeature> nfIter = nfCollection.features();
-        ArrayList<Geometry> geomCollection = new ArrayList<Geometry>();
-        while (nfIter.hasNext()) {
-            SimpleFeature feature = nfIter.next();
-            geom = (Geometry) feature.getDefaultGeometry();
-            geomCollection.add(geom);
-        }
-        geom = FeatureCollectionUtil.union(geomCollection);
-        featureBuilder.set("MPBGeom", geom);
-        featureBuilder.set(ReportingAreaUtils.ATTRIB_DISTR, ReportingAreaUtils.ATTRIB_DISTR_NF);
-        featureBuilder.set("MPBMeanEQR",
-                result.getAreaResult(MPAUtils.NORDFRIESLAND).getMeanEQR()
-                .toString());
-        featureBuilder.set("MPBEvalStringEQR",
-                result.getAreaResult(MPAUtils.NORDFRIESLAND)
-                .getMeanEQREvalString());
-        resultCollection.add(featureBuilder.buildFeature(null));
-        geomCollection.clear();
-
-        // Geometrien aus Dithmarschen sammeln
-        FeatureIterator<SimpleFeature> diIter = diCollection.features();
-        while (diIter.hasNext()) {
-            SimpleFeature feature = diIter.next();
-            geom = (Geometry) feature.getDefaultGeometry();
-            geomCollection.add(geom);
-        }
-        geom = FeatureCollectionUtil.union(geomCollection);
-        featureBuilder.set("MPBGeom", geom);
-        featureBuilder.set(ReportingAreaUtils.ATTRIB_DISTR, ReportingAreaUtils.ATTRIB_DISTR_DI);
-        featureBuilder.set("MPBMeanEQR",
-                result.getAreaResult(MPAUtils.DITHMARSCHEN).getMeanEQR()
-                .toString());
-        featureBuilder.set("MPBEvalStringEQR",
-                result.getAreaResult(MPAUtils.DITHMARSCHEN)
-                .getMeanEQREvalString());
-        resultCollection.add(featureBuilder.buildFeature(null));
-        geomCollection.clear();
-
-        return resultCollection;
     }
 
 }

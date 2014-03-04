@@ -32,6 +32,6 @@
     <!-- copies the remote log to localhost (./catalina.out)-->
     <target name="pulllogs">
         <scp file="${user}@${host}:/var/log/tomcat7/catalina.out" todir="catalina.out" port="${port}" password="${password}" trust="true"/>
-        <scp file="${user}@${host}:/var/log/tomcat7/catalina.out" todir="52n-wps.log" port="${port}" password="${password}" trust="true"/>
+        <scp file="${user}@${host}:/var/log/tomcat7/52n-wps.log" todir="52n-wps.log" port="${port}" password="${password}" trust="true"/>
     </target>
 </project>

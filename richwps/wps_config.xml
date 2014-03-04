@@ -513,7 +513,7 @@
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultipleComplexInAndOutputsDummyTestClass</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>-->
-                        <Property name="Algorithm" active="true">net.disy.wps.lkn.processes.mpa.MPBMain</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssesment</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">

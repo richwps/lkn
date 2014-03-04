@@ -1,22 +1,20 @@
-package net.disy.wps.lkn.mpa.types;
+package net.disy.wps.lkn.processes.mpa.types;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.joda.time.DateTime;
 
 
 /**
- * Wrapper-Klasse fuer ObservationFeatureCollection, die als SimpleFeatureCollction
- angeboten werden.
  * 
  * @author woessner
  */
-public class ObservationFeatureCollection implements Comparable<ObservationFeatureCollection> {
+public class ObservationCollection implements Comparable<ObservationCollection> {
 
 	private DateTime obsTime;
 	private Double area;
 	private SimpleFeatureCollection sfc;
 	
-	public ObservationFeatureCollection(DateTime obsTime, SimpleFeatureCollection sfc, Double area) {
+	public ObservationCollection(DateTime obsTime, SimpleFeatureCollection sfc, Double area) {
 		this.obsTime = obsTime;
 		this.area = area;
 		this.sfc = sfc;
@@ -44,7 +42,9 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
 	}
 
 	@Override
-	public int compareTo(ObservationFeatureCollection coll) {
+	public int compareTo(ObservationCollection coll) {
 		return this.getDateTime().compareTo(coll.getDateTime());
 	}
+
+	
 }
