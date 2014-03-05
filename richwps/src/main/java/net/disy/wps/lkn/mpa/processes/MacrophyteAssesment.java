@@ -2,8 +2,8 @@ package net.disy.wps.lkn.mpa.processes;
 
 import java.io.File;
 import java.util.ArrayList;
+import net.disy.wps.lkn.utils.FeatureCollectionUtil;
 
-import net.disy.wps.lkn.FeatureCollectionUtil;
 import net.disy.wps.n52.binding.MPBResultBinding;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -23,11 +23,12 @@ import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollection;
 import net.disy.wps.lkn.mpa.types.MPBResult;
 import net.disy.wps.lkn.mpa.types.MPBResultRecord;
 import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
-import net.disy.wps.lkn.mpa.MPAUtils;
-import net.disy.wps.lkn.MSRLD5Utils;
+
+import net.disy.wps.lkn.utils.MSRLD5Utils;
 import net.disy.wps.lkn.mpa.types.ObservationsList;
-import net.disy.wps.lkn.ReportingAreaUtils;
-import net.disy.wps.lkn.TopographyUtils;
+import net.disy.wps.lkn.utils.MPAUtils;
+import net.disy.wps.lkn.utils.ReportingAreaUtils;
+import net.disy.wps.lkn.utils.TopographyUtils;
 
 @Algorithm(version = "0.9.5", title = "Makrophytenbewertung", abstrakt = "Prozess zur Bewertung der Berichtsgebiete Nordfriesland und Dithmarschen anhand von MSRL-D5 Daten")
 public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
@@ -124,11 +125,11 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         //
         //[relevantAlgea,relevantSeagras, relevantYears] process::selectMSRLD5Parameters(this.inputMSRLD5, this.inputAssesmentYear)
         final ObservationsList relevantAlgea;
-        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBSV_PARAMNAME_OP, this.inputAssesmentYear);
+        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
         final int amountAlgaeObservations = relevantAlgea.size();
 
         final ObservationsList relevantSeagras;
-        relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBSV_PARAMNAME_ZS, this.inputAssesmentYear);
+        relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
         final int amountSeagrasObservations = relevantSeagras.size();
 
 

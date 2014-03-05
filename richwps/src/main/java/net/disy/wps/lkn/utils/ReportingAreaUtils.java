@@ -1,4 +1,4 @@
-package net.disy.wps.lkn;
+package net.disy.wps.lkn.utils;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.factory.CommonFactoryFinder;

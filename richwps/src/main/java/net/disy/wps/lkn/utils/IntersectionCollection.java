@@ -1,5 +1,6 @@
-package net.disy.wps.lkn;
+package net.disy.wps.lkn.utils;
 
+import net.disy.wps.lkn.ObservationCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.joda.time.DateTime;
 

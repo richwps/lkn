@@ -1,4 +1,4 @@
-package net.disy.wps.lkn;
+package net.disy.wps.lkn.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +24,54 @@ public class TopographyUtils {
     }
 
     /**
+     * Ermittelt aus der SimpleFeatureCollection der Topographien alle
+     * eindeutigen im Feld "YEAR" enthaltenen Werte
+     *
+     * @return
+     */
+    public ArrayList<Integer> getTopoYears() {
+        FeatureIterator<SimpleFeature> iter = this.topography.features();
+        ArrayList<Integer> existingTopoYears = new ArrayList<Integer>();
+        HashSet<Integer> hs = new HashSet<Integer>();
+        String existingYear;
+
+        try {
+            // Iteration ueber alle Features
+            while (iter.hasNext()) {
+                SimpleFeature feature = (SimpleFeature) iter.next();
+                existingYear = (String) feature.getAttribute(ATTRIB_YEAR);
+                existingTopoYears.add(Integer.parseInt(existingYear));
+            }
+        } finally {
+            // Iterator schliessen
+            iter.close();
+        }
+
+        // Ergebnisliste in eine Liste mit eindeutigen Werten konvertieren
+        hs.addAll(existingTopoYears);
+        existingTopoYears.clear();
+        existingTopoYears.addAll(hs);
+        // Aufsteigend sortieren
+        Collections.sort(existingTopoYears);
+        return existingTopoYears;
+    }
+
+    public SimpleFeatureCollection extractTidelands() {
+        String[] keys = {ATTRIB_POSKEY, ATTRIB_POSKEY};
+        String[] values = {"Watt", "watt"};
+        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extractEquals(this.topography, keys, values);
+        return rsfc;
+    }
+
+    public SimpleFeatureCollection extractByYear(final String year) {
+        String[] keys = {ATTRIB_YEAR};
+        String[] values = {year};
+        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extractEquals(this.topography, keys, values);
+        return rsfc;
+    }
+
+    
+     /**
      * Ermittelt aus der SimpleFeatureCollection der Topographien alle
      * eindeutigen im Feld "YEAR" enthaltenen Werte
      *
@@ -56,20 +104,7 @@ public class TopographyUtils {
         return existingTopoYears;
     }
 
-    public SimpleFeatureCollection extractTidelands() {
-        String[] keys = {ATTRIB_POSKEY, ATTRIB_POSKEY};
-        String[] values = {"Watt", "watt"};
-        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extractEquals(this.topography, keys, values);
-        return rsfc;
-    }
-
-    public SimpleFeatureCollection extractByYear(final String year) {
-        String[] keys = {ATTRIB_YEAR};
-        String[] values = {year};
-        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extractEquals(this.topography, keys, values);
-        return rsfc;
-    }
-
+    
    public SimpleFeatureCollection getFeatureCollection(){
         return this.topography;
     }

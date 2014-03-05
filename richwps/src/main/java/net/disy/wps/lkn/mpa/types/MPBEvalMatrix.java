@@ -2,7 +2,7 @@ package net.disy.wps.lkn.mpa.types;
 
 import net.disy.wps.lkn.mpa.processes.MacrophyteAssesment;
 import java.util.ArrayList;
-import net.disy.wps.lkn.mpa.MPAUtils;
+import net.disy.wps.lkn.utils.MPAUtils;
 
 /**
  * Diese Klasse repraesentiert eine Bewertungsmatrix, bestehend aus Parametern

@@ -1,4 +1,4 @@
-package net.disy.wps.lkn;
+package net.disy.wps.lkn.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;

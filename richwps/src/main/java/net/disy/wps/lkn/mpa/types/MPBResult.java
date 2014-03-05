@@ -10,9 +10,10 @@ import javax.xml.bind.Marshaller;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import net.disy.wps.lkn.utils.FeatureCollectionUtil;
 
-import net.disy.wps.lkn.FeatureCollectionUtil;
-import net.disy.wps.lkn.mpa.MPAUtils;
+import net.disy.wps.lkn.utils.MPAUtils;
+
 
 import org.joda.time.DateTime;
 
