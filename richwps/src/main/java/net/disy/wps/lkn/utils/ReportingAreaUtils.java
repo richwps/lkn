@@ -1,4 +1,4 @@
-package net.disy.wps.lkn.utils;
+package net.disy.wps.lkn;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.factory.CommonFactoryFinder;
@@ -53,7 +53,7 @@ public class ReportingAreaUtils {
     public SimpleFeatureCollection extractNF() {
         String[] keys = {ATTRIB_DISTR, ATTRIB_TEMPLATE};
         String[] values = {ATTRIB_DISTR_NF, ""};
-        SimpleFeatureCollection NFCollection = FeatureCollectionUtil.extract(
+        SimpleFeatureCollection NFCollection = FeatureCollectionUtil.extractEquals(
                 this.reportingareas, keys, values);
         return NFCollection;
     }
@@ -62,7 +62,7 @@ public class ReportingAreaUtils {
     public SimpleFeatureCollection extractDI() {
         String[] keys = {ATTRIB_DISTR, ATTRIB_TEMPLATE};
         String[] values = {ATTRIB_DISTR_DI, ""};
-        SimpleFeatureCollection NFCollection = FeatureCollectionUtil.extract(
+        SimpleFeatureCollection NFCollection = FeatureCollectionUtil.extractEquals(
                 this.reportingareas, keys, values);
         return NFCollection;
     }

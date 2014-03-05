@@ -1,4 +1,4 @@
-package net.disy.wps.lkn.utils;
+package net.disy.wps.lkn;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,17 +29,16 @@ public class TopographyUtils {
      *
      * @return
      */
-    public ArrayList<Integer> getTopoYears() {
-        FeatureIterator<SimpleFeature> iter = this.topography.features();
+    public ArrayList<Integer> getExistingTopographyYears() {
+        
         ArrayList<Integer> existingTopoYears = new ArrayList<Integer>();
-        HashSet<Integer> hs = new HashSet<Integer>();
-        String existingYear;
-
+        
+        FeatureIterator<SimpleFeature> iter = this.topography.features();
         try {
             // Iteration ueber alle Features
             while (iter.hasNext()) {
-                SimpleFeature feature = (SimpleFeature) iter.next();
-                existingYear = (String) feature.getAttribute(ATTRIB_YEAR);
+                final SimpleFeature feature = (SimpleFeature) iter.next();
+                final String existingYear = (String) feature.getAttribute(ATTRIB_YEAR);
                 existingTopoYears.add(Integer.parseInt(existingYear));
             }
         } finally {
@@ -47,6 +46,7 @@ public class TopographyUtils {
             iter.close();
         }
 
+        HashSet<Integer> hs = new HashSet<Integer>();
         // Ergebnisliste in eine Liste mit eindeutigen Werten konvertieren
         hs.addAll(existingTopoYears);
         existingTopoYears.clear();
@@ -59,14 +59,14 @@ public class TopographyUtils {
     public SimpleFeatureCollection extractTidelands() {
         String[] keys = {ATTRIB_POSKEY, ATTRIB_POSKEY};
         String[] values = {"Watt", "watt"};
-        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extract(this.topography, keys, values);
+        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extractEquals(this.topography, keys, values);
         return rsfc;
     }
 
     public SimpleFeatureCollection extractByYear(final String year) {
         String[] keys = {ATTRIB_YEAR};
         String[] values = {year};
-        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extract(this.topography, keys, values);
+        SimpleFeatureCollection rsfc = FeatureCollectionUtil.extractEquals(this.topography, keys, values);
         return rsfc;
     }
 

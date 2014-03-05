@@ -1,10 +1,11 @@
-package net.disy.wps.lkn.utils;
+package net.disy.wps.lkn;
 
+import net.disy.wps.lkn.mpa.types.ObservationsList;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import net.disy.wps.lkn.processes.mpa.types.ObservationCollection;
+import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollections;
 import org.geotools.feature.FeatureIterator;
@@ -22,21 +23,25 @@ import org.opengis.feature.simple.SimpleFeature;
  */
 public class MSRLD5Utils {
 
+    /**
+     * A collection of MSRLD5 observations.
+     */
     private SimpleFeatureCollection MSRLD5s;
-    // DateTimeFormatter: Repraesentiert das Datums-/Zeit-Format in den
-    // MSRL-Daten
+
     public static final String ATTRIB_OBSV_PHENOMENONTIME = "OBSV_PHENOMENONTIME";
     public static final String ATTRIB_OBSV_PARAMNAME = "OBSV_PARAMETERNAME";
     /**
      * COV_OP = Algen
      */
-    public static final String ATTRIB_OBS_PARAMNAME_OP = "COV_OP";
+    public static final String ATTRIB_OBSV_PARAMNAME_OP = "COV_OP";
     /**
      * COV_ZS = Seegras
      */
-    public static final String ATTRIB_OBS_PARAMNAME_ZS = "COV_ZS";
+    public static final String ATTRIB_OBSV_PARAMNAME_ZS = "COV_ZS";
     public static final String ATTRIB_OBSV_PARAMETERVALUE = "OBSV_PARAMETERVALUE";
 
+    // DateTimeFormatter: Repraesentiert das Datums-/Zeit-Format in den
+    // MSRL-Daten
     private static final DateTimeFormatter DateTimeFormatter = DateTimeFormat
             .forPattern("yyyy-MM-dd'T'HH:mm:ss");
     private static final DateTimeFormatter DateTimeFormatter4TimeStamp = DateTimeFormat
@@ -93,30 +98,42 @@ public class MSRLD5Utils {
         return obsDates;
     }
 
-    public Observations getRelevantObservationsByParameterAndYear(String param,
+    public ObservationsList getRelevantObservationsByParameterAndYear(String param,
             Integer assementyear) {
 
+        System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::MSRLD5s " + this.MSRLD5s.size());
         // observations: List of ObservationCollections
-        Observations observations = new Observations();
+        ObservationsList observations = null;
         // relevantObservations: List of relevant ObservationCollections
-        Observations relevantObservations = new Observations();
+        ObservationsList relevantObservations = null;
 
         String[] keys = {MSRLD5Utils.ATTRIB_OBSV_PARAMNAME};
         String[] values = {param};
-        SimpleFeatureCollection sfc = FeatureCollections.newCollection();
+        System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::keys " + keys);
+        for (String k : keys) {
+            System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::k " + k);
+        }
+        System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::values " + values);
+        for (String v : values) {
+            System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::v " + v);
+        }
+        SimpleFeatureCollection sfc = null;
+        //FeatureCollections.newCollection();
         // SimpleFeatureCollection des aktuellen Parameters extrahieren
-        sfc = FeatureCollectionUtil.extract(this.MSRLD5s, keys, values);
-
+        sfc = FeatureCollectionUtil.extractEquals(this.MSRLD5s, keys, values);
+        System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::sfc " + sfc.size());
         // Liste von Beobachtungszeitpunkten erzeugen, fuer die mindestens
         // eine Beobachtung vorhanden ist
             /*LOGGER.debug("getObservationDates: Fuer den Parameter "
          + obsParams[i]
          + " sind folgende Beobachtungszeitpunkte vorhanden:");*/
         ArrayList<DateTime> obsDates = this.getObservationDates(sfc);
+        System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::obsDates " + obsDates.size());
 
         // Liste von ObservationCollections anhand von
         // Beobachtungszeitpunkten
         observations = this.extractObservationsByListOfDates(sfc, obsDates);
+        System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::observations " + observations.size());
 
         // Relevante ObservationCollections ausgehend von Bewertungsjahr
         // ermitteln
@@ -125,6 +142,8 @@ public class MSRLD5Utils {
          + " und das Bewertungsjahr "
          + inputAssesmentYear + " ausgewaehlt");*/
         relevantObservations = this.extractRelevantObservationsByYear(observations, assementyear);
+        System.err.println("MSRLD5Utils#getRelevantObservationsByParameterAndYear::relevantObservations " + relevantObservations.size());
+
         return relevantObservations;
         // Relevante ObservationCollections der paramArrayListe hinzufuegen
         //paramArrayList.add(relevantObservations);
@@ -136,22 +155,23 @@ public class MSRLD5Utils {
     }
 
     /**
-     * Gibt eine Liste von ObservationCollections zurueck, die ein Element fuer
-     * jeden Eintrag in der uebergebenen Liste mit Beobachtungszeitpunkten
-     * enthaelt Returns an Array of ObservationsCollections. The list contains
+     * Gibt eine Liste von ObservationFeatureCollectionLists zurueck, die ein
+     * Element fuer jeden Eintrag in der uebergebenen Liste mit
+     * Beobachtungszeitpunkten enthaelt Returns an Array of
+     * ObservationFeatureCollectionCollectionCollections. The list contains
      * entries for each DateTime including the corresponding SimpleFeatures in a
      * collection and the total area
      *
      * @param sfc
      * @param obsDates
-     * @return Liste mit ObservationCollections
+     * @return Liste mit ObservationFeatureCollectionLists
      */
-    private Observations extractObservationsByListOfDates(
+    private ObservationsList extractObservationsByListOfDates(
             SimpleFeatureCollection sfc, ArrayList<DateTime> obsDates) {
         String compareStr;
         Double area;
         SimpleFeatureCollection groupCollection;
-        Observations obsCollections = new Observations();
+        ObservationsList obsCollections = new ObservationsList();
 
         // Schleife ueber die Beobachtungszeitpunkte
         for (int i = 0; i < obsDates.size(); i++) {
@@ -165,50 +185,50 @@ public class MSRLD5Utils {
             }
             // Entsprechende SimpleFeatureCollection aus der gesamten
             // FeatureCollection extrahieren
-            groupCollection = FeatureCollectionUtil.extract(sfc,
+            groupCollection = FeatureCollectionUtil.extractEquals(sfc,
                     new String[]{ATTRIB_OBSV_PHENOMENONTIME},
                     new String[]{compareStr});
             // Gesamtflaeche der Features berechnen
             area = FeatureCollectionUtil.getArea(groupCollection);
-            // ObservationCollection erzeugen und der Ausgabe-Liste hinzufuegen
-            obsCollections.add(new ObservationCollection(obsDates.get(i),
+            // ObservationFeatureCollection erzeugen und der Ausgabe-Liste hinzufuegen
+            obsCollections.add(new ObservationFeatureCollection(obsDates.get(i),
                     groupCollection, area));
         }
 
-        // Debug
-        for (ObservationCollection obsColl : obsCollections) {
-            /*LOGGER.debug("extractObservationsByListOfDates: "
+        /* Debug
+        for (ObservationFeatureCollection obsColl : obsCollections) {
+               LOGGER.debug("extractObservationsByListOfDates: "
              + obsColl.getDateTime().getYear() + "-"
              + obsColl.getDateTime().getMonthOfYear() + "-"
              + obsColl.getDateTime().getDayOfMonth() + ": "
-             + FeatureCollectionUtil.tokm2Str(obsColl.getArea()) + " km2");*/
-        }
+             + FeatureCollectionUtil.tokm2Str(obsColl.getArea()) + " km2");
+        }*/
 
         return obsCollections;
     }
 
     /**
-     * Versucht aus einer Liste von ObservationCollections (MSRL-Daten) die
-     * sechs fuer das Bewertungsjahr relevanten Beobachtungssammlungen zu
-     * ermitteln und zurueck zu geben. Falls vom Bewertungsjahr ausgehend keine
-     * sechs ObservationCollections verfuegbar sind, wird eine RuntimeException
-     * ausgeloest.
+     * Versucht aus einer Liste von ObservationFeatureCollectionLists
+     * (MSRL-Daten) die sechs fuer das Bewertungsjahr relevanten
+     * Beobachtungssammlungen zu ermitteln und zurueck zu geben. Falls vom
+     * Bewertungsjahr ausgehend keine sechs ObservationFeatureCollectionLists
+     * verfuegbar sind, wird eine RuntimeException ausgeloest.
      *
-     * @param observations - Liste von ObservationCollections fuer jeden
-     * Beobachtungszeitpunkt
+     * @param observations - Liste von ObservationFeatureCollectionLists fuer
+     * jeden Beobachtungszeitpunkt
      * @param bewertungsjahr
-     * @return Liste mit den sechs relevanten ObservationCollections
+     * @return Liste mit den sechs relevanten ObservationFeatureCollectionLists
      */
-    private Observations extractRelevantObservationsByYear(
-            Observations observations,
+    private ObservationsList extractRelevantObservationsByYear(
+            ObservationsList observations,
             Integer bewertungsjahr) {
-        Observations preSelCollections = new Observations();
-        Observations finalCollections = new Observations();
+        ObservationsList preSelCollections = new ObservationsList();
+        ObservationsList finalCollections = new ObservationsList();
         HashSet<Integer> existingYears = new HashSet<Integer>();
 
         // Schleife ueber alle ObservationCollections
         for (int i = 0; i < observations.size(); i++) {
-            ObservationCollection obsColl = observations.get(i);
+            ObservationFeatureCollection obsColl = observations.get(i);
 
             // Pruefen, ob die Liste der ausgewaehlten ObservationCollections
             // Eintraege enthaelt
@@ -217,7 +237,7 @@ public class MSRLD5Utils {
                 // um Jahr und Flaeche der neuen obsColl zu vergleichen
                 Integer initSize = preSelCollections.size();
                 for (int j = 0; j < initSize; j++) {
-                    ObservationCollection selColl = preSelCollections.get(j);
+                    ObservationFeatureCollection selColl = preSelCollections.get(j);
                     // Wenn unter den schon selektierten Sammlungen eine mit
                     // gleichem Jahr und kleinerer Flaeche ist...
                     if (selColl.getDateTime().getYear() == obsColl

@@ -1,4 +1,4 @@
-package net.disy.wps.lkn.utils;
+package net.disy.wps.lkn;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -182,16 +182,14 @@ public abstract class FeatureCollectionUtil {
      * @param values - Array von String, das die Namen der Werte enthaelt
      * @return
      */
-    public static SimpleFeatureCollection extract(
-            SimpleFeatureCollection inputCollection, String[] keys,
-            String[] values) {
-        SimpleFeatureCollection outputCollection = FeatureCollections
-                .newCollection();
+    public static SimpleFeatureCollection extractEquals(SimpleFeatureCollection inputCollection, String[] keys, String[] values) {
+        SimpleFeatureCollection outputCollection = FeatureCollections.newCollection();
         // Schleife ueber keys, zum Erzeugen mehrerer Filter
         for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            String value = values[i];
             FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2(null);
-            Filter filter = ff.equals(ff.property(keys[i]),
-                    ff.literal(values[i]));
+            Filter filter = ff.equals(ff.property(key), ff.literal(value));
             FeatureIterator<SimpleFeature> iter = inputCollection.features();
             // Schleife ueber Features und Evaluierung
             while (iter.hasNext()) {
@@ -495,4 +493,6 @@ public abstract class FeatureCollectionUtil {
         return SLD.wrapSymbolizers(sym);
     }
 
+    
+    
 }
