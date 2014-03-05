@@ -97,16 +97,6 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         //LOGGER.setLevel(Level.ALL);
     }
 
-    // Debug
-	/*
-     * @ComplexDataOutput(identifier = "debugA", title = "debugA", abstrakt =
-     * "debugA", binding = GTVectorDataBinding.class) public FeatureCollection
-     * getDebugA() { return this.debugA; }
-     * 
-     * @ComplexDataOutput(identifier = "debugB", title = "debugB", abstrakt =
-     * "debugB", binding = GTVectorDataBinding.class) public FeatureCollection
-     * getDebugB() { return this.debugB; }
-     */
     @Execute
     public void runMPB() {
         this.topgraphy = new TopographyUtils(this.inputTopography);
@@ -118,12 +108,15 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         this.result.setBewertungsjahr(this.inputAssesmentYear);
 
         ////////////////////////////////////////////////////////////////////////
-        //BEGIN //////////////////////////////////////////////PHASE SELEKTION
+        //BEGIN //////////////////////////////////////////////PHASE MSRLD5 SELECTION
         ////////////////////////////////////////////////////////////////////////
         //Selektion von MSRLD5-FeatureCollections algen und seegras anhand des
         //MSRLD5-Attributs OBSV_PARAMNAME. COV_OP = Algen. COV_ZS = Seegras.
         //
-        //[relevantAlgea,relevantSeagras, relevantYears] process::selectMSRLD5Parameters(this.inputMSRLD5, this.inputAssesmentYear)
+        //[
+        // relevantAlgea::ArrayList<SimpleFeatureCollection>+Attributes,
+        // relevantSeagras::ArrayList<SimpleFeatureCollection>+Attributes,
+        // relevantYears::ArrayList<Integer>] process::selectMSRLD5Parameters(this.inputMSRLD5, this.inputAssesmentYear)
         final ObservationsList relevantAlgea;
         relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
         final int amountAlgaeObservations = relevantAlgea.size();
@@ -132,10 +125,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
         final int amountSeagrasObservations = relevantSeagras.size();
 
-
-        
-        
-        //Validierung der vorherigen Selektion
+        // Validierung der vorherigen Selektion
         // Test: Gibt es zwei Eintraege in der msrld5Parameters? (Seegras und
         // Algen
         if (relevantAlgea == null || relevantSeagras == null) {
@@ -158,15 +148,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
                         + "beiden Parameter 'Algen' und 'Seegras' entsprechen sich nicht!");
             }
         }
-        ////////////////////////////////////////////////////////////////////////
-        //ENDE //////////////////////////////////////////////PHASE VALIDATION
-        ////////////////////////////////////////////////////////////////////////
 
-        LOGGER.info("Integritaetstest erfolgreich!");
-        LOGGER.info("PHASE::Integritaetstest der Auswahl::Ende");
-
-      
-        
         ArrayList<Integer> relevantYears = new ArrayList<Integer>();
 
         for (int i = 0; i < amountSeagrasObservations; i++) {
@@ -175,15 +157,20 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             relevantYears.add(seagrasyear);
         }
         ////////////////////////////////////////////////////////////////////////
-        //ENDE //////////////////////////////////////////////PHASE YEAR SELECTION
+        //ENDE //////////////////////////////////////////////PHASE MSRLD5 SELECTION
         ////////////////////////////////////////////////////////////////////////
 
-     
         ////////////////////////////////////////////////////////////////////////
-        //BEGIN ///////////////////PHASE SELEKTION BERICHTSGEBIET UND TOPOGRAPHY 
+        //BEGIN ///////////////////PHASE SELEKTION BERICHTSGEBIET
         ////////////////////////////////////////////////////////////////////////
-        LOGGER.info("PHASE::Auswahl Berichtsgebiete und Wattflaechen::Start");
-
+        //Selektion von Berichtsgebieten und Topography anhand verschiedener Kriterien.
+        //
+        //[
+        // reportingAreasNF::SimpleFeatureCollection,
+        // reportingAreasDI::SimpleFeatureCollection] process::mpa::selectReportingsAreas(this.reportingareas)
+        // Ggf. parameterisierter Prozess fuer Berichtsgebiete.
+        // [reportingAreas::SimpleFeatureCollection] process::lkn::selectReportingsAreas(this.reportingareas, "NF")
+        // [reportingAreas::SimpleFeatureCollection] process::lkn::selectReportingsAreas(this.reportingareas, "DI")
         // Inseln aus Berichtsgebieten entfernen
         this.inputReportingAreas = this.reportingareas.clearReportingAreas();
         // Nordfriesland (NF) und Dithmarschen (DI) aus Berichtsgebieten
@@ -191,19 +178,19 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         // SimpleFeatureCollections
         SimpleFeatureCollection reportingAreasNF = this.reportingareas.extractNF();
         SimpleFeatureCollection reportingAreasDI = this.reportingareas.extractDI();
-        // Wattflaechen aus Topographie extrahieren
-        //SimpleFeatureCollection tidelands = this.topgraphy.extractTidelands();
 
-        LOGGER.debug("Filter-Info:Berichtsgebiet Nordfriesland - "
-                + reportingAreasNF.size() + " Feautures");
-        LOGGER.debug("Filter-Info:Berichtsgebiet Diethmarschen - "
-                + reportingAreasDI.size() + " Feautures");
-
-        //LOGGER.debug("Filter-Info:Wattflaechen - " + tidelands.size()+ " Feautures");
         ////////////////////////////////////////////////////////////////////////
-        //BEGIN ///////////////////PHASE SELEKTION BERICHTSGEBIET UND TOPOGRAPHY 
+        //ENDE ///////////////////PHASE SELEKTION BERICHTSGEBIET
         ////////////////////////////////////////////////////////////////////////
-
+        ////////////////////////////////////////////////////////////////////////
+        //BEGIN ///////////////////PHASE SELEKTION TOPOGRAPHY
+        ////////////////////////////////////////////////////////////////////////
+        //Selektion von Topography anhand verschiedener Kriterien.
+        //
+        //[
+        // existingTopoYears::ArrayList<Integer>,
+        // relevantTopoYears::ArrayList<Integer>,
+        // relevantTopos::ArrayList<SimpleFeatureCollection>+Attributes] process::mpa::selectTpoography(this.topgraphy)
         // existingTopoYears: Liste von Jahren, zu denen ein Topographie
         // Datensatz vorhanden ist
         ArrayList<Integer> existingTopoYears = new ArrayList<Integer>();
@@ -216,7 +203,6 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         // Relevante Topographie-Jahre ermitteln
         relevantTopoYears = this.mpa.getRelevantTopoYears(existingTopoYears, relevantYears);
 
-        //String relevantTopoYearsAsString = "";
         // relevantTopos: Liste mit ObservationFeatureCollection,
         // die jeweils die FeatureCollection der Topographiegeometrien fuer ein
         // Jahr enthalten
@@ -231,37 +217,43 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             DateTime obsTime = new DateTime(relevantTopoYear, 1, 1, 0, 0);
             Double area = FeatureCollectionUtil.getArea(sfc);
             relevantTopos.add(new ObservationFeatureCollection(obsTime, sfc, area));
-            //relevantTopoYearsAsString += " " + relevantTopoYears.get(i);
         }
 
-        //LOGGER.debug("Relevante Topographie-Datensaetze: "+ relevantTopoYearsAsString);
-        LOGGER.info("PHASE::Auswahl Berichtsgebiete und Wattflaechen::Ende");
-
         ////////////////////////////////////////////////////////////////////////
-        //BEGIN //////////////////////////////////////////////PHASE VERSCHNEIDUNG
+        //ENDE ///////////////////PHASE SELEKTION TOPOGRAPHY 
         ////////////////////////////////////////////////////////////////////////
-        ArrayList<IntersectionFeatureCollection> intersecWattBerichtsgebiete = new ArrayList<IntersectionFeatureCollection>();
-
+        ////////////////////////////////////////////////////////////////////////
+        //BEGIN //////////////////////////////////////////PHASE VERSCHNEIDUNG (NF)
+        ////////////////////////////////////////////////////////////////////////
+        //[intersections::ArrayList<IntersectionFeatureCollection>]
+        //process::mpa::intersect(nfreportingAreas::SimpleFeatureCollection, relevanttopos, relevantTopos::ArrayList<SimpleFeatureCollection>+Attributes], "NF"
         // Schleife ueber existingTopoYears zur Verschneidung jedes
         // Topographie-Datensatzes mit dem Berichtsgebiet NF.
+        ArrayList<IntersectionFeatureCollection> intersecWattBerichtsgebieteNF = new ArrayList<IntersectionFeatureCollection>();
         for (Integer relevantTopoYear : relevantTopoYears) {
 
             // Verschneidung mit NF
             final SimpleFeatureCollection intersecWattBGebiet = MPAUtils.intersectReportingsareasAndTidelands(reportingAreasNF, relevantTopos.getObsCollByYear(relevantTopoYear).getFeatureCollection());
-            LOGGER.debug("Intersection-Result valid: "
-                    + FeatureCollectionUtil.checkValid(intersecWattBGebiet));
-
             final DateTime obsTime = new DateTime(relevantTopoYear, 1, 1, 0, 0);
             final Double area = FeatureCollectionUtil.getArea(intersecWattBGebiet);
 
             final IntersectionFeatureCollection intersecColl = new IntersectionFeatureCollection(MPAUtils.NORDFRIESLAND, obsTime, intersecWattBGebiet, area);
-            intersecWattBerichtsgebiete.add(intersecColl);
+            intersecWattBerichtsgebieteNF.add(intersecColl);
             LOGGER.debug("Verschneidung NF und Wattflaechen "
                     + relevantTopoYear + " abgeschlossen");
         }//of for
 
+        ////////////////////////////////////////////////////////////////////////
+        //ENDE //////////////////////////////////////////PHASE VERSCHNEIDUNG (NF)
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        //BEGIN //////////////////////////////////////////PHASE VERSCHNEIDUNG (DI)
+        ////////////////////////////////////////////////////////////////////////
+        //[intersections::ArrayList<IntersectionFeatureCollection>]
+        //process::mpa::intersect(direportingAreas::SimpleFeatureCollection, relevanttopos, relevantTopos::ArrayList<SimpleFeatureCollection>+Attributes], "DI"
         // Schleife ueber existingTopoYears zur Verschneidung jedes
         // Topographie-Datensatzes mit dem Berichtsgebiet DI.
+        ArrayList<IntersectionFeatureCollection> intersecWattBerichtsgebieteDI = new ArrayList<IntersectionFeatureCollection>();
         for (Integer relevantTopoYear : relevantTopoYears) {
 
             // Verschneidung mit DI
@@ -276,21 +268,31 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             final Double area = FeatureCollectionUtil.getArea(intersecWattBGebiet);
 
             final IntersectionFeatureCollection intersecColl = new IntersectionFeatureCollection(MPAUtils.DITHMARSCHEN, obsTime, intersecWattBGebiet, area);
-            intersecWattBerichtsgebiete.add(intersecColl);
+            intersecWattBerichtsgebieteDI.add(intersecColl);
             LOGGER.debug("Verschneidung DI und Wattflaechen "
                     + relevantTopoYear + " abgeschlossen");
         }//of for
 
         ////////////////////////////////////////////////////////////////////////
-        //ENDE //////////////////////////////////////////////PHASE VERSCHNEIDUNG
+        //ENDE //////////////////////////////////////////PHASE VERSCHNEIDUNG (DI)
         ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        //BEGIN ////////////////////////////////////PHASE KENNGROESSENBESTIMMUNG
+        ////////////////////////////////////////////////////////////////////////
+        //[]
+        //process::mpa::characteristics(
+        // relevantYears::ArrayList<Integer>,
+        // existingTopoYears::ArrayList<Integer>,
+        // intersectionsTidelandsReportingAreas::ArrayList<IntersectionFeatureCollection>,
+        // 
+        //)
         SimpleFeatureCollection intersecBGebietWattMSRL = FeatureCollections.newCollection();
 
         // Area - Flaechenangaben
-        Double totalWattAreaNF, totalWattAreaDI;
-        Integer ZS_numTypesNF, ZS_numTypesDI;
-        Double ZS_totalareaNF, ZS_40areaNF, ZS_60areaNF, ZS_totalareaDI, ZS_40areaDI, ZS_60areaDI;
-        Double OP_totalareaNF, OP_40areaNF, OP_60areaNF, OP_totalareaDI, OP_40areaDI, OP_60areaDI;
+        Double totalWattAreaNF;
+        Integer ZS_numTypesNF;
+        Double ZS_totalareaNF, ZS_40areaNF, ZS_60areaNF;
+        Double OP_totalareaNF, OP_40areaNF, OP_60areaNF;
 
         // Schleife ueber relevantYears zur jahresweisen Verschneidung
         for (Integer relevantYear : relevantYears) {
@@ -298,64 +300,47 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             ObservationFeatureCollection msrlColl;
             final Integer topoYear = this.mpa.getTopoYear(relevantYear, existingTopoYears);
 
-            LOGGER.debug("Verschneidung: MSRL D5 "
-                    + relevantYear + " & Topographie "
-                    + topoYear.toString());
-
             // Nordfriesland
-            intsecColl = MPAUtils.getIntersecCollByYearAndGebiet(
-                    intersecWattBerichtsgebiete, topoYear,
-                    MPAUtils.NORDFRIESLAND);
+            intsecColl = MPAUtils.getIntersecCollByYear(
+                    intersecWattBerichtsgebieteNF, topoYear);
             totalWattAreaNF = intsecColl.getArea();
             // ZS --> Seegras
             msrlColl = relevantSeagras.getObsCollByYear(relevantYear);
 
             intersecBGebietWattMSRL = this.mpa.intersectIntersectionAndMSRL(intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
 
-            // Debug
-			/*
-             * if (relevantYears.get(i) == 2003) { this.debugA =
-             * intsecColl.getFeatureCollection(); this.debugB = intersecBGebietWattMSRL; }
-             */
-            LOGGER.debug("Intersection-Result valid: "
-                    + FeatureCollectionUtil.checkValid(intersecBGebietWattMSRL));
-
             ZS_totalareaNF = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
-            ZS_40areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
-                    new String[]{"4"}));
-            ZS_60areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
-                    new String[]{"6"}));
+            SimpleFeatureCollection ZS_40areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"4"});
+            ZS_40areaNF = FeatureCollectionUtil.getArea(ZS_40areaNFSF);
+
+            SimpleFeatureCollection ZS_60areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"6"});
+            ZS_60areaNF = FeatureCollectionUtil.getArea(ZS_60areaNFSF);
+
             if (ZS_40areaNF > 0 && ZS_60areaNF > 0) {
                 ZS_numTypesNF = 2;
             } else {
                 ZS_numTypesNF = 1;
             }
-            LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Seegras "
-                    + relevantYear + " in Nordfriesland");
+
             // OP --> Algen
             msrlColl = relevantAlgea.getObsCollByYear(relevantYear);
             intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
                     intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
 
             OP_totalareaNF = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
-            OP_40areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
-                    new String[]{"4"}));
-            OP_60areaNF = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
-                    new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
-                    new String[]{"6"}));
-            LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Algen "
-                    + relevantYear + " in Nordfriesland");
+            final SimpleFeatureCollection OP_40areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL,new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},new String[]{"4"});
+            OP_40areaNF = FeatureCollectionUtil.getArea(OP_40areaNFSF);
+            final SimpleFeatureCollection OP_60areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL,new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},new String[]{"6"});
+            OP_60areaNF = FeatureCollectionUtil.getArea(OP_60areaNFSF);
+
+            ///////////////////////////DI 
+            Double totalWattAreaDI;
+            Integer ZS_numTypesDI;
+            Double ZS_totalareaDI, ZS_40areaDI, ZS_60areaDI;
+            Double OP_totalareaDI, OP_40areaDI, OP_60areaDI;
 
             // Dithmarschen
-            intsecColl = MPAUtils.getIntersecCollByYearAndGebiet(
-                    intersecWattBerichtsgebiete, topoYear, MPAUtils.DITHMARSCHEN);
+            intsecColl = MPAUtils.getIntersecCollByYear(intersecWattBerichtsgebieteDI, topoYear);
             totalWattAreaDI = intsecColl.getArea();
             // ZS --> Seegras
             msrlColl = relevantSeagras.getObsCollByYear(relevantYear);
@@ -393,6 +378,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Algen "
                     + relevantYear + " in Dithmarschen");
 
+            /// ERGEBNISSE ZUSAMMENFUEHREN
             // ResultRecord erzeugen
             MPBResultRecord resultRec = new MPBResultRecord(
                     relevantYear, totalWattAreaNF, totalWattAreaDI,
@@ -401,11 +387,11 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
                     OP_totalareaNF, OP_40areaNF, OP_60areaNF, OP_totalareaDI,
                     OP_40areaDI, OP_60areaDI);
             this.result.addRecord(resultRec);
-            LOGGER.debug("ResultRecord erzeugt");
         }
 
-        LOGGER.debug("PHASE::Verschneidung und Kenngroessenbestimmung::Ende");
-
+        ////////////////////////////////////////////////////////////////////////
+        //ENDE //////////////////////////////////////////PHASE KENNGROESSENBESTIMMUNG
+        ////////////////////////////////////////////////////////////////////////
         // Process Outputs
         // FeatureCollection mit den bewerteten Featuren Nordfriesland und
         // Dithmarschen

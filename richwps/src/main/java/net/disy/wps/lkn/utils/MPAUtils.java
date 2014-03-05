@@ -277,14 +277,12 @@ public class MPAUtils {
      * @param gebiet
      * @return
      */
-    public static IntersectionFeatureCollection getIntersecCollByYearAndGebiet(
-            ArrayList<IntersectionFeatureCollection> intersecCollList, Integer year,
-            Integer gebiet) {
+    public static IntersectionFeatureCollection getIntersecCollByYear(
+            ArrayList<IntersectionFeatureCollection> intersecCollList, Integer year) {
         IntersectionFeatureCollection intersecColl = null;
 
         for (int j = 0; j < intersecCollList.size(); j++) {
-            if (intersecCollList.get(j).getDateTime().getYear() == year
-                    && intersecCollList.get(j).getGebiet() == gebiet) {
+            if (intersecCollList.get(j).getDateTime().getYear() == year) {
                 intersecColl = intersecCollList.get(j);
             }
         }
