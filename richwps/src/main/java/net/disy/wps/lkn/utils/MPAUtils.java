@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import net.disy.wps.common.DescriptorContainer;
+import net.disy.wps.lkn.mpa.types.IntegerList;
 import net.disy.wps.lkn.utils.FeatureCollectionUtil;
 import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollection;
 import net.disy.wps.lkn.mpa.types.MPBResult;
@@ -154,9 +155,9 @@ public class MPAUtils {
      * @param msrlYears
      * @return
      */
-    public ArrayList<Integer> getRelevantTopoYears(
-            ArrayList<Integer> topoYears, ArrayList<Integer> msrlYears) {
-        ArrayList<Integer> relTopoYears = new ArrayList<Integer>();
+    public IntegerList getRelevantTopoYears(
+            IntegerList topoYears, IntegerList msrlYears) {
+       IntegerList relTopoYears = new IntegerList();
         HashSet<Integer> hs = new HashSet<Integer>();
 
         // Schleife ueber MSRL-Years, fuer die jeweils das entsprechende

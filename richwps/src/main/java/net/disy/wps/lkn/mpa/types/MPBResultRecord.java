@@ -1,7 +1,6 @@
 package net.disy.wps.lkn.mpa.types;
 
 import net.disy.wps.lkn.utils.FeatureCollectionUtil;
-import net.disy.wps.lkn.mpa.processes.MacrophyteAssesment;
 
 import net.disy.wps.lkn.utils.MPAUtils;
 
@@ -9,7 +8,7 @@ import net.disy.wps.lkn.utils.MPAUtils;
 /**
  * Diese Klasse repraesentiert einen Ergebnis-Record als Teil eines
  * Bewertungsergebnisses
- * 
+ * @see net.disy.wps.lkn.mpa.types.MPBResult
  * @author woessner
  * 
  */

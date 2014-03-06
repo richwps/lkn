@@ -2,7 +2,6 @@ package net.disy.wps.lkn.mpa.types;
 
 import java.io.File;
 import java.io.IOException;
-import net.disy.wps.lkn.mpa.processes.MacrophyteAssesment;
 import java.util.ArrayList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -21,7 +20,7 @@ import org.joda.time.DateTime;
  * Diese Klasse repraesentiert das Gesamtergebnis eines Bewertungsvorgangs
  *
  * @author woessner
- *
+ * @see net.disy.wps.n52.binding.MPBResultBinding
  */
 @XmlRootElement(name = "MPBResult")
 public class MPBResult {
@@ -138,7 +137,7 @@ public class MPBResult {
     }
 
     /**
-     * Berechnet f�r jedes Teilergebniss die Bewertungsparameter
+     * Berechnet fuer jedes Teilergebniss die Bewertungsparameter
      */
     public void calculateParameters() {
         initEvalMatrices();

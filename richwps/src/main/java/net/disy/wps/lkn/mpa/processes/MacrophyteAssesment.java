@@ -2,6 +2,7 @@ package net.disy.wps.lkn.mpa.processes;
 
 import java.io.File;
 import java.util.ArrayList;
+import net.disy.wps.lkn.mpa.types.IntegerList;
 import net.disy.wps.lkn.utils.FeatureCollectionUtil;
 
 import net.disy.wps.n52.binding.MPBResultBinding;
@@ -20,12 +21,13 @@ import org.n52.wps.io.data.binding.complex.GTVectorDataBinding;
 import org.n52.wps.io.data.binding.literal.LiteralStringBinding;
 import org.n52.wps.server.AbstractAnnotatedAlgorithm;
 import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollection;
+import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollectionList;
 import net.disy.wps.lkn.mpa.types.MPBResult;
 import net.disy.wps.lkn.mpa.types.MPBResultRecord;
 import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
 
 import net.disy.wps.lkn.utils.MSRLD5Utils;
-import net.disy.wps.lkn.mpa.types.ObservationsList;
+import net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList;
 import net.disy.wps.lkn.utils.MPAUtils;
 import net.disy.wps.lkn.utils.ReportingAreaUtils;
 import net.disy.wps.lkn.utils.TopographyUtils;
@@ -117,11 +119,11 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         // relevantAlgea::ArrayList<SimpleFeatureCollection>+Attributes,
         // relevantSeagras::ArrayList<SimpleFeatureCollection>+Attributes,
         // relevantYears::ArrayList<Integer>] process::selectMSRLD5Parameters(this.inputMSRLD5, this.inputAssesmentYear)
-        final ObservationsList relevantAlgea;
+        final ObservationFeatureCollectionList relevantAlgea;
         relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
         final int amountAlgaeObservations = relevantAlgea.size();
 
-        final ObservationsList relevantSeagras;
+        final ObservationFeatureCollectionList relevantSeagras;
         relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
         final int amountSeagrasObservations = relevantSeagras.size();
 
@@ -149,7 +151,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             }
         }
 
-        ArrayList<Integer> relevantYears = new ArrayList<Integer>();
+        IntegerList relevantYears = new IntegerList();
 
         for (int i = 0; i < amountSeagrasObservations; i++) {
             int seagrasyear = relevantSeagras.get(i).getDateTime().getYear();
@@ -193,13 +195,13 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         // relevantTopos::ArrayList<SimpleFeatureCollection>+Attributes] process::mpa::selectTpoography(this.topgraphy)
         // existingTopoYears: Liste von Jahren, zu denen ein Topographie
         // Datensatz vorhanden ist
-        ArrayList<Integer> existingTopoYears = new ArrayList<Integer>();
+        IntegerList existingTopoYears = new IntegerList();
         // Vorhandene Topographie-Jahre ermitteln
         existingTopoYears = this.topgraphy.getExistingTopographyYears();
 
         // relevantTopoYears: Liste von Jahren, die fuer die Bewertung
         // relevant sind
-        ArrayList<Integer> relevantTopoYears = new ArrayList<Integer>();
+        IntegerList relevantTopoYears = new IntegerList();
         // Relevante Topographie-Jahre ermitteln
         relevantTopoYears = this.mpa.getRelevantTopoYears(existingTopoYears, relevantYears);
 
@@ -208,7 +210,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         // Jahr enthalten
         // Liste von ObservationCollections mit Topographien fuer jedes Jahr
         // erstellen und der relevantTopos hinzufuegen
-        ObservationsList relevantTopos = new ObservationsList();
+        ObservationFeatureCollectionList relevantTopos = new ObservationFeatureCollectionList();
 
         for (Integer relevantTopoYear : relevantTopoYears) {
             SimpleFeatureCollection sfc = FeatureCollections.newCollection();
@@ -229,7 +231,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         //process::mpa::intersect(nfreportingAreas::SimpleFeatureCollection, relevanttopos, relevantTopos::ArrayList<SimpleFeatureCollection>+Attributes], "NF"
         // Schleife ueber existingTopoYears zur Verschneidung jedes
         // Topographie-Datensatzes mit dem Berichtsgebiet NF.
-        ArrayList<IntersectionFeatureCollection> intersecWattBerichtsgebieteNF = new ArrayList<IntersectionFeatureCollection>();
+        IntersectionFeatureCollectionList intersectionsTidelandReportingAreasNF = new IntersectionFeatureCollectionList();
         for (Integer relevantTopoYear : relevantTopoYears) {
 
             // Verschneidung mit NF
@@ -238,7 +240,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             final Double area = FeatureCollectionUtil.getArea(intersecWattBGebiet);
 
             final IntersectionFeatureCollection intersecColl = new IntersectionFeatureCollection(MPAUtils.NORDFRIESLAND, obsTime, intersecWattBGebiet, area);
-            intersecWattBerichtsgebieteNF.add(intersecColl);
+            intersectionsTidelandReportingAreasNF.add(intersecColl);
             LOGGER.debug("Verschneidung NF und Wattflaechen "
                     + relevantTopoYear + " abgeschlossen");
         }//of for
@@ -253,7 +255,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         //process::mpa::intersect(direportingAreas::SimpleFeatureCollection, relevanttopos, relevantTopos::ArrayList<SimpleFeatureCollection>+Attributes], "DI"
         // Schleife ueber existingTopoYears zur Verschneidung jedes
         // Topographie-Datensatzes mit dem Berichtsgebiet DI.
-        ArrayList<IntersectionFeatureCollection> intersecWattBerichtsgebieteDI = new ArrayList<IntersectionFeatureCollection>();
+        IntersectionFeatureCollectionList intersectionsTidelandReportingAreasDI = new IntersectionFeatureCollectionList();
         for (Integer relevantTopoYear : relevantTopoYears) {
 
             // Verschneidung mit DI
@@ -268,7 +270,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             final Double area = FeatureCollectionUtil.getArea(intersecWattBGebiet);
 
             final IntersectionFeatureCollection intersecColl = new IntersectionFeatureCollection(MPAUtils.DITHMARSCHEN, obsTime, intersecWattBGebiet, area);
-            intersecWattBerichtsgebieteDI.add(intersecColl);
+            intersectionsTidelandReportingAreasDI.add(intersecColl);
             LOGGER.debug("Verschneidung DI und Wattflaechen "
                     + relevantTopoYear + " abgeschlossen");
         }//of for
@@ -279,14 +281,14 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         ////////////////////////////////////////////////////////////////////////
         //BEGIN ////////////////////////////////////PHASE KENNGROESSENBESTIMMUNG
         ////////////////////////////////////////////////////////////////////////
-        //[]
+        //[ ArrayList<MPBAreaResult>]
         //process::mpa::characteristics(
         // relevantYears::ArrayList<Integer>,
         // existingTopoYears::ArrayList<Integer>,
         // intersectionsTidelandsReportingAreas::ArrayList<IntersectionFeatureCollection>,
         // 
         //)
-        SimpleFeatureCollection intersecBGebietWattMSRL = FeatureCollections.newCollection();
+        SimpleFeatureCollection intersectionReportingAreasTidelandsMSRL = FeatureCollections.newCollection();
 
         // Area - Flaechenangaben
         Double totalWattAreaNF;
@@ -302,18 +304,18 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
 
             // Nordfriesland
             intsecColl = MPAUtils.getIntersecCollByYear(
-                    intersecWattBerichtsgebieteNF, topoYear);
+                    intersectionsTidelandReportingAreasNF, topoYear);
             totalWattAreaNF = intsecColl.getArea();
             // ZS --> Seegras
             msrlColl = relevantSeagras.getObsCollByYear(relevantYear);
 
-            intersecBGebietWattMSRL = this.mpa.intersectIntersectionAndMSRL(intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
+            intersectionReportingAreasTidelandsMSRL = this.mpa.intersectIntersectionAndMSRL(intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
 
-            ZS_totalareaNF = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
-            SimpleFeatureCollection ZS_40areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"4"});
+            ZS_totalareaNF = FeatureCollectionUtil.getArea(intersectionReportingAreasTidelandsMSRL);
+            SimpleFeatureCollection ZS_40areaNFSF = FeatureCollectionUtil.extractEquals(intersectionReportingAreasTidelandsMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"4"});
             ZS_40areaNF = FeatureCollectionUtil.getArea(ZS_40areaNFSF);
 
-            SimpleFeatureCollection ZS_60areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"6"});
+            SimpleFeatureCollection ZS_60areaNFSF = FeatureCollectionUtil.extractEquals(intersectionReportingAreasTidelandsMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"6"});
             ZS_60areaNF = FeatureCollectionUtil.getArea(ZS_60areaNFSF);
 
             if (ZS_40areaNF > 0 && ZS_60areaNF > 0) {
@@ -324,13 +326,13 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
 
             // OP --> Algen
             msrlColl = relevantAlgea.getObsCollByYear(relevantYear);
-            intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
+            intersectionReportingAreasTidelandsMSRL = MPAUtils.intersectIntersectionAndMSRL(
                     intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
 
-            OP_totalareaNF = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
-            final SimpleFeatureCollection OP_40areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL,new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},new String[]{"4"});
+            OP_totalareaNF = FeatureCollectionUtil.getArea(intersectionReportingAreasTidelandsMSRL);
+            final SimpleFeatureCollection OP_40areaNFSF = FeatureCollectionUtil.extractEquals(intersectionReportingAreasTidelandsMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"4"});
             OP_40areaNF = FeatureCollectionUtil.getArea(OP_40areaNFSF);
-            final SimpleFeatureCollection OP_60areaNFSF = FeatureCollectionUtil.extractEquals(intersecBGebietWattMSRL,new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},new String[]{"6"});
+            final SimpleFeatureCollection OP_60areaNFSF = FeatureCollectionUtil.extractEquals(intersectionReportingAreasTidelandsMSRL, new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE}, new String[]{"6"});
             OP_60areaNF = FeatureCollectionUtil.getArea(OP_60areaNFSF);
 
             ///////////////////////////DI 
@@ -340,19 +342,19 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             Double OP_totalareaDI, OP_40areaDI, OP_60areaDI;
 
             // Dithmarschen
-            intsecColl = MPAUtils.getIntersecCollByYear(intersecWattBerichtsgebieteDI, topoYear);
+            intsecColl = MPAUtils.getIntersecCollByYear(intersectionsTidelandReportingAreasDI, topoYear);
             totalWattAreaDI = intsecColl.getArea();
             // ZS --> Seegras
             msrlColl = relevantSeagras.getObsCollByYear(relevantYear);
-            intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
+            intersectionReportingAreasTidelandsMSRL = MPAUtils.intersectIntersectionAndMSRL(
                     intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
-            ZS_totalareaDI = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
+            ZS_totalareaDI = FeatureCollectionUtil.getArea(intersectionReportingAreasTidelandsMSRL);
             ZS_40areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
+                    intersectionReportingAreasTidelandsMSRL,
                     new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
                     new String[]{"4"}));
             ZS_60areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
+                    intersectionReportingAreasTidelandsMSRL,
                     new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
                     new String[]{"6"}));
             if (ZS_40areaDI > 0 && ZS_60areaDI > 0) {
@@ -364,15 +366,15 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
                     + relevantYear + " in Dithmarschen");
             // OP --> Algen
             msrlColl = relevantAlgea.getObsCollByYear(relevantYear);
-            intersecBGebietWattMSRL = MPAUtils.intersectIntersectionAndMSRL(
+            intersectionReportingAreasTidelandsMSRL = MPAUtils.intersectIntersectionAndMSRL(
                     intsecColl.getFeatureCollection(), msrlColl.getFeatureCollection());
-            OP_totalareaDI = FeatureCollectionUtil.getArea(intersecBGebietWattMSRL);
+            OP_totalareaDI = FeatureCollectionUtil.getArea(intersectionReportingAreasTidelandsMSRL);
             OP_40areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
+                    intersectionReportingAreasTidelandsMSRL,
                     new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
                     new String[]{"4"}));
             OP_60areaDI = FeatureCollectionUtil.getArea(FeatureCollectionUtil.extractEquals(
-                    intersecBGebietWattMSRL,
+                    intersectionReportingAreasTidelandsMSRL,
                     new String[]{MSRLD5Utils.ATTRIB_OBSV_PARAMETERVALUE},
                     new String[]{"6"}));
             LOGGER.debug("Verschneidung: WattXBerichtsgebiete & MSRL-Algen "

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- *
+ * Wrapper for ObservationFeatureCollections.
+ * Necessary for marshalling.
  * @author dalcacer
  */
-public class ObservationsList extends ArrayList<ObservationFeatureCollection> {
+public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatureCollection> {
 
     /**
      * Ermittelt zu aus einer Liste von ObservationFeatureCollectionList und einer

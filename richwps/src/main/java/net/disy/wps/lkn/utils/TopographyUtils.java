@@ -3,6 +3,7 @@ package net.disy.wps.lkn.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import net.disy.wps.lkn.mpa.types.IntegerList;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.opengis.feature.simple.SimpleFeature;
@@ -77,9 +78,9 @@ public class TopographyUtils {
      *
      * @return
      */
-    public ArrayList<Integer> getExistingTopographyYears() {
+    public IntegerList getExistingTopographyYears() {
         
-        ArrayList<Integer> existingTopoYears = new ArrayList<Integer>();
+        IntegerList existingTopoYears = new IntegerList();
         
         FeatureIterator<SimpleFeature> iter = this.topography.features();
         try {

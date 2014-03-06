@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
-import net.disy.wps.lkn.mpa.types.ObservationsList;
+import net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollections;
@@ -95,13 +95,13 @@ public class MSRLD5Utils {
         return obsDates;
     }
 
-    public ObservationsList getRelevantObservationsByParameterAndYear(String param,
+    public ObservationFeatureCollectionList getRelevantObservationsByParameterAndYear(String param,
             Integer assementyear) {
 
         // observations: List of ObservationCollections
-        ObservationsList observations = new ObservationsList();
+        ObservationFeatureCollectionList observations = new ObservationFeatureCollectionList();
         // relevantObservations: List of relevant ObservationCollections
-        ObservationsList relevantObservations = new ObservationsList();
+        ObservationFeatureCollectionList relevantObservations = new ObservationFeatureCollectionList();
 
         String[] keys = {MSRLD5Utils.ATTRIB_OBSV_PARAMNAME};
         String[] values = {param};
@@ -148,12 +148,12 @@ public class MSRLD5Utils {
      * @param obsDates
      * @return Liste mit ObservationCollections
      */
-    private ObservationsList extractObservationsByListOfDates(
+    private ObservationFeatureCollectionList extractObservationsByListOfDates(
             SimpleFeatureCollection sfc, ArrayList<DateTime> obsDates) {
         String compareStr;
         Double area;
         SimpleFeatureCollection groupCollection;
-        ObservationsList obsCollections = new ObservationsList();
+        ObservationFeatureCollectionList obsCollections = new ObservationFeatureCollectionList();
 
         // Schleife ueber die Beobachtungszeitpunkte
         for (int i = 0; i < obsDates.size(); i++) {
@@ -201,11 +201,11 @@ public class MSRLD5Utils {
      * @param bewertungsjahr
      * @return Liste mit den sechs relevanten ObservationCollections
      */
-    private ObservationsList extractRelevantObservationsByYear(
-            ObservationsList observations,
+    private ObservationFeatureCollectionList extractRelevantObservationsByYear(
+            ObservationFeatureCollectionList observations,
             Integer bewertungsjahr) {
-        ObservationsList preSelCollections = new ObservationsList();
-        ObservationsList finalCollections = new ObservationsList();
+        ObservationFeatureCollectionList preSelCollections = new ObservationFeatureCollectionList();
+        ObservationFeatureCollectionList finalCollections = new ObservationFeatureCollectionList();
         HashSet<Integer> existingYears = new HashSet<Integer>();
 
         // Schleife ueber alle ObservationCollections
