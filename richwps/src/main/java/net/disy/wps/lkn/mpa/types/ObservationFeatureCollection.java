@@ -2,7 +2,6 @@ package net.disy.wps.lkn.mpa.types;
 
 import javax.xml.bind.annotation.XmlElement;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.feature.FeatureCollection;
 import org.joda.time.DateTime;
 
 /**
