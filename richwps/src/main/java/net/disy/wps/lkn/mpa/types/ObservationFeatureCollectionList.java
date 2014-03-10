@@ -1,20 +1,27 @@
 package net.disy.wps.lkn.mpa.types;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Wrapper for ObservationFeatureCollections.
- * Necessary for marshalling.
+ * Wrapper for ObservationFeatureCollections. Necessary for marshalling.
+ *
  * @author dalcacer
  */
+@XmlRootElement(name = "ObservationFeatureCollectionList")
 public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatureCollection> {
 
     /**
-     * Ermittelt zu aus einer Liste von ObservationFeatureCollectionList und einer
- Jahres-Angabe den Index des entsprechenden Element falls das Jahr
- kleiner ist als die vorhanden Jahre in der Liste wird eine
- RuntimeException ausgeloest. Falls das Jahr groesser ist als die
+     * Ermittelt zu aus einer Liste von ObservationFeatureCollectionList und
+     * einer Jahres-Angabe den Index des entsprechenden Element falls das Jahr
+     * kleiner ist als die vorhanden Jahre in der Liste wird eine
+     * RuntimeException ausgeloest. Falls das Jahr groesser ist als die
      * vorhandene Jahre in der Liste wird der Index des zeitlich
      * naechstliegenden Jahres zurueckgegeben.
      *
@@ -50,12 +57,12 @@ public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatu
     }
 
     /**
-     * Liefert eine durch ein Jahr bestimme ObservationFeatureCollectionList aus einer Liste von
- ObservationFeatureCollectionLists
+     * Liefert eine durch ein Jahr bestimme ObservationFeatureCollectionList aus
+     * einer Liste von ObservationFeatureCollectionLists
      *
      * @param obsCollList - Liste von ObservationFeatureCollectionLists
-     * @param year - Jahr, zu dem die ObservationFeatureCollectionList zurueckgegeben werden
- soll
+     * @param year - Jahr, zu dem die ObservationFeatureCollectionList
+     * zurueckgegeben werden soll
      * @return ObservationFeatureCollectionList
      */
     public ObservationFeatureCollection getObsCollByYear(Integer year) {
@@ -69,4 +76,23 @@ public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatu
         return obsColl;
     }
 
+    
+    public File persist() {
+        File f = null;
+        try {
+            JAXBContext context = JAXBContext.newInstance(ObservationFeatureCollectionList.class);
+            Marshaller m = context.createMarshaller();
+            String filename = this.getClass().getCanonicalName();
+            filename += System.currentTimeMillis();
+            f = File.createTempFile(filename, "tmp");
+
+            m.marshal(this, f);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return f;
+    }
 }
