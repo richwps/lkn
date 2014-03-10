@@ -14,12 +14,13 @@ public class IntegerList extends ArrayList<Integer>{
     
     public IntegerList(){}
     
-    @XmlElement(name = "Size")
+    @XmlElement(name = "IntegerListSize")
     public int size(){
         return super.size();
     }
 
     @Override
+    @XmlElement(name = "IntergerListValues")
     public Object[] toArray() {
         return super.toArray(); //To change body of generated methods, choose Tools | Templates.
     }

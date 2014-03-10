@@ -7,6 +7,7 @@ import java.util.Collections;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -76,6 +77,12 @@ public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatu
         return obsColl;
     }
 
+    
+    
+     @XmlElement(name = "Observations")
+    public ArrayList<ObservationFeatureCollection> getObservations() {
+        return this;
+    }
     
     public File persist() {
         File f = null;

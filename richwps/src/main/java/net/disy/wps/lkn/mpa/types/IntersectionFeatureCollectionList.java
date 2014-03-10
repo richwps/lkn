@@ -3,21 +3,26 @@ package net.disy.wps.lkn.mpa.types;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
 
- * Wrapper for ObservationFeatureCollections.
+ * Wrapper for IntersectionFeatureCollectionList.
  * Necessary for marshalling.
  * @author dalcacer
  */
 @XmlRootElement(name = "IntersectionFeatureCollectionList")
 public class IntersectionFeatureCollectionList extends ArrayList<IntersectionFeatureCollection> {
 
+   
+    @XmlElement(name = "Intersections")
+    public ArrayList<IntersectionFeatureCollection> getIntersections() {
+        return this;
+    }
     
     public File persist() {
         File f = null;

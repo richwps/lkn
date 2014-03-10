@@ -482,6 +482,18 @@
                                    active="true">
                             <Format mimetype="application/xml"/>
                         </Generator>
+                        
+                        <Generator name="ObservationFeatureCollectionListGenerator"
+                        className="net.disy.wps.n52.generator.ObservationFeatureCollectionListGenerator"
+                                   active="true">
+                            <Format mimetype="application/xml"/>
+                        </Generator>
+                        
+                         <Generator name="IntegerListGenerator"
+                        className="net.disy.wps.n52.generator.IntegerListGenerator"
+                                   active="true">
+                            <Format mimetype="application/xml"/>
+                        </Generator>
                 </GeneratorList>
 	</Datahandlers>
 	<AlgorithmRepositoryList>
@@ -514,6 +526,7 @@
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>-->
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssesment</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MSRLD5selection</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
