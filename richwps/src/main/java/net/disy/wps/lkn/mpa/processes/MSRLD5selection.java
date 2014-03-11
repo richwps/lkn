@@ -109,7 +109,7 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
 
         File f1 = relevantAlgea.persist();
         File f2 = relevantSeagras.persist();
-        File f3 = relevantSeagras.persist();
+        File f3 = relevantYears.persist();
         this.outputA = f1;
         this.outputB = f2;
         this.outputC = f3;

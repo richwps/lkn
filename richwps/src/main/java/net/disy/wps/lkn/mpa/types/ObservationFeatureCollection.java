@@ -15,7 +15,7 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
     private DateTime obsTime;
     private Double area;
     private SimpleFeatureCollection sfc;
-
+    
     public ObservationFeatureCollection(DateTime obsTime, SimpleFeatureCollection sfc, Double area) {
         this.obsTime = obsTime;
         this.area = area;
@@ -33,8 +33,8 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
     }
 
     /*@XmlElement(name = "ObservationFeature")
-    public FeatureCollection getFeatureCollectionPersistence() {
-        return this.sfc;
+     public SimpleFeatureCollection getFeatureCollectionPersistence() {
+     return  (SimpleFeatureCollection) this.sfc;
     }*/
 
     public SimpleFeatureCollection getFeatureCollection() {

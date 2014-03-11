@@ -79,7 +79,7 @@ public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatu
 
     
     
-     @XmlElement(name = "Observations")
+     @XmlElement(name = "Observation")
     public ArrayList<ObservationFeatureCollection> getObservations() {
         return this;
     }
