@@ -7,14 +7,14 @@ import org.n52.wps.io.data.IComplexData;
 public class IntegerListBinding implements IComplexData {
 	
 	private static final long serialVersionUID = 13154403015275324L;
-	protected transient File payload;
+	protected transient net.disy.wps.lkn.mpa.types.IntegerList payload;
 	
-	public IntegerListBinding(File payload) {
+	public IntegerListBinding(net.disy.wps.lkn.mpa.types.IntegerList payload) {
 		this.payload = payload;
 	}
 	
 	@Override
-	public File getPayload() {
+	public net.disy.wps.lkn.mpa.types.IntegerList getPayload() {
 		return this.payload;
 	}
 	

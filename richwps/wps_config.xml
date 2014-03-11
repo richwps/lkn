@@ -237,6 +237,12 @@
 				active="true">
 				<Format mimetype="application/wkt"/>
 			</Parser>
+                        
+                          <Parser name="IntegerListParser"
+                        className="net.disy.wps.n52.parser.IntegerListParser"
+                                   active="true">
+                            <Format mimetype="application/xml"/>
+                        </Parser>
 		</ParserList>
 		<GeneratorList>
 			
@@ -527,6 +533,7 @@
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>-->
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssesment</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MSRLD5selection</Property>
+                        <!--<Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntegerListTest</Property>-->
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
@@ -799,7 +806,7 @@
 			</Repository> -->
 		<Repository name="SextanteRepository"
 			className="org.n52.wps.server.sextante.SextanteProcessRepository"
-			active="true">
+			active="false">
 			<Property name="Algorithm" active="true">visibility</Property>
 			<Property name="Algorithm" active="true">recttopolar</Property>
 			<Property name="Algorithm" active="true">crossclassification</Property>

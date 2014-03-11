@@ -1,7 +1,9 @@
 package net.disy.wps.lkn.mpa.types;
 
 import javax.xml.bind.annotation.XmlElement;
+import org.geotools.data.memory.MemoryFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.feature.DefaultFeatureCollection;
 import org.joda.time.DateTime;
 
 /**
@@ -15,7 +17,7 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
     private DateTime obsTime;
     private Double area;
     private SimpleFeatureCollection sfc;
-    
+
     public ObservationFeatureCollection(DateTime obsTime, SimpleFeatureCollection sfc, Double area) {
         this.obsTime = obsTime;
         this.area = area;
@@ -32,10 +34,10 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
         return this.area;
     }
 
-    /*@XmlElement(name = "ObservationFeature")
-     public SimpleFeatureCollection getFeatureCollectionPersistence() {
-     return  (SimpleFeatureCollection) this.sfc;
-    }*/
+    @XmlElement(name = "ObservationFeature")
+    public DefaultFeatureCollection getFeatureCollectionPersistence() {
+        return new DefaultFeatureCollection(this.sfc);
+    }
 
     public SimpleFeatureCollection getFeatureCollection() {
         return this.sfc;
