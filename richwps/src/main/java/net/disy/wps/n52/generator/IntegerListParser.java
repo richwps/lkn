@@ -37,7 +37,6 @@ public class IntegerListParser extends AbstractParser {
             LOGGER.error(ioe.getMessage());
             throw new RuntimeException(ioe);
         }
-
         return ilb;
     }
 

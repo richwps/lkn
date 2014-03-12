@@ -34,4 +34,8 @@
         <scp file="${user}@${host}:/var/log/tomcat7/catalina.out" todir="catalina.out" port="${port}" password="${password}" trust="true"/>
         <scp file="${user}@${host}:/var/log/tomcat7/52n-wps.log" todir="52n-wps.log" port="${port}" password="${password}" trust="true"/>
     </target>
+    <!--restarts the remote tomcat-->
+      <target name="restart">
+        <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="/etc/init.d/tomcat7 restart" trust="true"/>
+    </target>
 </project>

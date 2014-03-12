@@ -399,8 +399,9 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         // Dithmarschen
         this.outputCollection = MPAUtils.getEvaluatedAreas(this.result, reportingAreasNF, reportingAreasDI);
 
-        File f = this.result.persist();
-        this.outputXMLFile = f;
+        //Persistence moved to generator.
+        //File f = this.result.persist();
+        //this.outputXMLFile = f;
 
         // Debug
         this.outputRawValues = result.getRawRecordsString(false);
@@ -446,7 +447,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
     }
 
     @ComplexDataOutput(identifier = "mpbResultXml", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = MPBResultBinding.class)
-    public File getResultXml() {
-        return this.outputXMLFile;
+    public net.disy.wps.lkn.mpa.types.MPBResult getResultXml() {
+        return this.result;
     }
 }

@@ -29,17 +29,18 @@ public class IntegerListTest extends AbstractAnnotatedAlgorithm {
     @Execute
     public void runMPB() {
         System.err.println(this.input.get(1));
-        File f = this.input.persist();
-        this.output=f;
+        
+        /*File f = this.input.persist();
+        this.output=f;*/
     }
 
     @ComplexDataInput(identifier = "theinput", title = "theinput", abstrakt = "None.", binding = IntegerListBinding.class)
-    public void setInput(IntegerListBinding in) {
-        this.input =  in.getPayload();
+    public void setInput(IntegerList in) {
+        this.input = in;
     }
 
     @ComplexDataOutput(identifier = "theoutput", title = "theoutput", abstrakt = "None.", binding = IntegerListBinding.class)
-    public File getOutputA() {
-        return this.output;
+    public IntegerList getOutputA() {
+        return this.input;
     }
 }

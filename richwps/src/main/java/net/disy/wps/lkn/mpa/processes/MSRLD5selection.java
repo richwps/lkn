@@ -18,6 +18,7 @@ import org.n52.wps.server.AbstractAnnotatedAlgorithm;
 
 import net.disy.wps.lkn.utils.MSRLD5Utils;
 import net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList;
+import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 
 @Algorithm(version = "0.0.1", title = "MSRLD5selection", abstrakt = ".")
 public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
@@ -43,10 +44,8 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
     private MSRLD5Utils msrld5;
    
 
-    private File outputA;
-    private File outputB;
-    private File outputC;
-
+    private ObservationFeatureCollectionList relevantAlgea;
+    private ObservationFeatureCollectionList relevantSeagras;
     /**
      * Constructs a new WPS-Process MacrophyteAssesment.
      */
@@ -63,14 +62,9 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
     public void runMPB() {
         this.msrld5 = new MSRLD5Utils(this.inputMSRLD5);
        
-        
-    
-    
-    
-        ObservationFeatureCollectionList relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
+        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
         final int amountAlgaeObservations = relevantAlgea.size();
         
-        ObservationFeatureCollectionList relevantSeagras;
         relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
         final int amountSeagrasObservations = relevantSeagras.size();
 
@@ -107,12 +101,6 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
             relevantYears.add(seagrasyear);
         }
 
-        File f1 = relevantAlgea.persist();
-        File f2 = relevantSeagras.persist();
-        File f3 = relevantYears.persist();
-        this.outputA = f1;
-        this.outputB = f2;
-        this.outputC = f3;
     }
 
     @ComplexDataInput(identifier = "msrl-d5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class)
@@ -125,18 +113,18 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
         this.inputAssesmentYear = Integer.parseInt(assesmentYear);
     }
 
-    @ComplexDataOutput(identifier = "relevantAlgea", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = MPBResultBinding.class)
-    public File getOutputA() {
-        return this.outputA;
+    @ComplexDataOutput(identifier = "relevantAlgea", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = ObeservationFeatureCollectionListBinding.class)
+    public ObservationFeatureCollectionList getOutputA() {
+        return this.relevantAlgea;
     }
 
-    @ComplexDataOutput(identifier = "relevantSeagras", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = MPBResultBinding.class)
-    public File getOutputB() {
-        return this.outputB;
+    @ComplexDataOutput(identifier = "relevantSeagras", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = ObeservationFeatureCollectionListBinding.class)
+    public ObservationFeatureCollectionList getOutputB() {
+        return this.relevantSeagras;
     }
 
-    @ComplexDataOutput(identifier = "relevantYears", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = MPBResultBinding.class)
-    public File getOutputC() {
-        return this.outputC;
-    }
+    /*@ComplexDataOutput(identifier = "relevantYears", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = ObeservationFeatureCollectionListBinding.class)
+    public ObservationFeatureCollectionList getOutputC() {
+        return this.relevantSeagras;
+    }*/
 }

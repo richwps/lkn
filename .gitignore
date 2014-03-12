@@ -7,3 +7,6 @@
 *.ear
 */target/**
 richwps/target/**
+richwps/52n-wps.log
+richwps/catalina.out
+ 
