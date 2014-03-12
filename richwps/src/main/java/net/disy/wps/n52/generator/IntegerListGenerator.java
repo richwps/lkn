@@ -18,9 +18,8 @@ public class IntegerListGenerator extends AbstractGenerator{
 	}
 
 	@Override
-	public InputStream generateStream(IData data, String mimeType, String schema)
-			throws IOException {
-		IntegerListBinding ilb = (IntegerListBinding) data.getPayload();
+	public InputStream generateStream(IData data, String mimeType, String schema)throws IOException {
+		IntegerListBinding ilb = (IntegerListBinding) data;
                 net.disy.wps.lkn.mpa.types.IntegerList li = ilb.getPayload();
                 File f = li.persist();
 		return new FileInputStream(f);

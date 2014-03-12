@@ -40,7 +40,7 @@ public class IntegerListTest extends AbstractAnnotatedAlgorithm {
     }
 
     @ComplexDataOutput(identifier = "theoutput", title = "theoutput", abstrakt = "None.", binding = IntegerListBinding.class)
-    public IntegerList getOutputA() {
+    public IntegerList getOutput() {
         return this.input;
     }
 }

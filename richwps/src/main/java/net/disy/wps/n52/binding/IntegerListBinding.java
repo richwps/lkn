@@ -6,7 +6,7 @@ import org.n52.wps.io.data.IComplexData;
 
 public class IntegerListBinding implements IComplexData {
 
-    private static final long serialVersionUID = 13154403015275324L;
+    private static final long serialVersionUID = 1L;
     protected transient net.disy.wps.lkn.mpa.types.IntegerList payload;
 
     public IntegerListBinding(net.disy.wps.lkn.mpa.types.IntegerList payload) {

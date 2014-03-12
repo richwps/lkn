@@ -18,6 +18,7 @@ import org.n52.wps.server.AbstractAnnotatedAlgorithm;
 
 import net.disy.wps.lkn.utils.MSRLD5Utils;
 import net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList;
+import net.disy.wps.n52.binding.IntegerListBinding;
 import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 
 @Algorithm(version = "0.0.1", title = "MSRLD5selection", abstrakt = ".")
@@ -46,6 +47,7 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
 
     private ObservationFeatureCollectionList relevantAlgea;
     private ObservationFeatureCollectionList relevantSeagras;
+    private IntegerList relevantYears; 
     /**
      * Constructs a new WPS-Process MacrophyteAssesment.
      */
@@ -81,7 +83,7 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
                     "Es sind nicht genuegend Parameter zur Bewertung vorhanden!");
         }
 
-        IntegerList relevantYears;        
+               
         // Test: Entsprechen sich die Jahre von Seegras- und Algen-Datensaetze?
         for (int i = 0; i < amountSeagrasObservations; i++) {
             int seagrasyear = relevantSeagras.get(i).getDateTime().getYear();
@@ -123,8 +125,8 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
         return this.relevantSeagras;
     }
 
-    /*@ComplexDataOutput(identifier = "relevantYears", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = ObeservationFeatureCollectionListBinding.class)
-    public ObservationFeatureCollectionList getOutputC() {
-        return this.relevantSeagras;
-    }*/
+    @ComplexDataOutput(identifier = "relevantYears", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = IntegerListBinding.class)
+    public IntegerList getOutputC() {
+        return this.relevantYears;
+    }
 }

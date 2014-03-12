@@ -33,6 +33,7 @@ public class IntegerList extends ArrayList<Integer> {
         return super.toArray();
     }
 
+    //fixme move to generator
     public File persist() {
         File f = null;
         try {
@@ -52,6 +53,7 @@ public class IntegerList extends ArrayList<Integer> {
         return f;
     }
 
+    //fixme move to parser
     public static IntegerList read(File f) {
         IntegerList list = null;
         try {

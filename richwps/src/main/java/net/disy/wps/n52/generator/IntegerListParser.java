@@ -22,6 +22,7 @@ public class IntegerListParser extends AbstractParser {
 
     @Override
     public IntegerListBinding parse(InputStream input, String mimeType, String schema) {
+        net.disy.wps.lkn.mpa.types.IntegerList il;
         IntegerListBinding ilb;
         try {
             String filename = this.getClass().getCanonicalName();
@@ -31,7 +32,7 @@ public class IntegerListParser extends AbstractParser {
             FileOutputStream out = null;
             out = new FileOutputStream(f);
             IOUtils.copy(input, out);
-            net.disy.wps.lkn.mpa.types.IntegerList il = net.disy.wps.lkn.mpa.types.IntegerList.read(f);
+            il = net.disy.wps.lkn.mpa.types.IntegerList.read(f);
             ilb = new IntegerListBinding(il);
         } catch (IOException ioe) {
             LOGGER.error(ioe.getMessage());
