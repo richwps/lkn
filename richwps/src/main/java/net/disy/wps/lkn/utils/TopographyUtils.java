@@ -97,11 +97,11 @@ public class TopographyUtils {
 
         HashSet<Integer> hs = new HashSet<Integer>();
         // Ergebnisliste in eine Liste mit eindeutigen Werten konvertieren
-        hs.addAll(existingTopoYears);
+        hs.addAll(existingTopoYears.getPayload());
         existingTopoYears.clear();
         existingTopoYears.addAll(hs);
         // Aufsteigend sortieren
-        Collections.sort(existingTopoYears);
+        Collections.sort(existingTopoYears.getPayload());
         return existingTopoYears;
     }
 

@@ -163,10 +163,10 @@ public class MPAUtils {
         // Schleife ueber MSRL-Years, fuer die jeweils das entsprechende
         // TopoYear bestimmt werden soll
         for (int i = 0; i < msrlYears.size(); i++) {
-            relTopoYears.add(this.getTopoYear(msrlYears.get(i), topoYears));
+            relTopoYears.add(this.getTopoYear(msrlYears.get(i), topoYears.getPayload()));
         }
         // Liste auf eindeutige Werte beschraenken
-        hs.addAll(relTopoYears);
+        hs.addAll(relTopoYears.getPayload());
         relTopoYears.clear();
         relTopoYears.addAll(hs);
 

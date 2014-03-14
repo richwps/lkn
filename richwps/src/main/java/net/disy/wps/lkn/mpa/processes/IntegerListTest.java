@@ -24,7 +24,8 @@ public class IntegerListTest extends AbstractAnnotatedAlgorithm {
 
     @Execute
     public void runMPB() {
-        System.err.println(this.input);
+        System.err.println(this.input.getArray());
+        System.err.println(this.input.get(1));
     }
 
     @ComplexDataInput(identifier = "inputyears",

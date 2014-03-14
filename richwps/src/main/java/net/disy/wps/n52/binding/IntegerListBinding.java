@@ -1,27 +1,28 @@
 package net.disy.wps.n52.binding;
 
+import java.io.IOException;
 import org.n52.wps.io.data.IComplexData;
+import net.disy.wps.lkn.mpa.types.IntegerList;
 
 public class IntegerListBinding implements IComplexData {
 
-    private static final long serialVersionUID = 2131395L;
-    protected transient net.disy.wps.lkn.mpa.types.IntegerList payload;
+    protected transient IntegerList payload;
 
-    public IntegerListBinding(net.disy.wps.lkn.mpa.types.IntegerList payload) {
+    public IntegerListBinding(IntegerList payload) {
         this.payload = payload;
     }
 
     @Override
-    public net.disy.wps.lkn.mpa.types.IntegerList getPayload() {
+    public IntegerList getPayload() {
         return this.payload;
     }
 
     @Override
-    public Class<?> getSupportedClass() {
-        return this.payload.getClass();
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public Class getSupportedClass() {
+        return IntegerList.class;
     }
 
-    @Override
     public void dispose() {
     }
 }

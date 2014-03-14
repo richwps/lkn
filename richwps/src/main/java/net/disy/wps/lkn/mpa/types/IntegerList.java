@@ -1,11 +1,9 @@
 package net.disy.wps.lkn.mpa.types;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,40 +13,49 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author dalcacer
  */
 @XmlRootElement(name = "IntegerList")
-public class IntegerList extends ArrayList<Integer> {
+public class IntegerList implements Iterable<Integer> {
+
+    private ArrayList<Integer> payload;
 
     public IntegerList() {
-        super();
+        this.payload = new ArrayList<Integer>();
     }
 
-    @XmlElement(name = "Size")
-    public int getSize() {
-        return super.size();
+    public void add(Integer value) {
+        this.payload.add(value);
+    }
+
+    public Integer get(int index) {
+        return this.payload.get(index);
+    }
+
+    public int size() {
+        return this.payload.size();
+    }
+
+    public void clear() {
+        this.payload.clear();
+    }
+
+    public void addAll(Collection<? extends Integer> col) {
+        this.payload.addAll(col);
+    }
+
+    public ArrayList<Integer> getPayload() {
+        return this.payload;
+    }
+
+    public void addAll(IntegerList il) {
+        this.payload.addAll(il.getPayload());
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return this.payload.iterator();
     }
 
     @XmlElement(name = "Value")
     public Object[] getArray() {
-        return super.toArray();
+        return this.payload.toArray();
     }
-
-    //fixme move to generator
-    public File persist() {
-        File f = null;
-        try {
-            JAXBContext context = JAXBContext.newInstance(IntegerList.class);
-            Marshaller m = context.createMarshaller();
-            String filename = this.getClass().getCanonicalName();
-            filename += System.currentTimeMillis();
-            f = File.createTempFile(filename, "tmp");
-
-            m.marshal(this, f);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-        return f;
-    }
-
 }

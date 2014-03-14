@@ -300,7 +300,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
         for (Integer relevantYear : relevantYears) {
             IntersectionFeatureCollection intsecColl;
             ObservationFeatureCollection msrlColl;
-            final Integer topoYear = this.mpa.getTopoYear(relevantYear, existingTopoYears);
+            final Integer topoYear = this.mpa.getTopoYear(relevantYear, existingTopoYears.getPayload());
 
             // Nordfriesland
             intsecColl = MPAUtils.getIntersecCollByYear(
