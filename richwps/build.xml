@@ -26,7 +26,7 @@
     <!-- empties the remote log -->
     <target name="flushlogs">
         <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="cat /dev/null > /var/log/tomcat7/catalina.out" trust="true"/>
-           <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="cat /dev/null > /var/log/tomcat7/52n-wps.log" trust="true"/>
+        <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="cat /dev/null > /var/log/tomcat7/52n-wps.log" trust="true"/>
     </target>
  
     <!-- copies the remote log to localhost (./catalina.out)-->
@@ -35,7 +35,7 @@
         <scp file="${user}@${host}:/var/log/tomcat7/52n-wps.log" todir="52n-wps.log" port="${port}" password="${password}" trust="true"/>
     </target>
     <!--restarts the remote tomcat-->
-      <target name="restart">
+    <target name="restart">
         <sshexec host="${host}" username="${user}" password="${password}" port="${port}" command="/etc/init.d/tomcat7 restart" trust="true"/>
     </target>
 </project>

@@ -237,12 +237,13 @@
 				active="true">
 				<Format mimetype="application/wkt"/>
 			</Parser>
-                        
+                        <!--
                         <Parser name="IntegerListParser"
                                 className="net.disy.wps.n52.parser.IntegerListParser"
                                 active="true">
                                 <Format mimetype="application/xml"/>
-                        </Parser>
+                        </Parser>-->
+                        
 		</ParserList>
 		<GeneratorList>
 			

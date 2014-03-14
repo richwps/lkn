@@ -1,9 +1,7 @@
 package net.disy.wps.lkn.mpa.processes;
 
-import java.io.File;
 import net.disy.wps.lkn.mpa.types.IntegerList;
 
-import net.disy.wps.n52.binding.MPBResultBinding;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollection;
