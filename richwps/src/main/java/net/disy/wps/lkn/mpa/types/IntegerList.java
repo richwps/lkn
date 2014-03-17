@@ -58,4 +58,12 @@ public class IntegerList implements Iterable<Integer> {
     public Object[] getArray() {
         return this.payload.toArray();
     }
+    
+    public void setArray(Object[] os){
+        for(Object o:os){
+            Integer tmp = (Integer)o;
+            this.add(tmp);
+        }
+        
+    }
 }
