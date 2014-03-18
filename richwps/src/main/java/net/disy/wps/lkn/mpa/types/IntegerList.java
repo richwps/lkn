@@ -3,13 +3,12 @@ package net.disy.wps.lkn.mpa.types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Wrapper for lists of Integers, e.g. years. Necessary for marshalling.
- *
+ * Tricky: don't use inheritance or the corresponding parser won't kick in.
  * @author dalcacer
  */
 @XmlRootElement(name = "IntegerList")

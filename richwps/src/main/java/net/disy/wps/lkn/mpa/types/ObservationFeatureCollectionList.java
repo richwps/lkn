@@ -3,20 +3,70 @@ package net.disy.wps.lkn.mpa.types;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.geotools.data.simple.SimpleFeatureCollection;
 
 /**
- * Wrapper for ObservationFeatureCollections. Necessary for marshalling.
+ * Wrapper for ObservationFeatureCollections. Necessary for marshalling. Tricky:
+ * don't use inheritance or the corresponding parser won't kick in.
  *
  * @author dalcacer
  */
 @XmlRootElement(name = "ObservationFeatureCollectionList")
-public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatureCollection> {
+public class ObservationFeatureCollectionList implements Iterable<ObservationFeatureCollection> {
+
+    private ArrayList<ObservationFeatureCollection> payload;
+
+    public ObservationFeatureCollectionList() {
+        this.payload = new ArrayList();
+    }
+
+    public void add(ObservationFeatureCollection value) {
+        this.payload.add(value);
+    }
+
+    public ObservationFeatureCollection get(int index) {
+        return this.payload.get(index);
+    }
+
+    public boolean remove(Object o) {
+        return this.payload.remove(o);
+    }
+
+    public int size() {
+        return this.payload.size();
+    }
+
+    public void clear() {
+        this.payload.clear();
+    }
+
+    public void addAll(Collection<? extends ObservationFeatureCollection> col) {
+        this.payload.addAll(col);
+    }
+
+    @XmlElement(name = "Observation")
+    @XmlElementWrapper(name = "Observations")
+    public ArrayList<ObservationFeatureCollection> getPayload() {
+        return this.payload;
+    }
+
+    public void addAll(ObservationFeatureCollectionList il) {
+        this.payload.addAll(il.getPayload());
+    }
+
+    @Override
+    public Iterator<ObservationFeatureCollection> iterator() {
+        return this.payload.iterator();
+    }
 
     /**
      * Ermittelt zu aus einer Liste von ObservationFeatureCollectionList und
@@ -34,7 +84,7 @@ public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatu
 
         Integer i = 0;
         // sort descending by DateTime of ObservationFeatureCollection
-        Collections.sort(this, Collections.reverseOrder());
+        Collections.sort(this.getPayload(), Collections.reverseOrder());
         Integer listYear = this.get(i).getDateTime().getYear();
         // Schleife, bis aktuelles Jahr aus der Liste nicht mehr kleier als das
         // Bewertungsjahr ist
@@ -78,16 +128,17 @@ public class ObservationFeatureCollectionList extends ArrayList<ObservationFeatu
     }
 
     
-    
-     @XmlElement(name = "Observation")
+    @XmlElement(name = "Observation")
     public ArrayList<ObservationFeatureCollection> getObservations() {
-        return this;
+        return this.payload;
     }
-    
+
+    //TODO outsource to generator
     public File persist() {
         File f = null;
         try {
-            JAXBContext context = JAXBContext.newInstance(ObservationFeatureCollectionList.class);
+            JAXBContext context = JAXBContext.newInstance(ObservationFeatureCollectionList.class, ObservationFeatureCollection.class);
+            System.out.println(context);
             Marshaller m = context.createMarshaller();
             String filename = this.getClass().getCanonicalName();
             filename += System.currentTimeMillis();
