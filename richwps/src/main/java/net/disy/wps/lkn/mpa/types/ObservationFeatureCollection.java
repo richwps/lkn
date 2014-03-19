@@ -1,9 +1,17 @@
 package net.disy.wps.lkn.mpa.types;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.joda.time.DateTime;
+import org.n52.wps.io.data.binding.complex.GTVectorDataBinding;
+import org.n52.wps.io.datahandler.generator.SimpleGMLGenerator;
+import org.n52.wps.io.datahandler.parser.SimpleGMLParser;
 
 /**
  * Wrapper-Klasse fuer ObservationFeatureCollection, die als
@@ -13,7 +21,7 @@ import org.joda.time.DateTime;
  */
 public class ObservationFeatureCollection implements Comparable<ObservationFeatureCollection> {
 
-    private DateTime obsTime;
+    private transient DateTime obsTime;
     private Double area;
     private SimpleFeatureCollection sfc;
 
@@ -27,6 +35,16 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
     }
 
     @XmlElement(name = "ObservationTime")
+    public Long getDateTimeJAXB() {
+        return this.obsTime.getMillis();
+    }
+
+    
+    public void setDateTimeJAXB(Long time) {
+        this.obsTime = new DateTime(time);
+    }
+
+    @XmlTransient
     public DateTime getDateTime() {
         return this.obsTime;
     }
@@ -44,7 +62,32 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
         this.area = area;
     }
 
-    @XmlElement(name = "ObservationFeature")
+    @XmlAnyElement
+    public org.w3c.dom.Node getFeatureCollectionJAXB() {
+        GTVectorDataBinding binding = new GTVectorDataBinding(this.sfc);
+        StringWriter buffer = new StringWriter();
+        SimpleGMLGenerator generator = new SimpleGMLGenerator();
+        generator.write(binding, buffer);
+        org.w3c.dom.Node node = generator.generateXML(binding, "");
+        return node;
+
+    }
+
+    public void setFeatureCollectionJAXB(org.w3c.dom.Node xmlcontent) {
+        String content = xmlcontent.toString();
+        this.setFeatureCollectionJAXB(content);
+    }
+
+    public void setFeatureCollectionJAXB(String xmlcontent) {
+        SimpleGMLParser parser = new SimpleGMLParser();
+
+        InputStream stream = new ByteArrayInputStream(xmlcontent.getBytes());
+        // use a default configuration for the parser by requesting the first supported format and schema
+        GTVectorDataBinding data = parser.parse(stream, parser.getSupportedFormats()[0], parser.getSupportedEncodings()[0]);
+        this.sfc = (SimpleFeatureCollection) data.getPayload();
+    }
+
+    @XmlTransient
     public SimpleFeatureCollection getFeatureCollection() {
         return this.sfc;
     }

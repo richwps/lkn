@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
+import net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList;
 import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 
 import org.n52.wps.io.data.IData;
@@ -21,9 +24,24 @@ public class ObservationFeatureCollectionListGenerator extends AbstractGenerator
     @Override
     public InputStream generateStream(IData data, String mimeType, String schema)
             throws IOException {
-         net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding binding = ( net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding) data;
-         net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList list = binding.getPayload();
-        File f = list.persist();
+        ObeservationFeatureCollectionListBinding binding = (ObeservationFeatureCollectionListBinding) data;
+        ObservationFeatureCollectionList list = binding.getPayload();
+
+        File f = null;
+        try {
+            JAXBContext context = JAXBContext.newInstance(ObservationFeatureCollectionList.class, ObservationFeatureCollection.class);
+            Marshaller m = context.createMarshaller();
+            String filename = this.getClass().getCanonicalName();
+            filename += System.currentTimeMillis();
+            f = File.createTempFile(filename, "tmp");
+
+            m.marshal(list, f);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         return new FileInputStream(f);
     }
 }

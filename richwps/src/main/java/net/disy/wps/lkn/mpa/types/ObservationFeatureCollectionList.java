@@ -1,18 +1,12 @@
 package net.disy.wps.lkn.mpa.types;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.geotools.data.simple.SimpleFeatureCollection;
 
 /**
  * Wrapper for ObservationFeatureCollections. Necessary for marshalling. Tricky:
@@ -131,26 +125,5 @@ public class ObservationFeatureCollectionList implements Iterable<ObservationFea
     @XmlElement(name = "Observation")
     public ArrayList<ObservationFeatureCollection> getObservations() {
         return this.payload;
-    }
-
-    //TODO outsource to generator
-    public File persist() {
-        File f = null;
-        try {
-            JAXBContext context = JAXBContext.newInstance(ObservationFeatureCollectionList.class, ObservationFeatureCollection.class);
-            System.out.println(context);
-            Marshaller m = context.createMarshaller();
-            String filename = this.getClass().getCanonicalName();
-            filename += System.currentTimeMillis();
-            f = File.createTempFile(filename, "tmp");
-
-            m.marshal(this, f);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-        return f;
     }
 }
