@@ -3,9 +3,18 @@ package net.disy.wps.lkn.mpa.types;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.joda.time.DateTime;
@@ -39,7 +48,6 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
         return this.obsTime.getMillis();
     }
 
-    
     public void setDateTimeJAXB(Long time) {
         this.obsTime = new DateTime(time);
     }
@@ -74,20 +82,34 @@ public class ObservationFeatureCollection implements Comparable<ObservationFeatu
     }
 
     public void setFeatureCollectionJAXB(org.w3c.dom.Node xmlcontent) {
-        String content = xmlcontent.toString();
-        this.setFeatureCollectionJAXB(content);
+
+        System.err.println(this.getClass().toString() + "setFeatureCollectionJAXB#node " + xmlcontent);
+        try {
+            StringWriter writer = new StringWriter();
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.transform(new DOMSource(xmlcontent), new StreamResult(writer));
+            String content = writer.toString();
+            System.err.println(this.getClass().toString() + "setFeatureCollectionJAXB#node " + content);
+            this.setFeatureCollectionJAXB(content);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(ObservationFeatureCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(ObservationFeatureCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logger.getLogger(ObservationFeatureCollection.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
-    public void setFeatureCollectionJAXB(String xmlcontent) {
+    private void setFeatureCollectionJAXB(String xmlcontent) {
+        System.err.println(this.getClass().toString() + "setFeatureCollectionJAXB#string " + xmlcontent);
         SimpleGMLParser parser = new SimpleGMLParser();
 
         InputStream stream = new ByteArrayInputStream(xmlcontent.getBytes());
-        // use a default configuration for the parser by requesting the first supported format and schema
+        // use a default configuration for the parser by requesting the  first supported format and schema
         GTVectorDataBinding data = parser.parse(stream, parser.getSupportedFormats()[0], parser.getSupportedEncodings()[0]);
         this.sfc = (SimpleFeatureCollection) data.getPayload();
     }
 
-    @XmlTransient
     public SimpleFeatureCollection getFeatureCollection() {
         return this.sfc;
     }
