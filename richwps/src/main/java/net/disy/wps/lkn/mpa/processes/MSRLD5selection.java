@@ -2,7 +2,6 @@ package net.disy.wps.lkn.mpa.processes;
 
 import net.disy.wps.lkn.mpa.types.IntegerList;
 
-
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollection;
 import org.n52.wps.algorithm.annotation.Algorithm;
@@ -19,7 +18,13 @@ import net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList;
 import net.disy.wps.n52.binding.IntegerListBinding;
 import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 
-@Algorithm(version = "0.0.1", title = "MSRLD5selection", abstrakt = ".")
+@Algorithm(version = "0.0.1", title = "MSRLD5selection", abstrakt = "MSRLD5selection. "
+        + "MPA-specific process for selecting parameters given by a MSRLD5-"
+        + "featurecollection and a year.")
+/**
+ * MSRLD5selection. MPA-specific process for selecting parameters given by a
+ * MSRLD5-featurecollection and a year.
+ */
 public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
 
     // Logger fuer Debugging erzeugen
@@ -29,23 +34,23 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
     //protected static org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MacrophyteAssesment.class);
 
     /**
-     * MSRLD05 algea and seagras.
+     * MSRLD05 algea and seagra as one simplefeaturecollection.
      */
     private SimpleFeatureCollection inputMSRLD5;
     /**
-     * The relevantTopoYear for the assessment.
+     * The relevantTopoYear for the selection.
      */
     private Integer inputAssesmentYear;
 
     /**
-     * Dealing with MSRLD5 measurements.
+     * Util for dealing with MSRLD5 measurements.
      */
     private MSRLD5Utils msrld5;
-   
 
     private ObservationFeatureCollectionList relevantAlgea;
     private ObservationFeatureCollectionList relevantSeagras;
-    private IntegerList relevantYears; 
+    private IntegerList relevantYears;
+
     /**
      * Constructs a new WPS-Process MacrophyteAssesment.
      */
@@ -61,11 +66,13 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
      */
     public void runMPB() {
         this.msrld5 = new MSRLD5Utils(this.inputMSRLD5);
-       
-        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
+
+        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(
+                MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
         final int amountAlgaeObservations = relevantAlgea.size();
-        
-        relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
+
+        relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(
+                MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
         final int amountSeagrasObservations = relevantSeagras.size();
 
         // Validierung der vorherigen Selektion
@@ -81,7 +88,6 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
                     "Es sind nicht genuegend Parameter zur Bewertung vorhanden!");
         }
 
-               
         // Test: Entsprechen sich die Jahre von Seegras- und Algen-Datensaetze?
         for (int i = 0; i < amountSeagrasObservations; i++) {
             int seagrasyear = relevantSeagras.get(i).getDateTime().getYear();
@@ -100,7 +106,6 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
             //Hinzufuegen/Merken eines der beiden Jahre.   
             relevantYears.add(seagrasyear);
         }
-
     }
 
     @ComplexDataInput(identifier = "msrl-d5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class)

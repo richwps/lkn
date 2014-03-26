@@ -10,7 +10,7 @@ import org.n52.wps.io.datahandler.parser.AbstractParser;
 import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 
 /**
- *
+ * Parser for ObservationFeatureCollectionBindings.
  * @author dalcacer
  */
 public class ObservationFeatureCollectionListParser extends AbstractParser {
@@ -21,25 +21,21 @@ public class ObservationFeatureCollectionListParser extends AbstractParser {
     }
 
     @Override
-    public ObeservationFeatureCollectionListBinding parse(InputStream input, String mimeType, String schema) {
+    public ObeservationFeatureCollectionListBinding parse(InputStream input,
+            String mimeType, String schema) {
         ObservationFeatureCollectionList list;
-        ObeservationFeatureCollectionListBinding ilb;
+        ObeservationFeatureCollectionListBinding binding;
         try {
-            //write XML to temporary file
-            /*String filename = this.getClass().getCanonicalName();
-             filename += System.currentTimeMillis();
-             File f = File.createTempFile(filename, ".tmp");
-             FileOutputStream out = new FileOutputStream(f);
-             IOUtils.copy(input, out);*/
-
-            JAXBContext context = JAXBContext.newInstance(ObservationFeatureCollectionList.class, ObservationFeatureCollection.class);
+            JAXBContext context = JAXBContext.newInstance(
+                    ObservationFeatureCollectionList.class,
+                    ObservationFeatureCollection.class);
+            
             Unmarshaller um = context.createUnmarshaller();
             list = (ObservationFeatureCollectionList) um.unmarshal(input);
-            //encapsulate object in binding
-            ilb = new ObeservationFeatureCollectionListBinding(list);
+            binding = new ObeservationFeatureCollectionListBinding(list);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return ilb;
+        return binding;
     }
 }

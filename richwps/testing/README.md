@@ -1,1 +1,4 @@
-in the absence of a good testing procedure (client) sublime text with [httprequester](https://github.com/braindamageinc/SublimeHttpRequester) is used.
+* install python (e.g. sudo apt-get install python)
+* install requester (e.g. `pip install requester`)
+
+* run script `python test.py`

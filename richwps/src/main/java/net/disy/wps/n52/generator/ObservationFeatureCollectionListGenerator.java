@@ -14,6 +14,11 @@ import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 import org.n52.wps.io.data.IData;
 import org.n52.wps.io.datahandler.generator.AbstractGenerator;
 
+/**
+ * Generator for ObservationFeatureCollectionBindings.
+ *
+ * @author dalcacer
+ */
 public class ObservationFeatureCollectionListGenerator extends AbstractGenerator {
 
     public ObservationFeatureCollectionListGenerator() {
@@ -29,18 +34,18 @@ public class ObservationFeatureCollectionListGenerator extends AbstractGenerator
 
         File f = null;
         try {
-            JAXBContext context = JAXBContext.newInstance(ObservationFeatureCollectionList.class, ObservationFeatureCollection.class);
+            JAXBContext context = JAXBContext.newInstance(
+                    ObservationFeatureCollectionList.class,
+                    ObservationFeatureCollection.class);
             Marshaller m = context.createMarshaller();
+
             String filename = this.getClass().getCanonicalName();
             filename += System.currentTimeMillis();
             f = File.createTempFile(filename, "tmp");
 
             m.marshal(list, f);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return new FileInputStream(f);
     }
