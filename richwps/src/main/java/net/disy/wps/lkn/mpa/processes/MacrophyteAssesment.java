@@ -304,7 +304,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
 
             // Nordfriesland
             intsecColl = MPAUtils.getIntersecCollByYear(
-                    intersectionsTidelandReportingAreasNF, topoYear);
+                    intersectionsTidelandReportingAreasNF.getIntersections(), topoYear);
             totalWattAreaNF = intsecColl.getArea();
             // ZS --> Seegras
             msrlColl = relevantSeagras.getObsCollByYear(relevantYear);
@@ -342,7 +342,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
             Double OP_totalareaDI, OP_40areaDI, OP_60areaDI;
 
             // Dithmarschen
-            intsecColl = MPAUtils.getIntersecCollByYear(intersectionsTidelandReportingAreasDI, topoYear);
+            intsecColl = MPAUtils.getIntersecCollByYear(intersectionsTidelandReportingAreasDI.getIntersections(), topoYear);
             totalWattAreaDI = intsecColl.getArea();
             // ZS --> Seegras
             msrlColl = relevantSeagras.getObsCollByYear(relevantYear);

@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
 import net.disy.wps.lkn.mpa.types.ObservationFeatureCollectionList;
@@ -14,7 +13,7 @@ import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 import org.n52.wps.io.data.IData;
 import org.n52.wps.io.datahandler.generator.AbstractGenerator;
 
-/**
+/**^
  * Generator for ObservationFeatureCollectionBindings.
  *
  * @author dalcacer

@@ -9,11 +9,11 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Wrapper for ObservationFeatureCollections. Necessary for marshalling. Tricky:
- * don't use inheritance or the corresponding parser won't kick in.
+ * Wrapper for ObservationFeatureCollections. Necessary for marshalling.
  *
  * @author dalcacer
  */
+//Tricky: do not use inheritance or the corresponding parser will not work.
 @XmlRootElement(name = "ObservationFeatureCollectionList")
 public class ObservationFeatureCollectionList implements Iterable<ObservationFeatureCollection> {
 
@@ -47,12 +47,6 @@ public class ObservationFeatureCollectionList implements Iterable<ObservationFea
         this.payload.addAll(col);
     }
 
-    @XmlElement(name = "Observation")
-    @XmlElementWrapper(name = "Observations")
-    public ArrayList<ObservationFeatureCollection> getPayload() {
-        return this.payload;
-    }
-
     public void addAll(ObservationFeatureCollectionList il) {
         this.payload.addAll(il.getPayload());
     }
@@ -60,6 +54,17 @@ public class ObservationFeatureCollectionList implements Iterable<ObservationFea
     @Override
     public Iterator<ObservationFeatureCollection> iterator() {
         return this.payload.iterator();
+    }
+
+    @XmlElement(name = "Observation")
+    @XmlElementWrapper(name = "Observations")
+    public ArrayList<ObservationFeatureCollection> getPayload() {
+        return this.payload;
+    }
+
+    @XmlElement(name = "Observation")
+    public ArrayList<ObservationFeatureCollection> getObservations() {
+        return this.payload;
     }
 
     /**
@@ -119,11 +124,5 @@ public class ObservationFeatureCollectionList implements Iterable<ObservationFea
             }
         }
         return obsColl;
-    }
-
-    
-    @XmlElement(name = "Observation")
-    public ArrayList<ObservationFeatureCollection> getObservations() {
-        return this.payload;
     }
 }

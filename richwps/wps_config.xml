@@ -244,9 +244,14 @@
                                 <Format mimetype="application/xml"/>
                         </Parser>
                         
-                         
                         <Parser name="ObservationFeatureCollectionListParser"
                                 className="net.disy.wps.n52.parser.ObservationFeatureCollectionListParser"
+                                active="true">
+                                <Format mimetype="application/xml"/>
+                        </Parser>
+                        
+                        <Parser name="IntersectionFeatureCollectionListParser"
+                                className="net.disy.wps.n52.parser.IntersectionFeatureCollectionListParser"
                                 active="true">
                                 <Format mimetype="application/xml"/>
                         </Parser>
@@ -509,6 +514,12 @@
                             <Format mimetype="application/xml"/>
                         </Generator>
                         
+                         <Generator name="IntersectionFeatureCollectionListGenerator"
+                        className="net.disy.wps.n52.generator.IntersectionFeatureCollectionListGenerator"
+                                   active="true">
+                            <Format mimetype="application/xml"/>
+                        </Generator>
+                        
                 </GeneratorList>
 	</Datahandlers>
 	<AlgorithmRepositoryList>
@@ -544,6 +555,8 @@
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MSRLD5selection</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntegerListTest</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.ObservationFeatureCollectionListTest</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntersectionFeatureCollectionListTest</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntersectionFeatureCollectionListGeneratorTest</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">

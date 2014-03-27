@@ -3,19 +3,20 @@ package net.disy.wps.n52.binding;
 import java.io.File;
 
 import org.n52.wps.io.data.IComplexData;
-import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollection;
+import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollectionList;
 
 public class IntersectionFeatureCollectionListBinding implements IComplexData {
 
-    private static final long serialVersionUID = 13154403015275324L;
-    protected transient IntersectionFeatureCollection payload;
+    private static final long serialVersionUID = 13164403015275334L;
+    protected transient IntersectionFeatureCollectionList payload;
 
-    public IntersectionFeatureCollectionListBinding(IntersectionFeatureCollection payload) {
+    public IntersectionFeatureCollectionListBinding(
+            IntersectionFeatureCollectionList payload) {
         this.payload = payload;
     }
 
     @Override
-    public IntersectionFeatureCollection getPayload() {
+    public IntersectionFeatureCollectionList getPayload() {
         return this.payload;
     }
 

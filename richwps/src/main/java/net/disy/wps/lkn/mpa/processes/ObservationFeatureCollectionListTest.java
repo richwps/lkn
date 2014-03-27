@@ -11,7 +11,7 @@ import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
 
 @Algorithm(version = "0.0.1", title = "ObservationFeatureCollectionListTest", abstrakt = ".")
 /**
- * ObservationFeatureCollectionListTest for testing-purpose only.
+ * ObservationFeatureCollectionListTest for testing parsers and generators.
  */
 public class ObservationFeatureCollectionListTest extends AbstractAnnotatedAlgorithm {
 
@@ -27,6 +27,7 @@ public class ObservationFeatureCollectionListTest extends AbstractAnnotatedAlgor
 
     @Execute
     public void runMPB() {
+        System.out.println("Entering test." + this.getClass().getCanonicalName());
         int size = this.input.getPayload().size();
         System.out.println("ObservationFeatureCollectionListTest incoming "
                 + "collection has " + size + " elements.");
@@ -34,6 +35,7 @@ public class ObservationFeatureCollectionListTest extends AbstractAnnotatedAlgor
         System.out.println("ObservationFeatureCollectionListTest incoming "
                 + "simplefeaturecollection has " + size + " elements.");
         this.output = this.input;
+        System.out.println("Exiting test." + this.getClass().getCanonicalName());
     }
 
     @ComplexDataInput(identifier = "inputcollection",

@@ -36,15 +36,29 @@ import org.opengis.style.ContrastMethod;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.Polygon;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import net.disy.wps.common.DescriptorContainer;
+import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
+import org.n52.wps.io.data.binding.complex.GTVectorDataBinding;
+import org.n52.wps.io.datahandler.generator.GML3BasicGenerator;
+import org.n52.wps.io.datahandler.parser.GML32BasicParser;
 
 /**
  * Diese Klasse beinhaltet allgemeine Hilfsfunktionen und Tools fuer die
  * Implementierung von WPS-Prozessen im RichWPS-Projekt
  *
  * @author woessner
- *
+ * @author dalcacer
  */
+//dalcacer transformation + persistence
 public abstract class FeatureCollectionUtil {
 
     /**
@@ -116,7 +130,7 @@ public abstract class FeatureCollectionUtil {
             ArrayList<DescriptorContainer> descrContainerList,
             String newFeatureTypeName, Class<?> newGeomType) {
 
-		// Get Builder with Descriptors of current FeatureType
+        // Get Builder with Descriptors of current FeatureType
         // SimpleFeatureTypeBuilder builder = getBuilderFromFeaturType(currFt);
         SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
         String geomDescrName;
@@ -493,6 +507,76 @@ public abstract class FeatureCollectionUtil {
         return SLD.wrapSymbolizers(sym);
     }
 
-    
-    
+    public static org.w3c.dom.Document toDocument(SimpleFeatureCollection sfc) {
+        InputStream is = null;
+        GTVectorDataBinding binding = new GTVectorDataBinding(sfc);
+        org.w3c.dom.Document doc = null;
+        org.n52.wps.io.datahandler.generator.GML3BasicGenerator generator = new GML3BasicGenerator();
+        try {
+            is = generator.generateStream(binding, null, null);
+            InputStreamReader isr = new InputStreamReader(is);
+            doc = FeatureCollectionUtil.loadXMLFrom(is);
+
+        } catch (Exception ex) {
+            Logger.getLogger(ObservationFeatureCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                is.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ObservationFeatureCollection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return doc;
+    }
+
+    public static org.w3c.dom.Node toNode(SimpleFeatureCollection sfc) {
+        org.w3c.dom.Document doc = toDocument(sfc);
+        org.w3c.dom.Node node = doc.getFirstChild();
+        return node;
+    }
+
+    public static SimpleFeatureCollection fromNode(org.w3c.dom.Node xmlcontent) {
+        String stringcontent = FeatureCollectionUtil.stringFromNode(xmlcontent);
+        InputStream stream = new ByteArrayInputStream(stringcontent.getBytes());
+        GML32BasicParser parser = new GML32BasicParser();
+        GTVectorDataBinding data = null;
+        try {
+            data = parser.parse(stream, parser.getSupportedFormats()[0], parser.getSupportedEncodings()[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return (SimpleFeatureCollection) data.getPayload();
+    }
+
+    //XMLUTILS
+    public static org.w3c.dom.Document loadXMLFrom(java.io.InputStream is)
+            throws org.xml.sax.SAXException, java.io.IOException {
+        javax.xml.parsers.DocumentBuilderFactory factory
+                = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        javax.xml.parsers.DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+        }
+        org.w3c.dom.Document doc = builder.parse(is);
+        is.close();
+        return doc;
+    }
+
+    //XMLUTILS
+    public static String stringFromNode(org.w3c.dom.Node xmlcontent) {
+        String content = null;
+        try {
+            StringWriter writer = new StringWriter();
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.transform(new DOMSource(xmlcontent), new StreamResult(writer));
+            content = writer.toString();
+            return content;
+        } catch (Exception e) {
+            e.printStackTrace();;
+        }
+        return content;
+    }
 }

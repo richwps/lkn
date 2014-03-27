@@ -289,7 +289,7 @@ public class MPAUtils {
 
         for (int j = 0; j < intersecCollList.size(); j++) {
             if (intersecCollList.get(j).getDateTime().getYear() == year
-                    && intersecCollList.get(j).getGebiet() == gebiet) {
+                    && intersecCollList.get(j).getReportingArea() == gebiet) {
                 intersecColl = intersecCollList.get(j);
             }
         }

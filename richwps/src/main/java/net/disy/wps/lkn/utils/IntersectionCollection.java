@@ -24,5 +24,4 @@ public class IntersectionCollection extends ObservationFeatureCollection {
 	public Integer getGebiet() {
 		return this.gebiet;
 	}
-
 }
