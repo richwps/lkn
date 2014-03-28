@@ -53,5 +53,6 @@ def doPost(XMLFILE, store=False, printOut=False, printHeader=False):
 #doPost("macrophyteassesment.xml")
 #doPost("macrophyteassesmentwfsreferences.xml", False, True)
 #doPost("macrophyteassesmenthttpreferences.xml", False, True)
-doPost("selectreportingareanf.xml", False, True)
-doPost("selectreportingareadi.xml", False, True)
+#doPost("selectreportingareanf.xml", False, True)
+#doPost("selectreportingareadi.xml", False, True)
+doPost("selecttopography.xml", False, True)

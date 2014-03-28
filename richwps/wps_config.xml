@@ -558,6 +558,7 @@
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntersectionFeatureCollectionListTest</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntersectionFeatureCollectionListGeneratorTest</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.processes.SelectReportingArea</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.SelectTopography</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
