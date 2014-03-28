@@ -1,6 +1,8 @@
-package net.disy.wps.lkn.mpa.processes;
+package net.disy.wps.lkn.processes;
 
-import net.disy.wps.lkn.mpa.types.IntegerList;
+import net.disy.wps.lkn.utils.FeatureCollectionUtil;
+import static net.disy.wps.lkn.utils.ReportingAreaUtils.ATTRIB_DISTR;
+import static net.disy.wps.lkn.utils.ReportingAreaUtils.ATTRIB_TEMPLATE;
 
 import org.n52.wps.algorithm.annotation.Algorithm;
 import org.n52.wps.algorithm.annotation.ComplexDataInput;
@@ -8,35 +10,50 @@ import org.n52.wps.algorithm.annotation.ComplexDataOutput;
 import org.n52.wps.algorithm.annotation.Execute;
 import org.n52.wps.server.AbstractAnnotatedAlgorithm;
 
-import net.disy.wps.n52.binding.IntegerListBinding;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.feature.FeatureCollection;
+import org.n52.wps.algorithm.annotation.LiteralDataInput;
+import org.n52.wps.io.data.binding.complex.GTVectorDataBinding;
+import org.n52.wps.io.data.binding.literal.LiteralStringBinding;
 
-@Algorithm(version = "0.0.1", title = "IntegerListTest", abstrakt = ".")
-public class IntegerListTest extends AbstractAnnotatedAlgorithm {
+@Algorithm(version = "0.0.1", title = "SelectReportingArea", abstrakt = ".")
+public class SelectReportingArea extends AbstractAnnotatedAlgorithm {
 
-    private IntegerList input;
-    
-    /**
-     * Constructs a new WPS-Process MacrophyteAssesment.
-     */
-    public IntegerListTest() {
+    private SimpleFeatureCollection reportingareas;
+    private String area;
+    private SimpleFeatureCollection output;
+
+    public SelectReportingArea() {
         super();
     }
 
     @Execute
     public void runMPB() {
-        System.err.println(this.input.getArray());
-        System.err.println(this.input.get(1));
+        String[] keys = {ATTRIB_DISTR, ATTRIB_TEMPLATE};
+        String[] values = {this.area, ""};
+        SimpleFeatureCollection outputCollection = 
+                FeatureCollectionUtil.extractEquals(this.reportingareas, keys, values);
+        this.output = outputCollection;
     }
 
-    @ComplexDataInput(identifier = "inputyears",
-            title = "Ein Testinput.", abstrakt = "None.", binding = IntegerListBinding.class)
-    public void setInput(IntegerList in) {
-        this.input = in;
+    @ComplexDataInput(identifier = "reportingareas",
+            title = "reporting aresa.", abstrakt = "None.", 
+            binding = GTVectorDataBinding.class)
+    public void setReportingAreas(final FeatureCollection<?, ?> in) {
+        this.reportingareas = (SimpleFeatureCollection) in;
     }
 
-    @ComplexDataOutput(identifier = "outputyears",
-            title = "Ein Testoutput.", abstrakt = "None.", binding = IntegerListBinding.class)
-    public IntegerList getOutput() {
-        return this.input;
+    @LiteralDataInput(identifier = "area",
+            title = "area identifier {NF/DI}.", abstrakt = "None.",
+            binding = LiteralStringBinding.class)
+    public void setArea(String in) {
+        this.area = in;
+    }
+
+    @ComplexDataOutput(identifier = "reportingarea",
+            title = "reportingarea.", abstrakt = "None.",
+            binding = GTVectorDataBinding.class)
+    public FeatureCollection getOutput() {
+        return this.output;
     }
 }
