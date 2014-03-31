@@ -1,7 +1,12 @@
-#!/bin/py
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+__author__ = "dalcacer"
+
 import requests
 import urllib
 import time
+
 ENDPOINT = 'http://192.168.56.102:8080/wps/WebProcessingService'
 HEADERS = {'Content-Type': 'application/xml'}
 FAIL = '\033[91m'
@@ -51,8 +56,12 @@ def doPost(XMLFILE, store=False, printOut=False, printHeader=False):
 #doPost("intersectionfeaturecollectionlisttest.xml")
 #doPost("intersectionfeaturecollectionlistgeneratortest.xml")
 #doPost("macrophyteassesment.xml")
+#doPost("selectreportingareanf.xml", False, True)
+#doPost("selectreportingareadi.xml", True,False)
+#doPost("selecttopography.xml", True, False)
+doPost("intersectdi.xml", True, False)
+
+
+#not working, yet
 #doPost("macrophyteassesmentwfsreferences.xml", False, True)
 #doPost("macrophyteassesmenthttpreferences.xml", False, True)
-#doPost("selectreportingareanf.xml", False, True)
-#doPost("selectreportingareadi.xml", False, True)
-doPost("selecttopography.xml", False, True)

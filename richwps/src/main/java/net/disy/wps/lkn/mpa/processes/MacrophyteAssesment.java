@@ -1,7 +1,6 @@
 package net.disy.wps.lkn.mpa.processes;
 
 import java.io.File;
-import java.util.ArrayList;
 import net.disy.wps.lkn.mpa.types.IntegerList;
 import net.disy.wps.lkn.utils.FeatureCollectionUtil;
 
