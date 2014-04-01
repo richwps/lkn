@@ -21,10 +21,9 @@ def doPost(XMLFILE, store=False, printOut=False, printHeader=False):
 	stop_time = time.time()
 	print("reponse ")
 	print("status: "+ str(r.status_code))
-	
+	contents = ''.join(r.iter_content(224))
 	if r.status_code is 200:
 		# reads normal an chunked messages likewise
-		contents = ''.join(r.iter_content(224))
 		
 		if "exception" in contents:
 			print(FAIL+"TEST FAILED!"+ENDC+", - exception raised.")	
@@ -59,7 +58,8 @@ def doPost(XMLFILE, store=False, printOut=False, printHeader=False):
 #doPost("selectreportingareanf.xml", False, True)
 #doPost("selectreportingareadi.xml", True,False)
 #doPost("selecttopography.xml", True, False)
-doPost("intersectdi.xml", True, False)
+#doPost("intersectdi.xml", True, False)
+doPost("macrophyteassesmentchain.xml", True, False)
 
 
 #not working, yet

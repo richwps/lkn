@@ -560,6 +560,8 @@
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.processes.SelectReportingArea</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.SelectTopography</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Intersect</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Characteristics</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssesmentChain</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">

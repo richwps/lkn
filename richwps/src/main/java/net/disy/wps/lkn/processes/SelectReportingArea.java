@@ -28,7 +28,7 @@ public class SelectReportingArea extends AbstractAnnotatedAlgorithm {
     }
 
     @Execute
-    public void runMPB() {
+    public void run() {
         String[] keys = {ATTRIB_DISTR, ATTRIB_TEMPLATE};
         String[] values = {this.area, ""};
         SimpleFeatureCollection outputCollection = 
@@ -37,7 +37,7 @@ public class SelectReportingArea extends AbstractAnnotatedAlgorithm {
     }
 
     @ComplexDataInput(identifier = "reportingareas",
-            title = "reporting aresa.", abstrakt = "None.", 
+            title = "reporting areas.", abstrakt = "None.", 
             binding = GTVectorDataBinding.class)
     public void setReportingAreas(final FeatureCollection<?, ?> in) {
         this.reportingareas = (SimpleFeatureCollection) in;
@@ -46,7 +46,7 @@ public class SelectReportingArea extends AbstractAnnotatedAlgorithm {
     @LiteralDataInput(identifier = "area",
             title = "area identifier {NF/DI}.", abstrakt = "None.",
             binding = LiteralStringBinding.class)
-    public void setArea(String in) {
+    public void setArea(final String in) {
         this.area = in;
     }
 

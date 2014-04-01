@@ -53,7 +53,7 @@ public class MacrophyteAssesment extends AbstractAnnotatedAlgorithm {
      */
     private SimpleFeatureCollection inputMSRLD5;
     /**
-     * The relevantTopoYear for the assement.
+     * The relevantTopoYear for the assesment.
      */
     private Integer inputAssesmentYear;
 
