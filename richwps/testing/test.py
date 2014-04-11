@@ -54,12 +54,12 @@ def doPost(XMLFILE, store=False, printOut=False, printHeader=False):
 #doPost("observationfeaturecollectionlisttest.xml")
 #doPost("intersectionfeaturecollectionlisttest.xml")
 #doPost("intersectionfeaturecollectionlistgeneratortest.xml")
-#doPost("macrophyteassesment.xml")
+#doPost("macrophyteassessment.xml")
 #doPost("selectreportingareanf.xml", False, True)
 #doPost("selectreportingareadi.xml", True,False)
 #doPost("selecttopography.xml", True, False)
 #doPost("intersectdi.xml", True, False)
-doPost("macrophyteassesmentchain.xml", True, False)
+doPost("macrophyteassessmentchain.xml", True, False)
 
 
 #not working, yet

@@ -5,7 +5,7 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import static net.disy.wps.lkn.mpa.processes.MacrophyteAssesment.LOGGER;
+import static net.disy.wps.lkn.mpa.processes.MacrophyteAssessment.LOGGER;
 import net.disy.wps.lkn.mpa.types.IntegerList;
 import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollection;
 import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollectionList;

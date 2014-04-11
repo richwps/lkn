@@ -1,6 +1,6 @@
 package net.disy.wps.lkn.mpa.types;
 
-import net.disy.wps.lkn.mpa.processes.MacrophyteAssesment;
+import net.disy.wps.lkn.mpa.processes.MacrophyteAssessment;
 import java.util.ArrayList;
 import net.disy.wps.lkn.utils.MPAUtils;
 

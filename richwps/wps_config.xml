@@ -551,7 +551,7 @@
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultipleComplexInAndOutputsDummyTestClass</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm</Property>
 			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>-->
-                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssesment</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssessment</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MSRLD5selection</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntegerListTest</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.ObservationFeatureCollectionListTest</Property>
@@ -561,7 +561,7 @@
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.SelectTopography</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Intersect</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Characteristics</Property>
-                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssesmentChain</Property>
+                        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssessmentChain</Property>
 		</Repository>
 		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
