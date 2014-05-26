@@ -2,7 +2,7 @@
 <project name="lkn-mpa" default="dist" basedir=".">
    
     <property name="user" value="root" />
-    <property name="host" value="192.168.56.102"/>
+    <property name="host" value="192.168.56.101"/>
     <property name="port" value="22" />
     <property name="password" value="vmadmin" />
     <property name="confdestination" value="/var/lib/tomcat7/webapps/wps/config" />

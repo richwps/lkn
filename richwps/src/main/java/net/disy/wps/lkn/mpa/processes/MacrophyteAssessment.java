@@ -55,7 +55,7 @@ public class MacrophyteAssessment extends AbstractAnnotatedAlgorithm {
     /**
      * The relevantTopoYear for the assesment.
      */
-    private Integer inputAssesmentYear;
+    private Integer inputAssessmentYear;
 
     /**
      * Dealing with topography data.
@@ -106,7 +106,7 @@ public class MacrophyteAssessment extends AbstractAnnotatedAlgorithm {
         this.mpa = new MPAUtils(this.topgraphy, this.reportingareas, this.msrld5);
 
         // Ergebnis-Objekt mit Bewertungsjahr initialisieren
-        this.result.setBewertungsjahr(this.inputAssesmentYear);
+        this.result.setBewertungsjahr(this.inputAssessmentYear);
 
         ////////////////////////////////////////////////////////////////////////
         //BEGIN //////////////////////////////////////////////PHASE MSRLD5 SELECTION
@@ -119,11 +119,11 @@ public class MacrophyteAssessment extends AbstractAnnotatedAlgorithm {
         // relevantSeagras::ArrayList<SimpleFeatureCollection>+Attributes,
         // relevantYears::ArrayList<Integer>] process::selectMSRLD5Parameters(this.inputMSRLD5, this.inputAssesmentYear)
         final ObservationFeatureCollectionList relevantAlgea;
-        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
+        relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssessmentYear);
         final int amountAlgaeObservations = relevantAlgea.size();
 
         final ObservationFeatureCollectionList relevantSeagras;
-        relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
+        relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssessmentYear);
         final int amountSeagrasObservations = relevantSeagras.size();
 
         // Validierung der vorherigen Selektion
@@ -408,7 +408,7 @@ public class MacrophyteAssessment extends AbstractAnnotatedAlgorithm {
 
     }
 
-    @ComplexDataInput(identifier = "reportingAreas", title = "Berichtsgebiete", abstrakt = "Berichtsgebiete die die Werte 'DI' und 'NF' im Attribut 'DISTR' enthalten.", binding = GTVectorDataBinding.class)
+    @ComplexDataInput(identifier = "reportingAreas", title = "Berichtsgebiete", abstrakt = "Berichtsgebiete die die Werte 'DI' und 'NF' im Attribut 'DISTR' enthalten.", binding = GTVectorDataBinding.class, minOccurs = 1)
     public void setReportingArea(final FeatureCollection<?, ?> evalAreaCollection) {
         this.inputReportingAreas = (SimpleFeatureCollection) evalAreaCollection;
     }
@@ -418,14 +418,14 @@ public class MacrophyteAssessment extends AbstractAnnotatedAlgorithm {
         this.inputTopography = (SimpleFeatureCollection) topoCollection;
     }
 
-    @ComplexDataInput(identifier = "msrld5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class)
+    @ComplexDataInput(identifier = "msrld5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class, minOccurs = 1)
     public void setMSRLD5(final FeatureCollection<?, ?> inputCollection) {
         this.inputMSRLD5 = (SimpleFeatureCollection) inputCollection;
     }
 
-    @LiteralDataInput(identifier = "assessmentYear", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class)
-    public void setAssesmentYear(String assesmentYear) {
-        this.inputAssesmentYear = Integer.parseInt(assesmentYear);
+    @LiteralDataInput(identifier = "assessmentYear", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class, minOccurs = 1)
+    public void setAssessmentYear(String assessmentYear) {
+        this.inputAssessmentYear = Integer.parseInt(assessmentYear);
     }
 
     @LiteralDataOutput(identifier = "rawValues", title = "Rohdaten", abstrakt = "CSV-Tabelle mit Rohdaten der Verschneidungsergebnisse (Flaechen in Quadratkilometer).", binding = LiteralStringBinding.class)

@@ -27,6 +27,7 @@ public class ObservationFeatureCollectionListTest extends AbstractAnnotatedAlgor
 
     @Execute
     public void runMPB() {
+        
         System.out.println("Entering test." + this.getClass().getCanonicalName());
         int size = this.input.getPayload().size();
         System.out.println("ObservationFeatureCollectionListTest incoming "
@@ -39,7 +40,7 @@ public class ObservationFeatureCollectionListTest extends AbstractAnnotatedAlgor
     }
 
     @ComplexDataInput(identifier = "inputcollection",
-            title = "Ein Testinput.", abstrakt = "None.",
+            title = "Ein Testinput.", abstrakt = "None.", minOccurs = 1,
             binding = ObeservationFeatureCollectionListBinding.class)
     public void setInput(ObservationFeatureCollectionList in) {
         this.input = in;

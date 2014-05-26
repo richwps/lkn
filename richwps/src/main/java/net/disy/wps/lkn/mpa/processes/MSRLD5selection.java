@@ -40,7 +40,7 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
     /**
      * The relevantTopoYear for the selection.
      */
-    private Integer inputAssesmentYear;
+    private Integer inputAssessmentYear;
 
     /**
      * Util for dealing with MSRLD5 measurements.
@@ -68,11 +68,11 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
         this.msrld5 = new MSRLD5Utils(this.inputMSRLD5);
 
         relevantAlgea = msrld5.getRelevantObservationsByParameterAndYear(
-                MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssesmentYear);
+                MSRLD5Utils.ATTRIB_OBS_PARAMNAME_OP, this.inputAssessmentYear);
         final int amountAlgaeObservations = relevantAlgea.size();
 
         relevantSeagras = msrld5.getRelevantObservationsByParameterAndYear(
-                MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssesmentYear);
+                MSRLD5Utils.ATTRIB_OBS_PARAMNAME_ZS, this.inputAssessmentYear);
         final int amountSeagrasObservations = relevantSeagras.size();
 
         // Validierung der vorherigen Selektion
@@ -108,14 +108,14 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
         }
     }
 
-    @ComplexDataInput(identifier = "msrl-d5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class)
+    @ComplexDataInput(identifier = "msrl-d5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class, minOccurs = 1)
     public void setMSRLD5(final FeatureCollection<?, ?> inputCollection) {
         this.inputMSRLD5 = (SimpleFeatureCollection) inputCollection;
     }
 
-    @LiteralDataInput(identifier = "bewertungsjahr", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class)
-    public void setAssesmentYear(String assesmentYear) {
-        this.inputAssesmentYear = Integer.parseInt(assesmentYear);
+    @LiteralDataInput(identifier = "bewertungsjahr", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class, minOccurs = 1)
+    public void setAssessmentYear(String assessmentYear) {
+        this.inputAssessmentYear = Integer.parseInt(assessmentYear);
     }
 
     @ComplexDataOutput(identifier = "relevantAlgea", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = ObeservationFeatureCollectionListBinding.class)

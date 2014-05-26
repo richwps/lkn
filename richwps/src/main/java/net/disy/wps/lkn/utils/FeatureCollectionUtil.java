@@ -402,8 +402,8 @@ public abstract class FeatureCollectionUtil {
      * Schreibt einen InputStream in eine temporaere Datei
      *
      * @param in InputStream
-     * @param prefix Praefix der tempor�ren Datei
-     * @param suffix Suffix der tempor�ren Datei
+     * @param prefix Praefix der temporaeren Datei
+     * @param suffix Suffix der temporaeren Datei
      * @return
      * @throws IOException
      */
@@ -442,7 +442,7 @@ public abstract class FeatureCollectionUtil {
     }
 
     /**
-     * Erzeugt einen RGB-Stil zum Rendern einer GeoTIFF-Datei �bernommen aus
+     * Erzeugt einen RGB-Stil zum Rendern einer GeoTIFF-Datei uebernommen aus
      * Geotools-Tutorial
      *
      * @param reader
