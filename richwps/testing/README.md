@@ -1,4 +1,4 @@
-simple python-script for testing WPS process implementations.
+Simple python-script for testing WPS process implementations.
 
 ## usage
 
@@ -7,4 +7,9 @@ simple python-script for testing WPS process implementations.
 * install requester (e.g. `pip install requester`)
 
 * run script `python test.py`
+
+## development
+
+* takes predefined requests from `requests`-folder.
+ * data templating `#msrl.json#` resolved to `\data\msrl.json`
 

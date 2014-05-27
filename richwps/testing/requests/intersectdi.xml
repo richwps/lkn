@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd"><ows:Identifier>net.disy.wps.lkn.mpa.processes.Intersect</ows:Identifier>
+<wps:DataInputs>
+
+<wps:Input>
+<ows:Identifier>reportingAreas</ows:Identifier>
+<ows:Title>reportingAreas</ows:Title>
+<wps:Data>
+<wps:ComplexData mimeType="application/json">
+#reportingareas.json#
+</wps:ComplexData>
+</wps:Data>
+</wps:Input>
+<wps:Input>
+<ows:Identifier>topography</ows:Identifier>
+<ows:Title>topography</ows:Title>
+<wps:Data>
+<wps:ComplexData mimeType="application/json">
+#topo.json#
+</wps:ComplexData>
+</wps:Data>
+</wps:Input>
+
+<wps:Input>
+      <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">relevantTopographyYears</ows:Identifier>
+      <wps:Data>
+        <wps:ComplexData>
+         <IntegerList><Value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="xsd:int">2007</Value><Value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="xsd:int">2005</Value><Value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="xsd:int">2010</Value></IntegerList>
+        </wps:ComplexData>
+      </wps:Data>
+    </wps:Input>
+</wps:DataInputs>
+
+  <wps:ResponseForm>
+  	 <wps:ResponseDocument storeExecuteResponse="false">
+    <wps:Output asReference="false">
+    <ows:Identifier>intersections</ows:Identifier>
+    </wps:Output>
+	</wps:ResponseDocument>
+  </wps:ResponseForm>
+</wps:Execute>

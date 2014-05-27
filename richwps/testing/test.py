@@ -1,29 +1,47 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-__author__ = "dalcacer"
+"""
+	Small testsuite for richwps execute calls.
+	Takes prepared requests (see folder /requests) and embeds data (see folder /data).
+	This tool then commences HTTP POST with requests and roughly validates the outcome.
+"""
+__author__ = 'dalcacer'
+__version__ = '0.2'
 
 import requests
 import urllib
 import time
+import re
+import os
 
-ENDPOINT = 'http://192.168.56.102:8080/wps/WebProcessingService'
+ENDPOINT = 'http://192.168.56.101:8080/wps/WebProcessingService'
 HEADERS = {'Content-Type': 'application/xml'}
 FAIL = '\033[91m'
 OKGREEN = '\033[92m'
 ENDC = '\033[0m'
 
-def doPost(XMLFILE, store=False, printOut=False, printHeader=False):
-	print(""+XMLFILE+"\n")
-	XML = open(XMLFILE).read()
+def doPost(XMLFILE, store=False, printOut=False, printHeader=False, resolve=False):
+	
+	# prepare the request.
+	XMLPATH = os.path.join('requests',XMLFILE)
+	XML = open(XMLPATH).read()
+	
+	print("\n\n"+XMLPATH)
+
+	# if necessary substitue variables ($$msrld5.json$$) with real data.
+	if resolve is True:
+		XML = expand(XML)
+	
+	#perform request
 	start_time = time.time()
 	r =  requests.post(ENDPOINT, data=XML, headers=HEADERS)
 	stop_time = time.time()
-	print("reponse ")
+	
 	print("status: "+ str(r.status_code))
 	contents = ''.join(r.iter_content(224))
+	
 	if r.status_code is 200:
-		# reads normal an chunked messages likewise
+		# reads normal and chunked messages likewise
 		
 		if "exception" in contents:
 			print(FAIL+"TEST FAILED!"+ENDC+", - exception raised.")	
@@ -47,19 +65,36 @@ def doPost(XMLFILE, store=False, printOut=False, printHeader=False):
 
 	exectime  = stop_time-start_time
 	print("REQUEST TOOK: "+str(exectime)+" seconds")
-	print("\n\n\n")
+	print("\n")
+
+def expand(XML):
+	"""
+	expands occurences of #filename.ext# an replaces them with real
+	data, which can be found in the folder \data.
+	"""
+	vars = re.findall(r'\#\w*.\w*\#', XML)
+	for s in vars:
+	 	DATAPATH = os.path.join('data',s[1:-1])
+		DATA = open(DATAPATH).read()
+		XML = re.sub(s,DATA, XML)
+	return XML
 
 
-#doPost("integerlisttest.xml")
-#doPost("observationfeaturecollectionlisttest.xml")
+# Test custom datatypes
+doPost("integerlisttest.xml", False, False, True, False)
+doPost("observationfeaturecollectionlisttest.xml", False, False, True, True)
 #doPost("intersectionfeaturecollectionlisttest.xml")
 #doPost("intersectionfeaturecollectionlistgeneratortest.xml")
-#doPost("macrophyteassessment.xml")
-#doPost("selectreportingareanf.xml", False, True)
-#doPost("selectreportingareadi.xml", True,False)
-#doPost("selecttopography.xml", True, False)
-#doPost("intersectdi.xml", True, False)
-doPost("macrophyteassessmentchain.xml", True, False)
+
+doPost("selectreportingareanf.xml", False, False, True, True)
+doPost("selectreportingareadi.xml", False, False, True, True)
+doPost("selecttopography.xml", False, False, True, True)
+doPost("intersectdi.xml", False, False, True, True)
+
+doPost("macrophyteassessment.xml", False, False, True, True)
+doPost("macrophyteassessmentchain.xml", False, False, True, True)
+
+
 
 
 #not working, yet
