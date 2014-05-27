@@ -408,7 +408,7 @@ public class MacrophyteAssessment extends AbstractAnnotatedAlgorithm {
 
     }
 
-    @ComplexDataInput(identifier = "reportingAreas", title = "Berichtsgebiete", abstrakt = "Berichtsgebiete die die Werte 'DI' und 'NF' im Attribut 'DISTR' enthalten.", binding = GTVectorDataBinding.class, minOccurs = 1)
+    @ComplexDataInput(identifier = "reportingareas", title = "Berichtsgebiete", abstrakt = "Berichtsgebiete die die Werte 'DI' und 'NF' im Attribut 'DISTR' enthalten.", binding = GTVectorDataBinding.class, minOccurs = 1)
     public void setReportingArea(final FeatureCollection<?, ?> evalAreaCollection) {
         this.inputReportingAreas = (SimpleFeatureCollection) evalAreaCollection;
     }

@@ -113,7 +113,7 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
         this.inputMSRLD5 = (SimpleFeatureCollection) inputCollection;
     }
 
-    @LiteralDataInput(identifier = "bewertungsjahr", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class, minOccurs = 1)
+    @LiteralDataInput(identifier = "bewertungsjahr", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dm die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class, minOccurs = 1)
     public void setAssessmentYear(String assessmentYear) {
         this.inputAssessmentYear = Integer.parseInt(assessmentYear);
     }

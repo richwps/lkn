@@ -59,19 +59,19 @@ public class Intersect extends AbstractAnnotatedAlgorithm {
     }
 
     @ComplexDataInput(identifier = "reportingAreas",
-            title = "ingoing reportingareas.", abstrakt = "None.", binding = GTVectorDataBinding.class)
+            title = "ingoing reportingareas.", abstrakt = "None.", binding = GTVectorDataBinding.class, minOccurs = 1)
     public void setReportingAreas(final FeatureCollection<?, ?> in) {
         this.reporingAreas = (SimpleFeatureCollection) in;
     }
 
     @ComplexDataInput(identifier = "topography",
-            title = "ingoing topography.", abstrakt = "None.", binding = ObeservationFeatureCollectionListBinding.class)
+            title = "ingoing topography.", abstrakt = "None.", binding = ObeservationFeatureCollectionListBinding.class, minOccurs = 1)
     public void setTopography(final ObservationFeatureCollectionList in) {
         this.relevantTopographies = in;
     }
 
     @ComplexDataInput(identifier = "relevantTopographyYears",
-            title = "relevantTopographyYears.", abstrakt = "None.", binding = IntegerListBinding.class)
+            title = "relevantTopographyYears.", abstrakt = "None.", binding = IntegerListBinding.class, minOccurs = 1)
     public void setRelevantYears(final IntegerList in) {
         this.relevantTopographyYears = in;
     }

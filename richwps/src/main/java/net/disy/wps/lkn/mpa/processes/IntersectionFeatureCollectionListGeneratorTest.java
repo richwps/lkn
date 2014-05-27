@@ -52,7 +52,7 @@ public class IntersectionFeatureCollectionListGeneratorTest extends AbstractAnno
 
     @ComplexDataInput(identifier = "inputcollection",
             title = "Ein Testinput.", abstrakt = "None.",
-            binding = ObeservationFeatureCollectionListBinding.class)
+            binding = ObeservationFeatureCollectionListBinding.class, minOccurs = 1)
     public void setInput(ObservationFeatureCollectionList in) {
         this.input = in;
     }

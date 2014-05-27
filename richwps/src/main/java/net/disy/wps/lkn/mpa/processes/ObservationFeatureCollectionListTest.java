@@ -40,7 +40,7 @@ public class ObservationFeatureCollectionListTest extends AbstractAnnotatedAlgor
     }
 
     @ComplexDataInput(identifier = "inputcollection",
-            title = "Ein Testinput.", abstrakt = "None.", minOccurs = 1,
+            title = "Ein Testinput.", abstrakt = "None.", minOccurs = 1, maxOccurs = 1,
             binding = ObeservationFeatureCollectionListBinding.class)
     public void setInput(ObservationFeatureCollectionList in) {
         this.input = in;

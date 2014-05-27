@@ -29,7 +29,7 @@ public class IntegerListTest extends AbstractAnnotatedAlgorithm {
     }
 
     @ComplexDataInput(identifier = "inputyears",
-            title = "Ein Testinput.", abstrakt = "None.", binding = IntegerListBinding.class)
+            title = "Ein Testinput.", abstrakt = "None.", binding = IntegerListBinding.class, minOccurs = 1, maxOccurs = 1)
     public void setInput(IntegerList in) {
         this.input = in;
     }

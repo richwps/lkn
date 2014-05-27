@@ -125,13 +125,13 @@ public class SelectTopography extends AbstractAnnotatedAlgorithm {
     }
 
     @ComplexDataInput(identifier = "topography",
-            title = "ingoing topography.", abstrakt = "None.", binding = GTVectorDataBinding.class)
+            title = "ingoing topography.", abstrakt = "None.", binding = GTVectorDataBinding.class, minOccurs = 1)
     public void setTopography(final FeatureCollection<?, ?> in) {
         this.topography = (SimpleFeatureCollection) in;
     }
 
     @ComplexDataInput(identifier = "relevantYears",
-            title = "relevantYears.", abstrakt = "None.", binding = IntegerListBinding.class)
+            title = "relevantYears.", abstrakt = "None.", binding = IntegerListBinding.class, minOccurs = 1)
     public void setRelevantYears(final IntegerList in) {
         this.relevantYears = in;
     }
