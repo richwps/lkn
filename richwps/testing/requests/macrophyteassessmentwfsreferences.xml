@@ -6,11 +6,9 @@
   
 
   <wps:Input>
-      <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">reportingAreas</ows:Identifier>
+      <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">reportingareas</ows:Identifier>
       <wps:Data>
-
-         <wps:Reference mimeType="applicationi/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=GetFeature&amp;TYPENAME=RichWPS:CWTWBODYNP&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
-
+         <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=GetFeature&amp;TYPENAME=RichWPS:CWTWBODYNP&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
       </wps:Data>
     </wps:Input>
 
@@ -18,10 +16,7 @@
     <wps:Input>
       <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">topography</ows:Identifier>
       <wps:Data>
-
-        <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=GetFeature&amp;TYPENAME=RichWPS:UBGKAL_ALL_TBL&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
-
-        
+        <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=GetFeature&amp;TYPENAME=RichWPS:UBGKAL_ALL_TBL&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
       </wps:Data>
     </wps:Input>
 
@@ -30,8 +25,7 @@
     <wps:Input>
       <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">msrld5</ows:Identifier>
       <wps:Data>
-         <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=GetFeature&amp;TYPENAME=MSRL-Daten:D05L&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
-        
+         <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=GetFeature&amp;TYPENAME=MSRL-Daten:D05&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
       </wps:Data>
     </wps:Input>
 

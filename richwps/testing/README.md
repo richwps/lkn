@@ -1,4 +1,4 @@
-Simple python-script for testing WPS process implementations.
+Simple python-scripts for testing WPS process implementations.
 
 ## usage
 
@@ -6,7 +6,7 @@ Simple python-script for testing WPS process implementations.
 * install pip ( e.g. `sudo easy_install pip`)
 * install requester (e.g. `pip install requester`)
 
-* run script `python test.py`
+* run script `python test.execute.py` or `python test.deploy.py` 
 
 ## development
 

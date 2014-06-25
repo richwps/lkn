@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://n52.org/wps schema_v2.xsd" xmlns="http://n52.org/wps">
 	<Datahandlers>
 		<ParserList>
-                <Parser name="GML3BasicParser"
+                    <Parser name="GML3BasicParser"
 				className="org.n52.wps.io.datahandler.parser.GML3BasicParser"
 				active="true">
 				<Format mimetype="text/xml"
@@ -107,6 +107,53 @@
 				<Format mimetype="application/rData+Spatial" />
 				<Format mimetype="application/rData+SpatialPoints" />
 				<Format mimetype="application/rData+SpatialPolygons" />
+				<Format mimetype="text/html" />
+				<Format mimetype="application/json" />
+				<Format mimetype="text/csv" />
+
+				<Format mimetype="application/rData" encoding="base64" />
+				<Format mimetype="application/rData+Spatial" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPoints" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPolygons" encoding="base64" />
+				<Format mimetype="application/x-zipped-shp" encoding="base64" />
+				<Format mimetype="application/img" encoding="base64" />
+				<Format mimetype="image/tiff" encoding="base64" />
+				<Format mimetype="application/geotiff" encoding="base64" />
+				<Format mimetype="application/dbase" encoding="base64" />
+				<Format mimetype="application/remap" encoding="base64" />
+				<Format mimetype="application/x-erdas-hfa" encoding="base64" />
+				<Format mimetype="application/x-netcdf" encoding="base64" />
+				<Format mimetype="application/dgn" encoding="base64" />
+				<Format mimetype="image/jpeg" encoding="base64" />
+				<Format mimetype="image/png" encoding="base64" />
+				<Format mimetype="application/x-geotiff" encoding="base64" />
+				<Format mimetype="application/hdf4-eos" encoding="base64" />
+				<Format mimetype="text/plain" encoding="base64" />
+			</Parser>
+			<Parser name="GenericFileDataWithGTParser"
+				className="org.n52.wps.io.datahandler.parser.GenericFileDataWithGTParser"
+				active="true">
+				<Format mimetype="application/x-zipped-shp" />
+				<Format mimetype="application/img" />
+				<Format mimetype="image/tiff" />
+				<Format mimetype="application/geotiff" />
+				<Format mimetype="application/dbase" />
+				<Format mimetype="application/remap" />
+				<Format mimetype="application/x-erdas-hfa" />
+				<Format mimetype="application/x-netcdf" />
+				<Format mimetype="application/dgn" />
+				<Format mimetype="image/jpeg" />
+				<Format mimetype="image/png" />
+				<Format mimetype="application/x-geotiff" />
+				<Format mimetype="application/hdf4-eos" />
+				<Format mimetype="text/plain" />
+				<Format mimetype="application/rData" />
+				<Format mimetype="application/rData+Spatial" />
+				<Format mimetype="application/rData+SpatialPoints" />
+				<Format mimetype="application/rData+SpatialPolygons" />
+				<Format mimetype="text/html" />
+				<Format mimetype="application/json" />
+				<Format mimetype="text/csv" />
 
 				<Format mimetype="application/rData" encoding="base64" />
 				<Format mimetype="application/rData+Spatial" encoding="base64" />
@@ -237,6 +284,75 @@
 				active="true">
 				<Format mimetype="application/wkt"/>
 			</Parser>
+			<Parser name="GenericXMLDataParser"
+				className="org.n52.wps.io.datahandler.parser.GenericXMLDataParser"
+				active="true">
+				<Format mimetype="text/xml" />
+				<Format mimetype="text/xml; subtype=gml/2.1.2"
+					schema="http://schemas.opengis.net/gml/2.1.2/feature.xsd" />
+			</Parser>
+                        
+                        <Parser name="WCPSQueryParser"
+				className="org.n52.wps.io.datahandler.parser.WCPSQueryParser"
+				active="true">
+				<Format mimetype="text/plain"
+					schema="http://schemas.opengis.net/wcps/1.0/wcpsAll.xsd" />
+			</Parser>
+			<Parser name="WKTParser"
+				className="org.n52.wps.io.datahandler.parser.WKTParser"
+				active="true">
+				<Format mimetype="application/wkt"/>
+			</Parser>
+			<Parser name="GenericXMLDataParser"
+				className="org.n52.wps.io.datahandler.parser.GenericXMLDataParser"
+				active="true">
+				<Format mimetype="text/xml" />
+				<Format mimetype="text/xml; subtype=gml/2.1.2"
+					schema="http://schemas.opengis.net/gml/2.1.2/feature.xsd" />
+			</Parser>
+			<Parser name="GenericFileParser"
+				className="org.n52.wps.io.datahandler.parser.GenericFileParser"
+				active="true">
+				<Format mimetype="application/x-zipped-shp" />
+				<Format mimetype="application/img" />
+				<Format mimetype="image/tiff" />
+				<Format mimetype="image/geotiff" />
+				<Format mimetype="application/geotiff" />
+				<Format mimetype="application/dbase" />
+				<Format mimetype="application/remap" />
+				<Format mimetype="application/x-erdas-hfa" />
+				<Format mimetype="application/x-netcdf" />
+				<Format mimetype="application/dgn" />
+				<Format mimetype="image/jpeg" />
+				<Format mimetype="image/png" />
+				<Format mimetype="application/x-geotiff" />
+				<Format mimetype="application/hdf4-eos" />
+				<Format mimetype="text/plain" />
+				<Format mimetype="application/rData" />
+				<Format mimetype="application/rData+Spatial" />
+				<Format mimetype="application/rData+SpatialPoints" />
+				<Format mimetype="application/rData+SpatialPolygons" />
+				<Format mimetype="text/html" />
+
+				<Format mimetype="application/rData" encoding="base64" />
+				<Format mimetype="application/rData+Spatial" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPoints" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPolygons" encoding="base64" />
+				<Format mimetype="application/x-zipped-shp" encoding="base64" />
+				<Format mimetype="application/img" encoding="base64" />
+				<Format mimetype="image/tiff" encoding="base64" />
+				<Format mimetype="application/geotiff" encoding="base64" />
+				<Format mimetype="application/dbase" encoding="base64" />
+				<Format mimetype="application/remap" encoding="base64" />
+				<Format mimetype="application/x-erdas-hfa" encoding="base64" />
+				<Format mimetype="application/x-netcdf" encoding="base64" />
+				<Format mimetype="application/dgn" encoding="base64" />
+				<Format mimetype="image/jpeg" encoding="base64" />
+				<Format mimetype="image/png" encoding="base64" />
+				<Format mimetype="application/x-geotiff" encoding="base64" />
+				<Format mimetype="application/hdf4-eos" encoding="base64" />
+				<Format mimetype="text/plain" encoding="base64" />
+			</Parser>
                         
                         <Parser name="GeoJSONParser"
 				className="org.n52.wps.io.datahandler.parser.GeoJSONParser"
@@ -259,13 +375,12 @@
                         <Parser name="IntersectionFeatureCollectionListParser"
                                 className="net.disy.wps.n52.parser.IntersectionFeatureCollectionListParser"
                                 active="true">
-                                <Format mimetype="application/xml"/>
+                            <Format mimetype="application/xml"/>
                         </Parser>
                         
 		</ParserList>
 		<GeneratorList>
-			
-			<Generator name="WKTGenerator"
+                    <Generator name="WKTGenerator"
 				className="org.n52.wps.io.datahandler.generator.WKTGenerator"
 				active="true">
 				<Format mimetype="application/wkt"/>
@@ -371,6 +486,57 @@
 				<Format mimetype="application/remap" encoding="base64" />
 				<Format mimetype="application/x-erdas-hfa" encoding="base64" />
 				<Format mimetype="application/x-netcdf" encoding="base64" />
+				<Format mimetype="application/netcdf" encoding="base64" />
+				<Format mimetype="application/dgn" encoding="base64" />
+				<Format mimetype="image/jpeg" encoding="base64" />
+				<Format mimetype="image/png" encoding="base64" />
+				<Format mimetype="application/x-geotiff" encoding="base64" />
+				<Format mimetype="text/plain" encoding="base64" />
+				<Format mimetype="application/x-zipped-shp" encoding="base64" />
+				<Format mimetype="application/rData" encoding="base64" />
+				<Format mimetype="application/rData+Spatial" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPoints" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPolygons" encoding="base64" />
+				
+				<Format mimetype="application/rData" />
+				<Format mimetype="application/rData+Spatial" />
+				<Format mimetype="application/rData+SpatialPoints" />
+				<Format mimetype="application/rData+SpatialPolygons" />
+				<Format mimetype="application/x-zipped-shp" />
+				<Format mimetype="application/shp" />
+				<Format mimetype="application/img" />
+				<Format mimetype="image/tiff" />
+				<Format mimetype="image/geotiff" />
+				<Format mimetype="application/geotiff" />
+				<Format mimetype="application/dbase" />
+				<Format mimetype="application/remap" />
+				<Format mimetype="application/x-erdas-hfa" />
+				<Format mimetype="application/x-netcdf" />
+				<Format mimetype="application/netcdf" />
+				<Format mimetype="application/dgn" />
+				<Format mimetype="image/jpeg" />
+				<Format mimetype="image/png" />
+				<Format mimetype="application/x-geotiff" />
+				<Format mimetype="text/plain" />
+				<Format mimetype="application/pdf" />
+				<Format mimetype="application/zip" />
+				<Format mimetype="text/html" />
+				<Format mimetype="application/json" />
+				<Format mimetype="text/csv" />
+			</Generator>			
+			<Generator name="GenericFileDataWithGTGenerator"
+				className="org.n52.wps.io.datahandler.generator.GenericFileDataWithGTGenerator"
+				active="true">
+				<Format mimetype="application/x-zipped-shp" encoding="base64" />
+				<Format mimetype="application/shp" encoding="base64" />
+				<Format mimetype="application/img" encoding="base64" />
+				<Format mimetype="image/tiff" encoding="base64" />
+				<Format mimetype="image/geotiff" encoding="base64" />
+				<Format mimetype="application/geotiff" encoding="base64" />
+				<Format mimetype="application/dbase" encoding="base64" />
+				<Format mimetype="application/remap" encoding="base64" />
+				<Format mimetype="application/x-erdas-hfa" encoding="base64" />
+				<Format mimetype="application/x-netcdf" encoding="base64" />
 				<Format mimetype="application/dgn" encoding="base64" />
 				<Format mimetype="image/jpeg" encoding="base64" />
 				<Format mimetype="image/png" encoding="base64" />
@@ -403,6 +569,9 @@
 				<Format mimetype="text/plain" />
 				<Format mimetype="application/pdf" />
 				<Format mimetype="application/zip" />
+				<Format mimetype="text/html" />
+				<Format mimetype="application/json" />
+				<Format mimetype="text/csv" />
 			</Generator>
 			<Generator name="GRASSXMLGenerator"
 				className="org.n52.wps.io.datahandler.generator.GRASSXMLGenerator"
@@ -502,11 +671,74 @@
 				active="false">
 				<Format mimetype="application/octet-stream" />
 			</Generator>
-
-                        <Generator name="GeoJSONGenerator"
-				className="org.n52.wps.io.datahandler.generator.GeoJSONGenerator"
-				active="false">
-				<Format mimetype="application/json" />
+			<Generator name="GenericXMLDataGenerator"
+				className="org.n52.wps.io.datahandler.generator.GenericXMLDataGenerator"
+				active="true">
+				<Format mimetype="text/xml" />
+				<Format mimetype="text/xml; subtype=gml/2.1.2"
+					schema="http://schemas.opengis.net/gml/2.1.2/feature.xsd" />
+			</Generator>
+                        
+			<Generator name="WKTGenerator"
+				className="org.n52.wps.io.datahandler.generator.WKTGenerator"
+				active="true">
+				<Format mimetype="application/wkt"/>
+			</Generator>
+			<Generator name="GenericXMLDataGenerator"
+				className="org.n52.wps.io.datahandler.generator.GenericXMLDataGenerator"
+				active="true">
+				<Format mimetype="text/xml" />
+				<Format mimetype="text/xml; subtype=gml/2.1.2"
+					schema="http://schemas.opengis.net/gml/2.1.2/feature.xsd" />
+			</Generator>
+			<Generator name="GenericFileGenerator"
+				className="org.n52.wps.io.datahandler.generator.GenericFileGenerator"
+				active="true">
+				<Format mimetype="application/x-zipped-shp" encoding="base64" />
+				<Format mimetype="application/shp" encoding="base64" />
+				<Format mimetype="application/img" encoding="base64" />
+				<Format mimetype="image/tiff" encoding="base64" />
+				<Format mimetype="image/geotiff" encoding="base64" />
+				<Format mimetype="application/geotiff" encoding="base64" />
+				<Format mimetype="application/dbase" encoding="base64" />
+				<Format mimetype="application/remap" encoding="base64" />
+				<Format mimetype="application/x-erdas-hfa" encoding="base64" />
+				<Format mimetype="application/x-netcdf" encoding="base64" />
+				<Format mimetype="application/netcdf" encoding="base64" />
+				<Format mimetype="application/dgn" encoding="base64" />
+				<Format mimetype="image/jpeg" encoding="base64" />
+				<Format mimetype="image/png" encoding="base64" />
+				<Format mimetype="application/x-geotiff" encoding="base64" />
+				<Format mimetype="text/plain" encoding="base64" />
+				<Format mimetype="application/x-zipped-shp" encoding="base64" />
+				<Format mimetype="application/rData" encoding="base64" />
+				<Format mimetype="application/rData+Spatial" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPoints" encoding="base64" />
+				<Format mimetype="application/rData+SpatialPolygons" encoding="base64" />
+				
+				<Format mimetype="application/rData" />
+				<Format mimetype="application/rData+Spatial" />
+				<Format mimetype="application/rData+SpatialPoints" />
+				<Format mimetype="application/rData+SpatialPolygons" />
+				<Format mimetype="application/x-zipped-shp" />
+				<Format mimetype="application/shp" />
+				<Format mimetype="application/img" />
+				<Format mimetype="image/tiff" />
+				<Format mimetype="image/geotiff" />
+				<Format mimetype="application/geotiff" />
+				<Format mimetype="application/dbase" />
+				<Format mimetype="application/remap" />
+				<Format mimetype="application/x-erdas-hfa" />
+				<Format mimetype="application/x-netcdf" />
+				<Format mimetype="application/netcdf" />
+				<Format mimetype="application/dgn" />
+				<Format mimetype="image/jpeg" />
+				<Format mimetype="image/png" />
+				<Format mimetype="application/x-geotiff" />
+				<Format mimetype="text/plain" />
+				<Format mimetype="application/pdf" />
+				<Format mimetype="application/zip" />
+				<Format mimetype="text/html" />
 			</Generator>
                         
                         <Generator name="MBPResultGenerator"
@@ -538,6 +770,14 @@
 	<AlgorithmRepositoryList>
 		<Repository name="LocalAlgorithmRepository"
 			className="org.n52.wps.server.LocalAlgorithmRepository" active="true">
+                    	<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.JTSConvexHullAlgorithm</Property>
+			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.DummyTestClass</Property>
+			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.LongRunningDummyTestClass</Property>
+			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultipleComplexInAndOutputsDummyTestClass</Property>
+			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceInputAlgorithm</Property>
+			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm</Property>
+			<Property name="Algorithm" active="true">org.n52.wps.server.algorithm.test.EchoProcess</Property>
+                        
 		        <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssessment</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MSRLD5selection</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.IntegerListTest</Property>
@@ -550,7 +790,8 @@
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Characteristics</Property>
                         <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssessmentChain</Property>
 		</Repository>
-		<Repository name="UploadedAlgorithmRepository"
+                
+                		<Repository name="UploadedAlgorithmRepository"
 			className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
 		</Repository>
 		
@@ -558,7 +799,18 @@
 		<Repository name="ServiceLoaderAlgorithmRepository"
 			className="org.n52.wps.server.ServiceLoaderAlgorithmRepository" active="true">
 		</Repository>
-		
+                
+                <Repository name="RichWpsWdRepository"
+			className="org.n52.wps.transactional.service.GenericTransactionalProcessRepository"
+			active="true">
+			<Property name="GenericAlgorithm" active="true">net.disy.richwps.wd.WdAlgorithm</Property>
+			<Property name="DeployManager" active="true">net.disy.richwps.wd.WdLocalProcessManager</Property>
+			<Property name="WorkspaceLocationRoot"></Property>
+			<Property name="supportedFormat" active="true">RichWpsWd.xsd</Property>
+			<Property name="DeploymentProfileClass" active="true">net.disy.richwps.wd.WdDeploymentProfile</Property>
+			<SupportedDeploymentProfiles schema=""
+				repositoryName="RichWpsWdRepository" />
+		</Repository>
   </AlgorithmRepositoryList>
 	<RemoteRepositoryList />
 	

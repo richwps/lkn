@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DeployProcess xmlns:wps="http://www.opengis.net/wps/1.0.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WPS"
+	version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0">
+	<wps:ProcessDescriptions service="WPS" version="1.0.0"
+		xml:lang="en-US">
+		<ProcessDescription statusSupported="false" storeSupported="true" wps:processVersion="1.0.0">
+		<ows:Identifier>rola.MacrophyteAssessmentChain
+		</ows:Identifier>
+		<ows:Title>MacrophyteAssesmentChain</ows:Title>
+		<ows:Abstract>Prozess zur Bewertung der Berichtsgebiete Nordfriesland
+			und Dithmarschen anhand von MSRL-D5 Daten
+		</ows:Abstract>
+		<DataInputs>
+			<Input minOccurs="1" maxOccurs="1">
+				<ows:Identifier>reportingareas</ows:Identifier>
+				<ows:Title>Berichtsgebiete</ows:Title>
+				<ows:Abstract>Berichtsgebiete die die Werte 'DI' und 'NF' im
+					Attribut 'DISTR' enthalten.
+				</ows:Abstract>
+				<ComplexData>
+					<Default>
+						<Format>
+							<MimeType>application/json</MimeType>
+						</Format>
+					</Default>
+				</ComplexData>
+			</Input>
+			<Input minOccurs="1" maxOccurs="1">
+				<ows:Identifier>msrld5</ows:Identifier>
+				<ows:Title>MSRL D5 Daten</ows:Title>
+				<ows:Abstract>MSRL D5 Daten, die Algen- und Seegras- Polygone
+					enthalten.
+				</ows:Abstract>
+				<ComplexData>
+					<Default>
+						<Format>
+							<MimeType>application/json</MimeType>
+						</Format>
+					</Default>
+				</ComplexData>
+			</Input>
+			<Input minOccurs="1" maxOccurs="1">
+				<ows:Identifier>topography</ows:Identifier>
+				<ows:Title>Topographie</ows:Title>
+				<ows:Abstract>Topographie Layer</ows:Abstract>
+				<ComplexData>
+					<Default>
+						<Format>
+							<MimeType>application/json</MimeType>
+						</Format>
+					</Default>
+				</ComplexData>
+			</Input>
+			<Input minOccurs="1" maxOccurs="1">
+				<ows:Identifier>assessmentYear</ows:Identifier>
+				<ows:Title>Bewertungsjahr</ows:Title>
+				<ows:Abstract>Bewertungsjahr, von dem die durchzufuehrende Bewertung
+					ausgeht.
+				</ows:Abstract>
+				<LiteralData>
+					<ows:DataType ows:reference="xs:string" />
+					<ows:AnyValue />
+				</LiteralData>
+			</Input>
+		</DataInputs>
+		<ProcessOutputs>
+			<Output>
+				<ows:Identifier>mpbResultGml</ows:Identifier>
+				<ows:Title>Bewertete Berichtsgebiete</ows:Title>
+				<ows:Abstract>FeatureCollection der bewerteten Berichtsgebiete
+				</ows:Abstract>
+				<ComplexOutput>
+					<Default>
+						<Format>
+							<MimeType>text/xml</MimeType>
+							<Schema>http://schemas.opengis.net/gml/3.2.1/base/feature.xsd</Schema>
+						</Format>
+					</Default>
+				</ComplexOutput>
+			</Output>
+		</ProcessOutputs>
+	</ProcessDescription>
+	</wps:ProcessDescriptions>
+	<wps:DeploymentProfile>
+		<wps:Schema href="RichWpsWd.xsd" />
+		<WorksequenceDescription>
+bind process net.disy.wps.lkn.processes.SelectReportingArea to lkn/selreporting
+bind process net.disy.wps.lkn.mpa.processes.MSRLD5selection to mpa/selmsrld5
+bind process net.disy.wps.lkn.mpa.processes.SelectTopography to mpa/seltopo
+bind process net.disy.wps.lkn.mpa.processes.Intersect to mpa/intersect
+bind process net.disy.wps.lkn.mpa.processes.Characteristics to mpa/characteristic
+
+var.area = "NF"
+
+execute lkn/selreporting with
+var.area as area
+in.reportingareas as reportingareas
+store
+reportingarea as var.reportingAreasNF
+
+var.area = "DI"
+
+execute lkn/selreporting with
+var.area as area
+in.reportingareas as reportingareas
+store
+reportingarea as var.reportingAreasDI
+
+execute mpa/selmsrld5 with
+in.msrld5 as msrl-d5
+in.assessmentYear as bewertungsjahr
+store
+relevantAlgea as var.relevantAlgea
+relevantSeagras as var.relevantSeagras
+relevantYears as var.relevantYears
+
+execute mpa/seltopo with
+in.topography as topography
+var.relevantYears as relevantYears
+store
+relevantTopographies as var.relevantTopographies
+relevantTopographyYears as var.relevantTopographyYears
+existingTopographyYears as var.existingTopographyYears
+
+execute mpa/intersect with
+var.reportingAreasDI as reportingAreas
+var.relevantTopographies as topography
+var.relevantTopographyYears as relevantTopographyYears
+store
+intersections as var.intersectionTidelandsReportingAreasDI
+
+execute mpa/intersect with
+var.reportingAreasNF as reportingAreas
+var.relevantTopographies as topography
+var.relevantTopographyYears as relevantTopographyYears
+store
+intersections as var.intersectionTidelandsReportingAreasNF
+
+execute mpa/characteristics with
+var.relevantYears as relevantYears
+var.existingTopographyYears as existingTopographyYears
+var.intersectionTidelandsReportingAreasNF as intersectionTidelandsReportingAreasNF
+var.intersectionTidelandsReportingAreasDI as intersectionTidelandsReportingAreasDI
+var.relevantSeagras as relevantSeagras
+var.relevantAlgea as relevantAlgea
+var.reportingAreasNF as reportingAreasNF
+var.reportingAreasDI as reportingAreasDI
+store
+mpbResultGml as out.mpbResultGml
+		</WorksequenceDescription>
+	</wps:DeploymentProfile>
+</DeployProcess>

@@ -3,10 +3,9 @@
   http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd">
   <ows:Identifier>net.disy.wps.lkn.mpa.processes.MacrophyteAssessment</ows:Identifier>
   <wps:DataInputs>
-  
 
   <wps:Input>
-      <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">reportingAreas</ows:Identifier>
+      <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">reportingareas</ows:Identifier>
       <wps:Data>
 
          <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows" method="POST">

@@ -31,13 +31,13 @@ public class SelectReportingArea extends AbstractAnnotatedAlgorithm {
     public void run() {
         String[] keys = {ATTRIB_DISTR, ATTRIB_TEMPLATE};
         String[] values = {this.area, ""};
-        SimpleFeatureCollection outputCollection = 
-                FeatureCollectionUtil.extractEquals(this.reportingareas, keys, values);
+        SimpleFeatureCollection outputCollection
+                = FeatureCollectionUtil.extractEquals(this.reportingareas, keys, values);
         this.output = outputCollection;
     }
 
     @ComplexDataInput(identifier = "reportingareas",
-            title = "reporting areas.", abstrakt = "None.", 
+            title = "reporting areas.", abstrakt = "None.",
             binding = GTVectorDataBinding.class)
     public void setReportingAreas(final FeatureCollection<?, ?> in) {
         this.reportingareas = (SimpleFeatureCollection) in;

@@ -6,7 +6,7 @@
 <ows:Title>reportingareas</ows:Title>
 <wps:Data>
 <wps:ComplexData mimeType="application/json">
-	#reportingareas.json#
+#reportingareas.json#
 </wps:ComplexData>
 </wps:Data>
 </wps:Input>
