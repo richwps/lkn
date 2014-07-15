@@ -5,7 +5,7 @@
     <artifactId>lkn-mpa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
-        <n52WPS.version>3.3.1-SNAPSHOT</n52WPS.version>
+        <n52WPS.version>3.3.0</n52WPS.version>
         <geotools.version>8.7</geotools.version>
         <!--<geotools.version>2.7.5</geotools.version>-->
         <apache.axis2.version>1.5.1</apache.axis2.version>
@@ -161,6 +161,11 @@
             <id>n52-snapshot</id>
             <name>n52-snapshot</name>
             <url>http://52north.org/maven/repo/snapshots/</url>
+        </repository>
+          <repository>
+            <id>n52-releases</id>
+            <name>n52-releases</name>
+            <url>http://52north.org/maven/repo/releases/</url>
         </repository>
         <repository>
             <id>osgeo</id>
