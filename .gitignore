@@ -6,7 +6,7 @@
 *.war
 *.ear
 */target/**
-richwps/target/**
-richwps/52n-wps.log
-richwps/catalina.out
+mpa/target/**
+mpa/52n-wps.log
+mpa/catalina.out
 git_stats
