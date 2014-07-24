@@ -92,13 +92,15 @@ def expand(XML):
 #doPost("selectreportingareadi.xml", False, False, True)
 #doPost("selecttopography.xml", False, False, True)
 #doPost("intersectdi.xml", False, False, True)
+doPost("macrophyteassessment.xml", False, True, True)
+#doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
 #doPost("macrophyteassessment.xml", False, False, True)
-doPost("macrophyteassessment-rola.xml", False, False, True)
-#doPost("macrophyteassessmentchain.xml", False, False, True)
-#doPost("macrophyteassessment.xml", False, False, True)
-#doPost("macrophyteassessmentreferences.xml", False, False, True)
-#doPost("macrophyteassessmentkvpreferences.xml", False, False, True)
+
 
 #not working, yet
+#doPost("macrophyteassessmentreferences.xml", False, True, True)
+#doPost("macrophyteassessment-rola.xml", False, False, True)
+#doPost("macrophyteassessmentchain.xml", False, True, True)
+
 #doPost("macrophyteassesmentwfsreferences.xml", False, True)
 #doPost("macrophyteassesmenthttpreferences.xml", False, True)

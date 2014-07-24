@@ -233,6 +233,8 @@ public class MPAUtils {
             iterA.close();
         }
 
+        System.out.println("236: "+msrlColl.getSchema());
+        
         SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
                 // FeatureType der Ziel-Collection aus der MSRLCollection erstellen und
                 // Geometrietyp auf Multipolygon setzen

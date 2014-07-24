@@ -4,10 +4,10 @@
   <ows:Identifier>net.disy.wps.lkn.mpa.processes.MacrophyteAssessment</ows:Identifier>
   <wps:DataInputs>
   
-
   <wps:Input>
       <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">reportingareas</ows:Identifier>
       <wps:Data>
+          <!-- http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=RichWPS:CWTWBODYNP&SRSNAME=EPSG:31467&outputFormat=JSON-->
          <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=GetFeature&amp;TYPENAME=RichWPS:CWTWBODYNP&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
       </wps:Data>
     </wps:Input>
@@ -16,6 +16,7 @@
     <wps:Input>
       <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">topography</ows:Identifier>
       <wps:Data>
+        <!--http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=MSRL-Daten:D05&SRSNAME=EPSG:31467&outputFormat=JSON-->
         <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=GetFeature&amp;TYPENAME=RichWPS:UBGKAL_ALL_TBL&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
       </wps:Data>
     </wps:Input>
@@ -25,6 +26,7 @@
     <wps:Input>
       <ows:Identifier xmlns:ns1="http://www.opengis.net/ows/1.1">msrld5</ows:Identifier>
       <wps:Data>
+        <!--view-source:http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=RichWPS:UBGKAL_ALL_TBL&SRSNAME=EPSG:31467&outputFormat=JSON?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=RichWPS:UBGKAL_ALL_TBL&SRSNAME=EPSG:31467&outputFormat=JSON-->
          <wps:Reference mimeType="application/json" xlink:href="http://mdi-sh.org/geoserver_lkn/ows?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=GetFeature&amp;TYPENAME=MSRL-Daten:D05&amp;SRSNAME=EPSG:31467&amp;outputFormat=JSON" method="GET"/>
       </wps:Data>
     </wps:Input>

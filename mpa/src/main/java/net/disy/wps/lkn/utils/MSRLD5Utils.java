@@ -39,6 +39,8 @@ public class MSRLD5Utils {
     public static final String ATTRIB_OBS_PARAMNAME_ZS = "COV_ZS";
     public static final String ATTRIB_OBSV_PARAMETERVALUE = "OBSV_PARAMETERVALUE";
 
+    //GeoJSON 2004-06-07T22:00:00Z
+    //GML 2004-06-07T22:00:00
     private static final DateTimeFormatter DateTimeFormatter = DateTimeFormat
             .forPattern("yyyy-MM-dd'T'HH:mm:ss");
     private static final DateTimeFormatter DateTimeFormatter4TimeStamp = DateTimeFormat
@@ -74,6 +76,7 @@ public class MSRLD5Utils {
                 } else {
                     String dateTimeStr = (String) feature
                             .getAttribute(ATTRIB_OBSV_PHENOMENONTIME);
+                    dateTimeStr = dateTimeStr.replaceAll("Z", ""); //TRICKY
                     // ... damit ein DateTime-Objekt instanziieren...
                     dt = DateTimeFormatter.parseDateTime(dateTimeStr);
                 }
@@ -96,7 +99,7 @@ public class MSRLD5Utils {
     }
 
     public ObservationFeatureCollectionList getRelevantObservationsByParameterAndYear(String param,
-            Integer assementyear) {
+            Integer assessmentyear) {
 
         // observations: List of ObservationCollections
         ObservationFeatureCollectionList observations = new ObservationFeatureCollectionList();
@@ -126,7 +129,7 @@ public class MSRLD5Utils {
          + obsParams[i]
          + " und das Bewertungsjahr "
          + inputAssesmentYear + " ausgewaehlt");*/
-        relevantObservations = this.extractRelevantObservationsByYear(observations, assementyear);
+        relevantObservations = this.extractRelevantObservationsByYear(observations, assessmentyear);
         return relevantObservations;
         // Relevante ObservationCollections der paramArrayListe hinzufuegen
         //paramArrayList.add(relevantObservations);
@@ -152,7 +155,7 @@ public class MSRLD5Utils {
             SimpleFeatureCollection sfc, ArrayList<DateTime> obsDates) {
         String compareStr;
         Double area;
-        SimpleFeatureCollection groupCollection;
+        SimpleFeatureCollection groupCollection=null;
         ObservationFeatureCollectionList obsCollections = new ObservationFeatureCollectionList();
 
         // Schleife ueber die Beobachtungszeitpunkte
@@ -160,8 +163,7 @@ public class MSRLD5Utils {
             groupCollection = FeatureCollections.newCollection();
             // String zum Vergleich von Beobachtungszeitpunkten erzeugen
             if (FeatureCollectionUtil.attributeIsTimeStamp(sfc, ATTRIB_OBSV_PHENOMENONTIME)) {
-                compareStr = obsDates.get(i).toString(
-                        DateTimeFormatter4TimeStamp);
+                compareStr = obsDates.get(i).toString(DateTimeFormatter4TimeStamp);
             } else {
                 compareStr = obsDates.get(i).toString(DateTimeFormatter);
             }
@@ -170,13 +172,13 @@ public class MSRLD5Utils {
             groupCollection = FeatureCollectionUtil.extractEquals(sfc,
                     new String[]{ATTRIB_OBSV_PHENOMENONTIME},
                     new String[]{compareStr});
+            
             // Gesamtflaeche der Features berechnen
             area = FeatureCollectionUtil.getArea(groupCollection);
             // ObservationCollection erzeugen und der Ausgabe-Liste hinzufuegen
             obsCollections.add(new ObservationFeatureCollection(obsDates.get(i),
                     groupCollection, area));
         }
-
         // Debug
         /*for (ObservationFeatureCollection obsColl : obsCollections) {
             LOGGER.debug("extractObservationsByListOfDates: "

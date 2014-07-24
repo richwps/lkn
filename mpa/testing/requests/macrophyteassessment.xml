@@ -25,7 +25,7 @@
 <ows:Title>msrld5</ows:Title>
 <wps:Data>
 <wps:ComplexData mimeType="application/json">
-#msrl.json#
+#msrl2.json#
 </wps:ComplexData>
 </wps:Data>
 </wps:Input>
@@ -45,7 +45,7 @@
 <wps:Output>
 <ows:Identifier>evalValues</ows:Identifier>
 </wps:Output>-->
-<wps:Output asReference="true" mimeType="text/xml" schema="http://schemas.opengis.net/gml/3.2.1/base/feature.xsd"><ows:Identifier>mpbResultGml</ows:Identifier>
+<wps:Output asReference="false" mimeType="text/xml" schema="http://schemas.opengis.net/gml/3.2.1/base/feature.xsd"><ows:Identifier>mpbResultGml</ows:Identifier>
 </wps:Output>
 <!--<wps:Output asReference="true" mimeType="application/xml"><ows:Identifier>mpbResultXml</ows:Identifier></wps:Output>-->
 </wps:ResponseDocument>
