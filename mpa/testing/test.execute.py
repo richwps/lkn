@@ -92,8 +92,8 @@ def expand(XML):
 #doPost("selectreportingareadi.xml", False, False, True)
 #doPost("selecttopography.xml", False, False, True)
 #doPost("intersectdi.xml", False, False, True)
-doPost("macrophyteassessment.xml", False, True, True)
-#doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
+#doPost("macrophyteassessment.xml", False, True, True)
+doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
 #doPost("macrophyteassessment.xml", False, False, True)
 
 

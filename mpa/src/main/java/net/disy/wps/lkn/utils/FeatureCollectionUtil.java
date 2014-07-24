@@ -50,6 +50,7 @@ import net.disy.wps.lkn.mpa.types.ObservationFeatureCollection;
 import org.n52.wps.io.data.binding.complex.GTVectorDataBinding;
 import org.n52.wps.io.datahandler.generator.GML3BasicGenerator;
 import org.n52.wps.io.datahandler.parser.GML32BasicParser;
+import org.opengis.filter.expression.Expression;
 
 /**
  * Diese Klasse beinhaltet allgemeine Hilfsfunktionen und Tools fuer die
@@ -204,6 +205,38 @@ public abstract class FeatureCollectionUtil {
             String value = values[i];
             FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2(null);
             Filter filter = ff.equals(ff.property(key), ff.literal(value));
+            FeatureIterator<SimpleFeature> iter = inputCollection.features();
+            // Schleife ueber Features und Evaluierung
+            while (iter.hasNext()) {
+                SimpleFeature feature = iter.next();
+                if (filter.evaluate(feature)) {
+                    // Feature der outputCollection hinzufuegen
+                    outputCollection.add(feature);
+                }
+            }
+        }
+        return outputCollection;
+    }
+    
+     /**
+     * Filtert eine SimpleFeatureCollection nach den in 'keys' und 'values'
+     * vorgegebenen Attribut-Eigenschaften und gibt einen Extrakt aus der
+     * uebergebenen Collection zurueck
+     *
+     * @param inputCollection - SimpleFeatureCollection,
+     * @param keys - Array von Strings, das die Namen der Schluessel enthaelt
+     * @param values - Array von String, das die Namen der Werte enthaelt
+     * @return
+     */
+    public static SimpleFeatureCollection extractEquals2(SimpleFeatureCollection inputCollection, String[] keys, String[] values) {
+        SimpleFeatureCollection outputCollection = FeatureCollections.newCollection();
+        // Schleife ueber keys, zum Erzeugen mehrerer Filter
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            String value = values[i];
+            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2(null);
+         
+            Filter filter = ff.equals(ff.property(key), ff.literal(value+"Z"));
             FeatureIterator<SimpleFeature> iter = inputCollection.features();
             // Schleife ueber Features und Evaluierung
             while (iter.hasNext()) {

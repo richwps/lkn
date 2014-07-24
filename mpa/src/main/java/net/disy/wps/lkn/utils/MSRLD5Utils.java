@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import net.disy.wps.lkn.utils.FeatureCollectionUtil;
+import org.joda.time.DateTimeZone;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
@@ -155,7 +156,7 @@ public class MSRLD5Utils {
             SimpleFeatureCollection sfc, ArrayList<DateTime> obsDates) {
         String compareStr;
         Double area;
-        SimpleFeatureCollection groupCollection=null;
+        SimpleFeatureCollection groupCollection = null;
         ObservationFeatureCollectionList obsCollections = new ObservationFeatureCollectionList();
 
         // Schleife ueber die Beobachtungszeitpunkte
@@ -167,12 +168,13 @@ public class MSRLD5Utils {
             } else {
                 compareStr = obsDates.get(i).toString(DateTimeFormatter);
             }
+
             // Entsprechende SimpleFeatureCollection aus der gesamten
             // FeatureCollection extrahieren
-            groupCollection = FeatureCollectionUtil.extractEquals(sfc,
+            groupCollection = FeatureCollectionUtil.extractEquals2(sfc,
                     new String[]{ATTRIB_OBSV_PHENOMENONTIME},
                     new String[]{compareStr});
-            
+
             // Gesamtflaeche der Features berechnen
             area = FeatureCollectionUtil.getArea(groupCollection);
             // ObservationCollection erzeugen und der Ausgabe-Liste hinzufuegen
@@ -181,12 +183,12 @@ public class MSRLD5Utils {
         }
         // Debug
         /*for (ObservationFeatureCollection obsColl : obsCollections) {
-            LOGGER.debug("extractObservationsByListOfDates: "
-             + obsColl.getDateTime().getYear() + "-"
-             + obsColl.getDateTime().getMonthOfYear() + "-"
-             + obsColl.getDateTime().getDayOfMonth() + ": "
-             + FeatureCollectionUtil.tokm2Str(obsColl.getArea()) + " km2");
-        }*/
+         LOGGER.debug("extractObservationsByListOfDates: "
+         + obsColl.getDateTime().getYear() + "-"
+         + obsColl.getDateTime().getMonthOfYear() + "-"
+         + obsColl.getDateTime().getDayOfMonth() + ": "
+         + FeatureCollectionUtil.tokm2Str(obsColl.getArea()) + " km2");
+         }*/
 
         return obsCollections;
     }
