@@ -14,7 +14,8 @@ import time
 import re
 import os
 
-ENDPOINT = 'http://192.168.56.101:8080/wps/WebProcessingService'
+#ENDPOINT = 'http://192.168.56.101:8080/wps/WebProcessingService'
+ENDPOINT = "http://52n.edvsz.hs-osnabrueck.de/wps/WebProcessingService"
 HEADERS = {'Content-Type': 'application/xml'}
 
 # colors
@@ -90,17 +91,19 @@ def expand(XML):
 
 #doPost("selectreportingareanf.xml", False, False, True)
 #doPost("selectreportingareadi.xml", False, False, True)
-#doPost("selecttopography.xml", False, False, True)
+#doPost("selectreportingareadi-kvp.xml")
+#doPost("selecttopography.xml", True, True, True)
+doPost("selecttopographykvp.xml", False, False, True)
 #doPost("intersectdi.xml", False, False, True)
 #doPost("macrophyteassessment.xml", False, True, True)
-doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
+#doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
 #doPost("macrophyteassessment.xml", False, False, True)
-
+#doPost("macrophyteassessmentchain.xml", False, True, True)
 
 #not working, yet
 #doPost("macrophyteassessmentreferences.xml", False, True, True)
 #doPost("macrophyteassessment-rola.xml", False, False, True)
-#doPost("macrophyteassessmentchain.xml", False, True, True)
+
 
 #doPost("macrophyteassesmentwfsreferences.xml", False, True)
 #doPost("macrophyteassesmenthttpreferences.xml", False, True)
