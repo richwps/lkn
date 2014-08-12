@@ -14,8 +14,8 @@ import time
 import re
 import os
 
-#ENDPOINT = 'http://192.168.56.101:8080/wps/WebProcessingService'
-ENDPOINT = "http://52n.edvsz.hs-osnabrueck.de/wps/WebProcessingService"
+ENDPOINT = 'http://192.168.56.101:8080/wps/WebProcessingService'
+#ENDPOINT = "http://52n.edvsz.hs-osnabrueck.de/wps/WebProcessingService"
 HEADERS = {'Content-Type': 'application/xml'}
 
 # colors
@@ -93,9 +93,9 @@ def expand(XML):
 #doPost("selectreportingareadi.xml", False, False, True)
 #doPost("selectreportingareadi-kvp.xml")
 #doPost("selecttopography.xml", True, True, True)
-doPost("selecttopographykvp.xml", False, False, True)
+#doPost("selecttopographykvp.xml", True, False, True)
 #doPost("intersectdi.xml", False, False, True)
-#doPost("macrophyteassessment.xml", False, True, True)
+doPost("macrophyteassessment.xml", True, True, True)
 #doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
 #doPost("macrophyteassessment.xml", False, False, True)
 #doPost("macrophyteassessmentchain.xml", False, True, True)
