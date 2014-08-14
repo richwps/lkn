@@ -90,7 +90,7 @@ bind process net.disy.wps.lkn.processes.SelectReportingArea to lkn/selreporting
 bind process net.disy.wps.lkn.mpa.processes.MSRLD5selection to mpa/selmsrld5
 bind process net.disy.wps.lkn.mpa.processes.SelectTopography to mpa/seltopo
 bind process net.disy.wps.lkn.mpa.processes.Intersect to mpa/intersect
-bind process net.disy.wps.lkn.mpa.processes.Characteristics to mpa/characteristic
+bind process net.disy.wps.lkn.mpa.processes.Characteristics to mpa/characteristics
 
 var.area = "NF"
 
@@ -109,7 +109,7 @@ store
 reportingarea as var.reportingAreasDI
 
 execute mpa/selmsrld5 with
-in.msrld5 as msrl-d5
+in.msrld5 as msrld5
 in.assessmentYear as bewertungsjahr
 store
 relevantAlgea as var.relevantAlgea

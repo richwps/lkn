@@ -108,7 +108,7 @@ public class MSRLD5selection extends AbstractAnnotatedAlgorithm {
         }
     }
 
-    @ComplexDataInput(identifier = "msrl-d5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class, minOccurs = 1)
+    @ComplexDataInput(identifier = "msrld5", title = "MSRL D5 Daten", abstrakt = "MSRL D5 Daten, die Algen- und Seegras- Polygone enthalten.", binding = GTVectorDataBinding.class, minOccurs = 1)
     public void setMSRLD5(final FeatureCollection<?, ?> inputCollection) {
         this.inputMSRLD5 = (SimpleFeatureCollection) inputCollection;
     }
