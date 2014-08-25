@@ -14,7 +14,7 @@ import time
 import re
 import os
 
-ENDPOINT = 'http://192.168.56.101:8080/wps/WPS-T'
+ENDPOINT = 'http://localhost:8085/wps/WPS-T'
 HEADERS = {'Content-Type': 'application/xml'}
 FAIL = '\033[91m'
 OKGREEN = '\033[92m'
@@ -79,4 +79,4 @@ def expand(XML):
 	return XML
 
 
-doPost("UndeployMacrophyte.xml", False, False, True)
+doPost("UndeployMacrophyte.xml", False, True, True)
