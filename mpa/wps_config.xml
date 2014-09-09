@@ -811,10 +811,11 @@
 			<SupportedDeploymentProfiles schema=""
 				repositoryName="RichWpsWdRepository" />
 		</Repository>
+
   </AlgorithmRepositoryList>
 	<RemoteRepositoryList />
 	
-	<Server hostname="localhost" hostport="8085"
+	<Server hostname="192.168.56.101" hostport="8080"
 		includeDataInputsInResponse="false" computationTimeoutMilliSeconds="5"
 		cacheCapabilites="false" webappPath="wps" repoReloadInterval="0">
 		<!-- Setting to 'true' will enable filtering of responses documents.  Any server URL in
