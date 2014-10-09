@@ -81,5 +81,5 @@ def expand(XML):
 	return XML
 
 
-#doPost("DeploySampleWDProcess.xml", False, False, True)
-doPost("DeployMacropythe.xml", False, True, True)
+doPost("DeploySampleWDProcess.xml", False, False, True)
+#doPost("DeployMacropythe.xml", False, True, True)

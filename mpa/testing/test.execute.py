@@ -90,13 +90,14 @@ def expand(XML):
 #doPost("intersectionfeaturecollectionlistgeneratortest.xml")
 
 #doPost("selectreportingareanf.xml", False, False, True)
-#doPost("selectreportingareadi.xml", False, False, True)
+doPost("selectreportingareadi.xml", False, True, True)
 #doPost("selectreportingareadi-kvp.xml")
 #doPost("selecttopography.xml", True, True, True)
 #doPost("selecttopographykvp.xml", True, False, True)
-#doPost("intersectdi.xml", False, False, True)
+#doPost("intersectdi.xml", False, True, True)
 #doPost("macrophyteassessment.xml", True, True, True)
-doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
+#doPost("macrophyteassessment-rola.xml", False, False, True)
+#doPost("macrophyteassessmentkvpreferences.xml", False, True, True)
 #doPost("macrophyteassessment.xml", False, False, True)
 #doPost("macrophyteassessmentchain.xml", False, True, True)
 
