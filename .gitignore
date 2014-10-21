@@ -3,7 +3,6 @@
 *.settings
 *.project
 *.classpath
-*.Rhistory
 
 # Package Files #
 *.jar
