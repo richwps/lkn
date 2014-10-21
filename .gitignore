@@ -1,5 +1,9 @@
 *.class
 *.xml.OUT
+*.settings
+*.project
+*.classpath
+*.Rhistory
 
 # Package Files #
 *.jar
