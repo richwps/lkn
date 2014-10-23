@@ -800,7 +800,7 @@
 			className="org.n52.wps.server.ServiceLoaderAlgorithmRepository" active="true">
 		</Repository>
                 
-                <Repository name="RichWpsRolaRepository"
+                 <Repository name="RichWpsRolaRepository"
 			className="org.n52.wps.transactional.service.GenericTransactionalProcessRepository"
 			active="true">
 			<Property name="GenericAlgorithm" active="true">net.disy.richwps.oe.RolaAlgorithm</Property>
