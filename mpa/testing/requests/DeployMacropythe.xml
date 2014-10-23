@@ -25,6 +25,11 @@
 							<MimeType>application/json</MimeType>
 						</Format>
 					</Default>
+					<Supported>
+						<Format>
+							<MimeType>application/json</MimeType>
+						</Format>
+					</Supported>
 				</ComplexData>
 			</Input>
 			<Input minOccurs="1" maxOccurs="1">
@@ -39,6 +44,11 @@
 							<MimeType>application/json</MimeType>
 						</Format>
 					</Default>
+					<Supported>
+						<Format>
+							<MimeType>application/json</MimeType>
+						</Format>
+					</Supported>
 				</ComplexData>
 			</Input>
 			<Input minOccurs="1" maxOccurs="1">
@@ -51,6 +61,11 @@
 							<MimeType>application/json</MimeType>
 						</Format>
 					</Default>
+					<Supported>
+						<Format>
+							<MimeType>application/json</MimeType>
+						</Format>
+					</Supported>
 				</ComplexData>
 			</Input>
 			<Input minOccurs="1" maxOccurs="1">
@@ -75,10 +90,15 @@
 					<Default>
 						<Format>
 							<MimeType>text/xml</MimeType>
-							<Schema>http://schemas.opengis.net/gml/3.2.1/base/feature.xsd
-							</Schema>
+							<Schema>http://schemas.opengis.net/gml/3.2.1/base/feature.xsd</Schema>
 						</Format>
 					</Default>
+					<Supported>
+						<Format>
+							<MimeType>text/xml</MimeType>
+							<Schema>http://schemas.opengis.net/gml/3.2.1/base/feature.xsd</Schema>
+						</Format>
+					</Supported>
 				</ComplexOutput>
 			</Output>
 		</ProcessOutputs>
