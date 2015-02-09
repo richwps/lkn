@@ -40,7 +40,7 @@
 	<parameter name="bewertungsjahr" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
-	<parameter name="MPBResult" class="net.disy.wps.lkn.MPBResult"/>
+	<parameter name="MPBResult" class="net.disy.wps.lkn.mpa.types.MPBResult"/>
 	<parameter name="MPBResultMap" class="java.io.InputStream"/>
 	<parameter name="img_blau" class="java.io.InputStream"/>
 	<parameter name="img_gruen" class="java.io.InputStream"/>
@@ -374,7 +374,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<variable name="MPBResult" class="net.disy.wps.lkn.MPBResult">
+	<variable name="MPBResult" class="net.disy.wps.lkn.mpa.types.MPBResult">
 		<variableExpression><![CDATA[$V{MPBResult}]]></variableExpression>
 	</variable>
 	<variable name="ReportTitle" class="java.lang.String"/>
