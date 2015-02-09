@@ -19,6 +19,8 @@ public class ReportingAreaUtils {
     public static final String ATTRIB_DISTR = "DISTR";
     public static final String ATTRIB_DISTR_DI = "DI";
     public static final String ATTRIB_DISTR_NF = "NF";
+    public static final Integer ATTRIB_DISTR_DI_INT = 2;
+    public static final Integer ATTRIB_DISTR_NF_INT = 1;
     private SimpleFeatureCollection reportingareas;
     
     public ReportingAreaUtils(SimpleFeatureCollection reportingareas){
