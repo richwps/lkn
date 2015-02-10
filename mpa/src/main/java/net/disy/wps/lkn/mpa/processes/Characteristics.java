@@ -2,9 +2,11 @@ package net.disy.wps.lkn.mpa.processes;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+
 import static net.disy.wps.lkn.mpa.processes.MacrophyteAssessment.LOGGER;
 import net.disy.wps.lkn.mpa.types.IntegerList;
 import net.disy.wps.lkn.mpa.types.IntersectionFeatureCollection;
@@ -22,17 +24,21 @@ import org.n52.wps.algorithm.annotation.Algorithm;
 import org.n52.wps.algorithm.annotation.ComplexDataInput;
 import org.n52.wps.algorithm.annotation.ComplexDataOutput;
 import org.n52.wps.algorithm.annotation.Execute;
+import org.n52.wps.algorithm.annotation.LiteralDataInput;
 import org.n52.wps.server.AbstractAnnotatedAlgorithm;
 
 import net.disy.wps.n52.binding.IntegerListBinding;
 import net.disy.wps.n52.binding.IntersectionFeatureCollectionListBinding;
+import net.disy.wps.n52.binding.MPBResultBinding;
 import net.disy.wps.n52.binding.ObeservationFeatureCollectionListBinding;
+
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureCollections;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.n52.wps.io.data.binding.complex.GTVectorDataBinding;
+import org.n52.wps.io.data.binding.literal.LiteralStringBinding;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -42,6 +48,8 @@ public class Characteristics extends AbstractAnnotatedAlgorithm {
     private MPBResult result = new MPBResult();
     private SimpleFeatureCollection outputCollection;
 
+    private Integer inputAssessmentYear;
+    
     private SimpleFeatureCollection reportingAreasNF;
     private SimpleFeatureCollection reportingAreasDI;
     private IntegerList relevantYears;
@@ -67,6 +75,8 @@ public class Characteristics extends AbstractAnnotatedAlgorithm {
         Double ZS_totalareaNF, ZS_40areaNF, ZS_60areaNF;
         Double OP_totalareaNF, OP_40areaNF, OP_60areaNF;
 
+        result.setBewertungsjahr(inputAssessmentYear);
+        
         // Schleife ueber relevantYears zur jahresweisen Verschneidung
         for (Integer relevantYear : relevantYears) {
             IntersectionFeatureCollection intsecColl;
@@ -293,6 +303,11 @@ public class Characteristics extends AbstractAnnotatedAlgorithm {
         }
         return intersecFeatureCollection;
     }
+    
+    @LiteralDataInput(identifier = "bewertungsjahr", title = "Bewertungsjahr", abstrakt = "Bewertungsjahr, von dem die durchzufuehrende Bewertung ausgeht.", binding = LiteralStringBinding.class, minOccurs = 1)
+    public void setAssessmentYear(String assessmentYear) {
+        this.inputAssessmentYear = Integer.parseInt(assessmentYear);
+    }
 
     @ComplexDataInput(identifier = "relevantYears",
             title = "relevantYears.", abstrakt = "None.", binding = IntegerListBinding.class)
@@ -345,5 +360,10 @@ public class Characteristics extends AbstractAnnotatedAlgorithm {
     @ComplexDataOutput(identifier = "mpbResultGml", title = "Bewertete Berichtsgebiete", abstrakt = "FeatureCollection der bewerteten Berichtsgebiete", binding = GTVectorDataBinding.class)
     public FeatureCollection getResultGml() {
         return this.outputCollection;
+    }
+    
+    @ComplexDataOutput(identifier = "mpbResultXml", title = "XML-Rohdaten Datei", abstrakt = "XML-Datei mit Rohdaten der Bewertung", binding = MPBResultBinding.class)
+    public net.disy.wps.lkn.mpa.types.MPBResult getResultXml() {
+        return this.result;
     }
 }
