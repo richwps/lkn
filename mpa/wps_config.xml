@@ -281,6 +281,10 @@
       <Parser name="IntersectionFeatureCollectionListParser" className="net.disy.wps.n52.parser.IntersectionFeatureCollectionListParser" active="true">
         <Format mimetype="application/xml" encoding="UTF-8" schema="http://richwps.github.io/schemas/IntersectionFeatureCollectionList" />
       </Parser>
+      
+      <Parser name="MBPResultParser" className="net.disy.wps.n52.parser.MpbResultParser" active="true">
+        <Format mimetype="application/xml" encoding="UTF-8" schema="http://richwps.github.io/schemas/MBPResult" />
+      </Parser>
 
     </ParserList>
     <GeneratorList>
@@ -570,6 +574,9 @@
       <Generator name="IntersectionFeatureCollectionListGenerator" className="net.disy.wps.n52.generator.IntersectionFeatureCollectionListGenerator" active="true">
         <Format mimetype="application/xml" encoding="UTF-8" schema="http://richwps.github.io/schemas/IntersectionFeatureCollectionList" />
       </Generator>
+      <Generator name="JasperReportGenerator" className="net.disy.wps.n52.generator.PdfGenerator" active="true">
+        <Format mimetype="application/pdf" encoding="UTF-8" schema="http://richwps.github.io/schemas/PdfReport" />
+      </Generator>
 
     </GeneratorList>
   </Datahandlers>
@@ -593,6 +600,7 @@
       <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.SelectTopography</Property>
       <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Intersect</Property>
       <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Characteristics</Property>
+      <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.Report</Property>
       <Property name="Algorithm" active="true">net.disy.wps.lkn.mpa.processes.MacrophyteAssessmentChain</Property>
     </Repository>
     <Repository name="UploadedAlgorithmRepository" className="org.n52.wps.server.UploadedAlgorithmRepository" active="false">
