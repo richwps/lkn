@@ -418,7 +418,11 @@ public class Report extends AbstractAnnotatedAlgorithm {
 			bGebieteStyle = ((NamedLayer) sld.getStyledLayers()[0]).getStyles()[0];
 			layBGebiete = new FeatureLayer(inSfc, bGebieteStyle);
 			map.addLayer(layBGebiete);
-		} catch (IOException | SAXException | ParserConfigurationException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 
